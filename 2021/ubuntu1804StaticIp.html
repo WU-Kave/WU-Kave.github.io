@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wu-kave.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="如何修改ubuntu的ip并使用静态ip？（半科普">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu18.04使用静态ip">
+<meta property="og:url" content="https://wu-kave.github.io/2021/ubuntu1804StaticIp.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="如何修改ubuntu的ip并使用静态ip？（半科普">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpViewInfo.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpAlterInfo.png">
+<meta property="article:published_time" content="2021-05-03T04:30:12.000Z">
+<meta property="article:modified_time" content="2021-05-03T04:30:12.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Mac">
+<meta property="article:tag" content="ip">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpViewInfo.png">
+
+
+<link rel="canonical" href="https://wu-kave.github.io/2021/ubuntu1804StaticIp.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wu-kave.github.io/2021/ubuntu1804StaticIp.html","path":"2021/ubuntu1804StaticIp.html","title":"Ubuntu18.04使用静态ip"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ubuntu18.04使用静态ip | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">预先知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E5%BF%83%E7%BD%91%E5%8F%8B%E7%9A%84%E9%A2%84%E5%85%88%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">热心网友的预先知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E7%9A%84%E6%9D%A5%E6%BA%90%E5%8E%BB%E8%84%89"><span class="nav-number">1.2.</span> <span class="nav-text">配置信息的来源去脉</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">1.2.1.</span> <span class="nav-text">需要的配置信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置信息详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">1.2.3.</span> <span class="nav-text">查找配置信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9AGUI"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">方法一：GUI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9Avmware%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">方法二：vmware配置文件</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">！开始修改！</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">方法一：GUI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%93%AA%E9%87%8C%E6%94%B9%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">在哪里改？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">方法二：命令行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%93%AA%E9%87%8C%E6%94%B9%EF%BC%9F-2"><span class="nav-number">4.1.</span> <span class="nav-text">在哪里改？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Q-A"><span class="nav-number">4.2.</span> <span class="nav-text">Q&amp;A</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">5.</span> <span class="nav-text">tips</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/images/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wu-kave.github.io/2021/ubuntu1804StaticIp.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/images/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu18.04使用静态ip | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu18.04使用静态ip
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-03 12:30:12" itemprop="dateCreated datePublished" datetime="2021-05-03T12:30:12+08:00">2021-05-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>如何修改ubuntu的ip并使用静态ip？（半科普</p>
+<span id="more"></span>
+<p>背景：最近在使用ubuntu，使用ssh连接的方式，ip一直变，很烦，就想到使用静态ip的方式</p>
+<h1>预先知识</h1>
+<h2 id="热心网友的预先知识">热心网友的预先知识</h2>
+<blockquote>
+<p><em>(来源于博主荒野雄兵，链接 <a target="_blank" rel="noopener" href="https://blog.csdn.net/daerzei/article/details/85058130">https://blog.csdn.net/daerzei/article/details/85058130</a>)</em><br>
+Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/interfaces</code> （命令行方案）方案2：<code>Network-manager</code> （图形化界面方案）</p>
+<p>两套方案是冲突的，不能同时共存。第一个方案适用于命令行如部署在云服务器上，如果你在阿里云，腾讯云，亚马逊云等等这些地方部署了Ubuntu的云服务器的话，就只能这种情况了。</p>
+<p>第二个方案适图形化界面一般来说我们自己电脑上安装的Ubuntu都是采用这个方案，但是如果你在 <code>/etc/network/interfaces</code> 里设置了网上信息的话， <code>NetworkManager</code> 就不会接管该网上，即使是你开了，系统重启过后也会自动关闭。</p>
+<p>所以嘛，好好想想你最近有没有修改过 <code>/etc/network/interfaces</code> 配置文件。如果你不知道自己有没有修改过的话，这个文件正常应该是这样的（看看有没有谁偷偷修改了你的配置文件）</p>
+</blockquote>
+<p>我们已经知道有两种管理方案了，所以按理说有两种配置方案。</p>
+<h2 id="配置信息的来源去脉">配置信息的来源去脉</h2>
+<h3 id="需要的配置信息">需要的配置信息</h3>
+<p><code>地址(address)、子网掩码(netmask)、网关(gateway)、域名服务器地址(DNS)</code></p>
+<h3 id="配置信息详解">配置信息详解</h3>
+<p>地址(address)：ipv4地址，随便填，但是应该符合分配范围，可以从vmware的配置文件查看分配范围，如果懒得找，直接填原来的或者与原来的差不多且不冲突的</p>
+<p>子网掩码(netmask)：一般是255.255.255.0，否则要去配置文件找</p>
+<p>网关(默认路由)(gateway) 与 DNS：1. 在进入GUI的网络设置前可以看到  2. vm配置文件有</p>
+<h3 id="查找配置信息">查找配置信息</h3>
+<h4 id="方法一：GUI">方法一：GUI</h4>
+<p>ubuntu桌面–&gt;设置–&gt;网络–&gt;有线连接–&gt;设置</p>
+<p>此处可以找到ip、gateway、dns</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpViewInfo.png" alt="ubuntu1804IpViewInfo"></p>
+<h4 id="方法二：vmware配置文件">方法二：vmware配置文件</h4>
+<p>macOS路径： <code>/Library/Preferences/VMware Fusion</code></p>
+<p><code>networking</code> 文件是有关vmware网络的一些基础配置，如是否开启某个网卡的DHCP，此时不用管</p>
+<p>因为我用的是NAT模式，所以进入 <code>vmnet8</code> 文件夹。</p>
+<ol>
+<li>首先是 <code>dhcpd.conf</code> 文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">subnet 172.16.10.0 netmask 255.255.255.0 &#123;</span><br><span class="line">	range 172.16.10.128 172.16.10.254;</span><br><span class="line">	option broadcast-address 172.16.10.255;</span><br><span class="line">	option domain-name-servers 172.16.10.2;</span><br><span class="line">	option domain-name localdomain;</span><br><span class="line">	default-lease-time 1800;                # default is 30 minutes</span><br><span class="line">	max-lease-time 7200;                    # default is 2 hours</span><br><span class="line">	option netbios-name-servers 172.16.10.2;</span><br><span class="line">	option routers 172.16.10.2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从中知道</p>
+<blockquote>
+<p><code>ip</code> 地址分配范围是 <code>172.16.10.128</code> 到 <code>172.16.10.254</code></p>
+<p><code>netmask</code> 为 <code>255.255.255.0</code></p>
+<p><code>DNS</code> 为 <code>172.16.10.2</code></p>
+</blockquote>
+<ol start="2">
+<li>其次是 <code>nat.conf</code> 文件</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># NAT gateway address</span><br><span class="line">ip = 172.16.10.2</span><br><span class="line">netmask = 255.255.255.0</span><br></pre></td></tr></table></figure>
+<p>从中知道</p>
+<blockquote>
+<p><code>gateway</code> 为 <code>172.16.10.2</code></p>
+<p><code>netmask</code> 为 <code>255.255.255.0</code></p>
+</blockquote>
+<h1>！开始修改！</h1>
+<h1>方法一：GUI</h1>
+<h2 id="在哪里改？">在哪里改？</h2>
+<p>ubuntu桌面–&gt;设置–&gt;网络–&gt;有线连接–&gt;设置–&gt;ipv4–&gt;手动，修改以下配置项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpAlterInfo.png" alt="ubuntu1804IpAlterInfo"></p>
+<p>改完后记得重启  <code>sudo reboot</code></p>
+<h1>方法二：命令行</h1>
+<h2 id="在哪里改？-2">在哪里改？</h2>
+<p>进入 <code>/etc/network/interfaces</code> ，默认内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br></pre></td></tr></table></figure>
+<p>添加以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line">address 172.16.10.135</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 172.16.10.2</span><br><span class="line">dns-nameservers 172.16.10.2</span><br></pre></td></tr></table></figure>
+<p>注：</p>
+<blockquote>
+<p>iface ens33 inet static：采用静态ip</p>
+<p>其他内容根据预先知识填写就好</p>
+</blockquote>
+<p>配置完记得重启  <code>sudo reboot</code></p>
+<h2 id="Q-A">Q&amp;A</h2>
+<p>但此时直接重启会出现“有线未托管”情况，原因是ubuntu的网络管理方案出问题了。</p>
+<p>此时需要修改 <code>/etc/NetworkManager/NetworkManager.conf</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[main]</span><br><span class="line">plugins=ifupdown,keyfile</span><br><span class="line"></span><br><span class="line">[ifupdown]</span><br><span class="line">managed=false</span><br><span class="line"></span><br><span class="line">[device]</span><br><span class="line">wifi.scan-rand-mac-address=no</span><br></pre></td></tr></table></figure>
+<p>把 <code>managed=false</code> 改成  <code>managed=true</code></p>
+<p>后重启 <code>network-manager</code> 或重启ubuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service network-manager restart</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<p>尝试能否ping通百度与能否ssh连接到虚拟机</p>
+<h1>tips</h1>
+<p>之前ip一直变的时候ssh连接上去，都会保存密钥，会占用不需要的ip的密钥</p>
+<p>在主机的 <code>～/.ssh/known_hosts</code> 可以删除</p>
+<p><strong>附录</strong></p>
+<p><strong>参考</strong></p>
+<ol>
+<li>Ubuntu18.04连不网 报&quot;有线连接未托管&quot; <a target="_blank" rel="noopener" href="https://blog.csdn.net/daerzei/article/details/85058130">https://blog.csdn.net/daerzei/article/details/85058130</a></li>
+<li>Ubuntu 18.04 lts 修改静态ip  <a target="_blank" rel="noopener" href="http://ivo-wang.github.io/2019/03/26/Ubuntu-18.04-lts-%E4%BF%AE%E6%94%B9%E9%9D%99%E6%80%81ip/">http://ivo-wang.github.io/2019/03/26/Ubuntu-18.04-lts-%E4%BF%AE%E6%94%B9%E9%9D%99%E6%80%81ip/</a></li>
+<li>ubuntu16.04配置网卡  <a target="_blank" rel="noopener" href="https://blog.csdn.net/stay_zezo/article/details/80718369">https://blog.csdn.net/stay_zezo/article/details/80718369</a></li>
+<li>虚拟机Ubuntu 18.04配置固定IP地址（ens33网卡，eth0也一样）ping百度  <a target="_blank" rel="noopener" href="https://blog.csdn.net/wu10188/article/details/102985067">https://blog.csdn.net/wu10188/article/details/102985067</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://wu-kave.github.io/2021/ubuntu1804StaticIp.html" title="Ubuntu18.04使用静态ip">https://wu-kave.github.io/2021/ubuntu1804StaticIp.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Ubuntu/" rel="tag"># Ubuntu</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Mac/" rel="tag"># Mac</a>
+              <a href="/tags/ip/" rel="tag"># ip</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/HowUseSQL_serverOnMacAndLinuxInstallSQL_server.html" rel="prev" title="如何在mac上使用SQL server与在Linux上安装SQL server">
+                  <i class="fa fa-angle-left"></i> 如何在mac上使用SQL server与在Linux上安装SQL server
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/GitAndStudyNotes.html" rel="next" title="Git学习笔记/Git不完全个人使用指南">
+                  Git学习笔记/Git不完全个人使用指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:39</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

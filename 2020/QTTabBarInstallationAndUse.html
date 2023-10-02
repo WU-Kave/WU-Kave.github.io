@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wu-kave.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="更高效的使用资源管理器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式">
+<meta property="og:url" content="https://wu-kave.github.io/2020/QTTabBarInstallationAndUse.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="更高效的使用资源管理器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png">
+<meta property="article:published_time" content="2020-04-14T07:53:44.000Z">
+<meta property="article:modified_time" content="2020-04-14T07:53:44.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png">
+
+
+<link rel="canonical" href="https://wu-kave.github.io/2020/QTTabBarInstallationAndUse.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wu-kave.github.io/2020/QTTabBarInstallationAndUse.html","path":"2020/QTTabBarInstallationAndUse.html","title":"QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式 | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">1. 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E9%9D%A2%E6%98%AF%E5%BA%9F%E8%AF%9D%EF%BC%8C%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E8%B7%B3%E5%88%B0%E5%AE%89%E8%A3%85%E9%83%A8%E5%88%86"><span class="nav-number">1.2.</span> <span class="nav-text">后面是废话，可以直接跳到安装部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why"><span class="nav-number">1.3.</span> <span class="nav-text">Why?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">What？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text">2. 安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text">3. 使用与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 开始使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%B1%89%E5%8C%96"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 汉化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E9%A2%84%E8%A7%88"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 预览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%90%AF"><span class="nav-number">3.3.1.</span> <span class="nav-text">开启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.3.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">3.3.3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">3.3.4.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E5%8D%A1%E5%85%B3%E9%97%AD%E6%8C%89%E9%92%AE"><span class="nav-number">3.4.</span> <span class="nav-text">标签卡关闭按钮</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BE%A4%E7%BB%84"><span class="nav-number">3.5.</span> <span class="nav-text">群组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">3.6.</span> <span class="nav-text">快捷键</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">4.</span> <span class="nav-text">4. 卸载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.1.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/images/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wu-kave.github.io/2020/QTTabBarInstallationAndUse.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/images/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式 | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-14 15:53:44" itemprop="dateCreated datePublished" datetime="2020-04-14T15:53:44+08:00">2020-04-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%BD%AF%E4%BB%B6-%E5%B7%A5%E5%85%B7-%E6%8A%80%E5%B7%A7/" itemprop="url" rel="index"><span itemprop="name">软件&工具&技巧</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>更高效的使用资源管理器</p>
+<span id="more"></span>
+<h1>1. 介绍</h1>
+<h2 id="功能">功能</h2>
+<p>窗口合并</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
+<p>照片视频文本预览，且支持选择哪种格式预览</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
+<p>很多…按需</p>
+<p>缺点</p>
+<ol>
+<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
+<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
+</ol>
+<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
+<h2 id="Why">Why?</h2>
+<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
+<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
+<h2 id="What？">What？</h2>
+<ol>
+<li>QTTabBar就是一个文件浏览增强工具</li>
+<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
+</ol>
+<h1>2. 安装</h1>
+<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a target="_blank" rel="noopener" href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
+官网下载很慢，<a target="_blank" rel="noopener" href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
+<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
+<h1>3. 使用与配置</h1>
+<h2 id="3-1-开始使用">3.1 开始使用</h2>
+<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
+<blockquote>
+<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
+<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
+</blockquote>
+<p>重启资源管理器<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
+<p>再不行，重启自行解决，友情链接<a target="_blank" rel="noopener" href="http://www.google.com/">google</a></p>
+<h2 id="3-2-汉化">3.2 汉化</h2>
+<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
+<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
+<blockquote>
+<p>若失效：任务管理器重启资源管理器</p>
+<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
+</blockquote>
+<h2 id="3-3-预览">3.3 预览</h2>
+<h3 id="开启">开启</h3>
+<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
+<h3 id="使用">使用</h3>
+<p>默认为鼠标悬停即可预览</p>
+<h3 id="配置">配置</h3>
+<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
+<h3 id="问题">问题</h3>
+<blockquote>
+<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
+</blockquote>
+<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
+<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
+<h2 id="群组">群组</h2>
+<p>加入群组，类似于浏览器的书签，快速访问</p>
+<h2 id="快捷键">快捷键</h2>
+<blockquote>
+<p>鼠标滚轮快速切换标签</p>
+<p>Ctrl + Tab 下一个标签页<br>
+Ctrl + Shift + Tab上一个标签页<br>
+Ctrl + Num0 – Num9 打开几号标签页<br>
+Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
+<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
+Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
+Ctrl + O open dialog for folder<br>
+Ctrl + L 锁定/解除标签页<br>
+Ctrl + N 关闭当然标签页<br>
+Alt + F4 直接把窗口关了，多数软件都使用</p>
+</blockquote>
+<h1>4. 卸载</h1>
+<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://wu-kave.github.io/2020/QTTabBarInstallationAndUse.html" title="QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式">https://wu-kave.github.io/2020/QTTabBarInstallationAndUse.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/windows/" rel="tag"># windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/myfisrsthexoblog.html" rel="prev" title="我的第一篇hexo框架blog">
+                  <i class="fa fa-angle-left"></i> 我的第一篇hexo框架blog
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/StudentAchievementManagementSystem.html" rel="next" title="C语言学生成绩管理系统">
+                  C语言学生成绩管理系统 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">27k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:39</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
