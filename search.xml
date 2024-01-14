@@ -177,6 +177,25 @@
 </tr>
 </tbody>
 </table>
+<h2 id="一些注意注意事项">一些注意注意事项</h2>
+<h3 id="选择第二个-li-标签">选择第二个 li 标签</h3>
+<p>假设有一段这样的 html</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&#x27;ul-div&#x27;</span>&gt;</span>1-ul-div<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&#x27;ul-li&#x27;</span>&gt;</span>2-ul-li<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>3-ul-li<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>4-ul-li<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>5-ul-li<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如何选择第二个 li 标签，也就是内容为“3-ul-li”的 li 标签。</p>
+<p>按照直觉，我们编写了这样的选择器</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">li</span><span class="selector-pseudo">:nth-child</span>(<span class="number">2</span>) &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而实际是内容 “2-ul-li” 响应了。</p>
+<p>因为 <code>li:nth-child(2)</code> 选择器正在选择其父元素的第二个子元素，而不是第二个 <code>li</code> 元素。</p>
+<p>选择第二个 li 标签，有两种方式</p>
+<ol>
+<li>过滤</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">li</span><span class="selector-pseudo">:nth-child</span>(<span class="number">2</span> of <span class="selector-tag">li</span>) &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>2 of li</code> ：过滤取得 li 标签列表，再选择第二个</p>
+<ol start="2">
+<li>nth-of-type</li>
+</ol>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">li</span><span class="selector-pseudo">:nth-of-type</span>(<span class="number">2</span>) &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="课后练习：小试牛刀答案">课后练习：小试牛刀答案</h2>
 <h3 id="Selectors-One">Selectors One</h3>
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">h2</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: white;</span><br><span class="line">    <span class="attribute">background-color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">span</span> &#123;</span><br><span class="line">    <span class="attribute">font-size</span>: <span class="number">200%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -644,6 +663,105 @@
       </tags>
   </entry>
   <entry>
+    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
+    <url>/2020/QTTabBarInstallationAndUse.html</url>
+    <content><![CDATA[<p>更高效的使用资源管理器</p>
+<span id="more"></span>
+<h1>1. 介绍</h1>
+<h2 id="功能">功能</h2>
+<p>窗口合并</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
+<p>照片视频文本预览，且支持选择哪种格式预览</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
+<p>很多…按需</p>
+<p>缺点</p>
+<ol>
+<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
+<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
+</ol>
+<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
+<h2 id="Why">Why?</h2>
+<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
+<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
+<h2 id="What？">What？</h2>
+<ol>
+<li>QTTabBar就是一个文件浏览增强工具</li>
+<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
+</ol>
+<h1>2. 安装</h1>
+<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
+官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
+<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
+<h1>3. 使用与配置</h1>
+<h2 id="3-1-开始使用">3.1 开始使用</h2>
+<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
+<blockquote>
+<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
+<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
+</blockquote>
+<p>重启资源管理器<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
+<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
+<h2 id="3-2-汉化">3.2 汉化</h2>
+<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
+<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
+<blockquote>
+<p>若失效：任务管理器重启资源管理器</p>
+<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
+</blockquote>
+<h2 id="3-3-预览">3.3 预览</h2>
+<h3 id="开启">开启</h3>
+<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
+<h3 id="使用">使用</h3>
+<p>默认为鼠标悬停即可预览</p>
+<h3 id="配置">配置</h3>
+<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
+<h3 id="问题">问题</h3>
+<blockquote>
+<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
+</blockquote>
+<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
+<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
+<h2 id="群组">群组</h2>
+<p>加入群组，类似于浏览器的书签，快速访问</p>
+<h2 id="快捷键">快捷键</h2>
+<blockquote>
+<p>鼠标滚轮快速切换标签</p>
+<p>Ctrl + Tab 下一个标签页<br>
+Ctrl + Shift + Tab上一个标签页<br>
+Ctrl + Num0 – Num9 打开几号标签页<br>
+Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
+<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
+Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
+Ctrl + O open dialog for folder<br>
+Ctrl + L 锁定/解除标签页<br>
+Ctrl + N 关闭当然标签页<br>
+Alt + F4 直接把窗口关了，多数软件都使用</p>
+</blockquote>
+<h1>4. 卸载</h1>
+<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
+<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>软件&amp;工具&amp;技巧</category>
+      </categories>
+      <tags>
+        <tag>windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言学生成绩管理系统</title>
     <url>/2020/StudentAchievementManagementSystem.html</url>
     <content><![CDATA[<p>C语言——学生成绩管理系统详解</p>
@@ -893,163 +1011,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
-    <url>/2020/QTTabBarInstallationAndUse.html</url>
-    <content><![CDATA[<p>更高效的使用资源管理器</p>
-<span id="more"></span>
-<h1>1. 介绍</h1>
-<h2 id="功能">功能</h2>
-<p>窗口合并</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
-<p>照片视频文本预览，且支持选择哪种格式预览</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
-<p>很多…按需</p>
-<p>缺点</p>
-<ol>
-<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
-<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
-</ol>
-<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
-<h2 id="Why">Why?</h2>
-<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
-<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
-<h2 id="What？">What？</h2>
-<ol>
-<li>QTTabBar就是一个文件浏览增强工具</li>
-<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
-</ol>
-<h1>2. 安装</h1>
-<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
-官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
-<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
-<h1>3. 使用与配置</h1>
-<h2 id="3-1-开始使用">3.1 开始使用</h2>
-<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
-<blockquote>
-<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
-<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
-</blockquote>
-<p>重启资源管理器<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
-<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
-<h2 id="3-2-汉化">3.2 汉化</h2>
-<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
-<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
-<blockquote>
-<p>若失效：任务管理器重启资源管理器</p>
-<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
-</blockquote>
-<h2 id="3-3-预览">3.3 预览</h2>
-<h3 id="开启">开启</h3>
-<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
-<h3 id="使用">使用</h3>
-<p>默认为鼠标悬停即可预览</p>
-<h3 id="配置">配置</h3>
-<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
-<h3 id="问题">问题</h3>
-<blockquote>
-<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
-</blockquote>
-<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
-<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
-<h2 id="群组">群组</h2>
-<p>加入群组，类似于浏览器的书签，快速访问</p>
-<h2 id="快捷键">快捷键</h2>
-<blockquote>
-<p>鼠标滚轮快速切换标签</p>
-<p>Ctrl + Tab 下一个标签页<br>
-Ctrl + Shift + Tab上一个标签页<br>
-Ctrl + Num0 – Num9 打开几号标签页<br>
-Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
-<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
-Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
-Ctrl + O open dialog for folder<br>
-Ctrl + L 锁定/解除标签页<br>
-Ctrl + N 关闭当然标签页<br>
-Alt + F4 直接把窗口关了，多数软件都使用</p>
-</blockquote>
-<h1>4. 卸载</h1>
-<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
-<h2 id="参考">参考</h2>
-<ol>
-<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
-<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>软件&amp;工具&amp;技巧</category>
-      </categories>
-      <tags>
-        <tag>windows</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
-    <url>/2021/algs4DijkstraJava.html</url>
-    <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
-<span id="more"></span>
-<h1>一、算法原理</h1>
-<p>计算表达式<code>( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )</code></p>
-<p>分析书上有，不赘述。算法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将操作数压入操作数栈；</span><br><span class="line">将运算符压入运算符栈；</span><br><span class="line">忽略左括号；</span><br><span class="line">在遇到右括号时，弹出一个运算符，弹出所需数量的操作数，并将运算符和操作数的运算结果压入操作数栈。</span><br></pre></td></tr></table></figure>
-<p>书上源码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; </span><br><span class="line">        Stack&lt;String&gt; ops  = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> StdIn.readString();</span><br><span class="line">            <span class="keyword">if</span>      (s.equals(<span class="string">&quot;(&quot;</span>))               ;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;-&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;*&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;/&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;sqrt&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">v</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span>      (op.equals(<span class="string">&quot;+&quot;</span>))    v = vals.pop() + v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>))    v = vals.pop() - v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>))    v = vals.pop() * v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>))    v = vals.pop() / v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;sqrt&quot;</span>)) v = Math.sqrt(v);</span><br><span class="line">                vals.push(v);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> vals.push(Double.parseDouble(s));</span><br><span class="line">        &#125;</span><br><span class="line">        StdOut.println(vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>二、问题</h1>
-<p>算法第四版中的Dijkstra的双栈算术表达式求值算法中，<code>while (!StdIn.isEmpty())</code> 循环无法跳出</p>
-<p><code>StdIn.isEmpty()的实现:</code></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !scanner.hasNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>三、解决方法</h1>
-<h2 id="法一｜敌动我不动：">法一｜敌动我不动：</h2>
-<p>控制台输入以下快捷键：</p>
-<p><code>macOS</code> ： <code>Command+D</code></p>
-<p><code>Windows</code> ： <code>Ctrl+D</code></p>
-<blockquote>
-<p>原理：⌘D组合键可让您发送EOF(文件末尾)，即表示无法从数据源读取更多数据。</p>
-</blockquote>
-<h2 id="法二｜敌不动我动：">法二｜敌不动我动：</h2>
-<p>不用StdIn，使用Java自己的库重新写一遍</p>
-<blockquote>
-<p>只处理了±*/，没有处理算术平方根</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;请输入算术表达式，中间用空格隔开，括号用英文字符：&quot;</span>);</span><br><span class="line">        str = sc.nextLine();</span><br><span class="line">        String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">            <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">            <span class="comment">//是否为操作符</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                vals.push(val);</span><br><span class="line">            &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运算示例：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx01.png" alt="algs4DijkstraEx01"></p>
-<p><strong>循环输入版本：</strong></p>
-<blockquote>
-<p>如果要循环计算算术表达式：</p>
-<ol>
-<li>请在合适位置添加<code>while(sc.hasNextLine())</code></li>
-<li>除去提示语句，因为会造成输出上逻辑混乱，但是代码本身是可以执行的</li>
-<li>设置退出条件，否则程序循环执行，就跟书上的一样了。</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line">        <span class="keyword">while</span> (sc.hasNextLine()) &#123;</span><br><span class="line">            str = sc.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (str.equals(<span class="string">&quot;q&quot;</span>)) &#123; <span class="comment">//退出</span></span><br><span class="line">                System.out.println(<span class="string">&quot;已退出，终止程序！&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">                <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">                    <span class="comment">//是否为操作符</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                    <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                    <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                    vals.push(val);</span><br><span class="line">                &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>示例：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx02.png" alt="algs4DijkstraEx02"></p>
-<p><strong>附录</strong></p>
-<p>参考：</p>
-<ol>
-<li><a href="http://zzanswer.github.io/2016/03/23/Dijkstra%E7%9A%84%E5%8F%8C%E6%A0%88%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%E7%AE%97%E6%B3%95/">Dijkstra的双栈算术表达式求值算法 Java实现</a>   <em>问题：char型，只能处理个位数</em></li>
-<li><a href="https://www.coder.work/article/1934742">java - 如何使StdIn.isEmpty()返回true？</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>algs4</tag>
-        <tag>Dijkstra</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu18.04使用静态ip</title>
     <url>/2021/ubuntu1804StaticIp.html</url>
     <content><![CDATA[<p>如何修改ubuntu的ip并使用静态ip？（半科普</p>
@@ -1149,6 +1110,84 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
       </tags>
   </entry>
   <entry>
+    <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
+    <url>/2021/algs4DijkstraJava.html</url>
+    <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
+<span id="more"></span>
+<h1>一、算法原理</h1>
+<p>计算表达式<code>( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )</code></p>
+<p>分析书上有，不赘述。算法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将操作数压入操作数栈；</span><br><span class="line">将运算符压入运算符栈；</span><br><span class="line">忽略左括号；</span><br><span class="line">在遇到右括号时，弹出一个运算符，弹出所需数量的操作数，并将运算符和操作数的运算结果压入操作数栈。</span><br></pre></td></tr></table></figure>
+<p>书上源码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; </span><br><span class="line">        Stack&lt;String&gt; ops  = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> StdIn.readString();</span><br><span class="line">            <span class="keyword">if</span>      (s.equals(<span class="string">&quot;(&quot;</span>))               ;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;-&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;*&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;/&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;sqrt&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">v</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span>      (op.equals(<span class="string">&quot;+&quot;</span>))    v = vals.pop() + v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>))    v = vals.pop() - v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>))    v = vals.pop() * v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>))    v = vals.pop() / v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;sqrt&quot;</span>)) v = Math.sqrt(v);</span><br><span class="line">                vals.push(v);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> vals.push(Double.parseDouble(s));</span><br><span class="line">        &#125;</span><br><span class="line">        StdOut.println(vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>二、问题</h1>
+<p>算法第四版中的Dijkstra的双栈算术表达式求值算法中，<code>while (!StdIn.isEmpty())</code> 循环无法跳出</p>
+<p><code>StdIn.isEmpty()的实现:</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !scanner.hasNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>三、解决方法</h1>
+<h2 id="法一｜敌动我不动：">法一｜敌动我不动：</h2>
+<p>控制台输入以下快捷键：</p>
+<p><code>macOS</code> ： <code>Command+D</code></p>
+<p><code>Windows</code> ： <code>Ctrl+D</code></p>
+<blockquote>
+<p>原理：⌘D组合键可让您发送EOF(文件末尾)，即表示无法从数据源读取更多数据。</p>
+</blockquote>
+<h2 id="法二｜敌不动我动：">法二｜敌不动我动：</h2>
+<p>不用StdIn，使用Java自己的库重新写一遍</p>
+<blockquote>
+<p>只处理了±*/，没有处理算术平方根</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;请输入算术表达式，中间用空格隔开，括号用英文字符：&quot;</span>);</span><br><span class="line">        str = sc.nextLine();</span><br><span class="line">        String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">            <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">            <span class="comment">//是否为操作符</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                vals.push(val);</span><br><span class="line">            &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运算示例：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx01.png" alt="algs4DijkstraEx01"></p>
+<p><strong>循环输入版本：</strong></p>
+<blockquote>
+<p>如果要循环计算算术表达式：</p>
+<ol>
+<li>请在合适位置添加<code>while(sc.hasNextLine())</code></li>
+<li>除去提示语句，因为会造成输出上逻辑混乱，但是代码本身是可以执行的</li>
+<li>设置退出条件，否则程序循环执行，就跟书上的一样了。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line">        <span class="keyword">while</span> (sc.hasNextLine()) &#123;</span><br><span class="line">            str = sc.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (str.equals(<span class="string">&quot;q&quot;</span>)) &#123; <span class="comment">//退出</span></span><br><span class="line">                System.out.println(<span class="string">&quot;已退出，终止程序！&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">                <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">                    <span class="comment">//是否为操作符</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                    <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                    <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                    vals.push(val);</span><br><span class="line">                &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx02.png" alt="algs4DijkstraEx02"></p>
+<p><strong>附录</strong></p>
+<p>参考：</p>
+<ol>
+<li><a href="http://zzanswer.github.io/2016/03/23/Dijkstra%E7%9A%84%E5%8F%8C%E6%A0%88%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%E7%AE%97%E6%B3%95/">Dijkstra的双栈算术表达式求值算法 Java实现</a>   <em>问题：char型，只能处理个位数</em></li>
+<li><a href="https://www.coder.work/article/1934742">java - 如何使StdIn.isEmpty()返回true？</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>algs4</tag>
+        <tag>Dijkstra</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/clrdpjqhl000jwc0ub7eg9n3y.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+<h2 id="Quick-Start">Quick Start</h2>
+<h3 id="Create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>algs4｜macOS《算法》idea环境配置及重定位</title>
     <url>/2021/MacIdeaAlgs4Test.html</url>
     <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
@@ -1194,204 +1233,10 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
         <category>算法</category>
       </categories>
       <tags>
-        <tag>algs4</tag>
         <tag>Mac</tag>
+        <tag>algs4</tag>
         <tag>idea</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/cln8kntij000n8iykfje8e4yd.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>在Mac上使用sublime_text3运行Java</title>
-    <url>/2020/MacSublimeText3Java.html</url>
-    <content><![CDATA[<p>在sublime text3中可以编译Java但不能运行，只需要添加一个编译环境即可</p>
-<span id="more"></span>
-<h2 id="1-新建编译系统">1. 新建编译系统</h2>
-<p>英文：Tools–&gt;Build System–&gt;New Build System<br>
-中文：工具–&gt;编译系统–&gt;新建编译系统</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2020/09/NewBuildSystem.png" alt="NewBuildSystem"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&quot;shell_cmd&quot;: &quot;javac -encoding utf-8 $file_name &amp;&amp; java $file_base_name&quot;,</span><br><span class="line"></span><br><span class="line">&quot;file_regex&quot;: &quot;^ *\\[javac\\] (.+):([0-9]+):() (.*)$&quot;,</span><br><span class="line"></span><br><span class="line">&quot;selector&quot;: &quot;source.java&quot;,</span><br><span class="line"></span><br><span class="line">&quot;encoding&quot;: &quot;utf-8&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>复制粘贴上面代码，保存，路径不变，文件名为：<code>xxx.sublime-build</code>，其中xxx为编译系统的名字，随便取，如我的xxx为JavaRun，一目了然知道要用来干嘛的。</p>
-<h2 id="2-选择编译系统">2. 选择编译系统</h2>
-<p>英文：Tools–&gt;Build System–&gt;JavaRun<br>
-中文：工具–&gt;编译系统–&gt;JavaRun</p>
-<h2 id="3-cmd-B编译并运行">3. cmd+B编译并运行</h2>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2020/09/sublimetext3javacoderun.png" alt="sublimetext3javacoderun"></p>
-<p>参考：</p>
-<p><a href="https://www.jianshu.com/p/0fac60f43ca7">Mac 使用Sublime Text 3搭建java环境</a></p>
-]]></content>
-      <categories>
-        <category>Mac</category>
-      </categories>
-      <tags>
-        <tag>Mac</tag>
-        <tag>sublime_text3</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>我的第一篇hexo框架blog</title>
-    <url>/2020/myfisrsthexoblog.html</url>
-    <content><![CDATA[<p>@<a href="%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95">TOC</a></p>
-<h1>我的博客编写</h1>
-<span id="more"></span>
-<blockquote>
-<p>用“<!-- more -->”可以控制博客文章在首页的长度，后面内容不显示</p>
-</blockquote>
-<h1>一级标题</h1>
-<h2 id="二级标题">二级标题</h2>
-<h3 id="三级标题">三级标题</h3>
-<h4 id="四级标题">四级标题</h4>
-<h5 id="五级标题">五级标题</h5>
-<h6 id="六级标题">六级标题</h6>
-<p>注意标题都有索引，而直接换行没有，这就是一个换行</p>
-<h2 id="区块引入">区块引入</h2>
-<blockquote>
-<p>这是一段引入段落，Typora快捷方式为Ctrl+Shitf+Q</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;这是一段引入代码，Typora快捷方式为Ctrl+Shitf+K&quot;</span>);</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>$$<br>
-这里是一个引入公式，Typora快捷方式为Ctrl+Shitf+M<br>
-x=-2a/s<br>
-$$</p>
-<h2 id="超链接">超链接</h2>
-<p><a href="https://www.baidu.com">百度</a></p>
-<h2 id="图片">图片</h2>
-<p><img src="http://pic2.52pk.com/files/allimg/160510/143922CM-1.jpg" alt="源氏"></p>
-<h2 id="无序列表">无序列表</h2>
-<ul>
-<li>
-<p>无序列表</p>
-</li>
-<li>
-<p>用“ - ”</p>
-</li>
-</ul>
-<ul>
-<li>或者“ * ”</li>
-</ul>
-<ul>
-<li>或者快捷键C+S+]</li>
-</ul>
-<p>##有序列表</p>
-<ol>
-<li>有序列表</li>
-<li>把无序的“ - ”改成“ 1. ”</li>
-</ol>
-<p>##分割线用三个或三个以上的“ — ”或“ *** ”</p>
-<hr>
-<hr>
-<p>最好用五个</p>
-<hr>
-<p>参考网上资料8</p>
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=28133171&auto=1&height=66"></iframe>]]></content>
-      <categories>
-        <category>分类测试</category>
-      </categories>
-      <tags>
-        <tag>随笔</tag>
-        <tag>标签测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法｜最大公因数和最小公倍数多个详细版-JavaScript</title>
-    <url>/2022/gcd-lcm-one-and-more-js.html</url>
-    <content><![CDATA[<p>使用 Javascript 描述了多种求两个数或多个数的 GCD 和 LCM 的方法。</p>
-<span id="more"></span>
-<h1>最大公约数（Greatest Common Divisor）</h1>
-<p><strong>定义</strong><br>
-也叫最大公因数。简单：因数最大严谨：指一个或多个数中，a1 ～ an ，都能被 k 整除，k 是公约数，k 最大时即为最大公约数。</p>
-<h2 id="两个数的最大公约数">两个数的最大公约数</h2>
-<h3 id="倒数遍历求解">倒数遍历求解</h3>
-<p>找到两个数中较小的那个数，称之为a，从a开始遍历到1，找到一个都能被a和b整数的数，符合定义。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">  a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">  b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">  <span class="keyword">if</span> (a - b &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    [a, b] = [b, a]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = a; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( a % i === <span class="number">0</span> &amp;&amp; b % i === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中，当两数相差较大时，让a成为较小值是非常必要的。</p>
-<h3 id="辗转相除法（欧几里德算法）">辗转相除法（欧几里德算法）</h3>
-<p>前提：<code>gcd(a, b) === gcd(b, a mod b)</code> (a &gt; b &amp;&amp; a mod b &gt; 0)<br>
-证明：<br>
-a可以表示成a = kb + r  (a，b，k，r皆为正整数，且 r &gt; 0)<br>
-假设d是a,b的一个公约数，即a和b都可以被d整除。而r = a - kb，两边同时除以d，r/d=a/d-kb/d，由等式右边可知r/d为整数，因此d也是r的因数。<br>
-d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约数。因(a,b)和(b,a mod b)的公约数相等，则其最大公约数也相等，得证。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a % b === <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">gcd</span>(b, a % b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>简洁版：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> a % b ? <span class="title function_">gcd</span>(b, a % b) : b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="更损相减法">更损相减法</h3>
-<p>第一步：若都为偶数，重复除2直到最少又一个奇数，但要记下除了多少。第二步：重复用大数减小数，直到减数等于差。最大公约数为 第一步被除了多少 * 第二步的差。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="comment">// 若两个相等，不作判断后面死循环</span></span><br><span class="line">	<span class="keyword">if</span> (a === b) &#123;</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 除2</span></span><br><span class="line">	<span class="keyword">let</span> sum = <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> (a % <span class="number">2</span> === <span class="number">0</span> &amp;&amp; b % <span class="number">2</span> === <span class="number">0</span>) &#123;</span><br><span class="line">		a /= <span class="number">2</span></span><br><span class="line">		b /= <span class="number">2</span></span><br><span class="line">		sum *= <span class="number">2</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 开始相减</span></span><br><span class="line">	<span class="keyword">let</span> poor = a - b</span><br><span class="line">	<span class="keyword">while</span> (poor !== b) &#123;</span><br><span class="line">		<span class="keyword">if</span> (poor &lt; b) &#123;</span><br><span class="line">			a = b</span><br><span class="line">			b = poor</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			a = poor</span><br><span class="line">		&#125;</span><br><span class="line">		poor = a - b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> poor * sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="多个数的最大公约数">多个数的最大公约数</h2>
-<p>若参数个数为0，返回 undefined ，若参数个数为1，返回该参数。否则先求解前2个参数的最大公约数，然后用该最大公约数和第三个数求最大公约数，以此类推。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcdMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">gcd</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>最小公倍数（Least Common Multiple）</h1>
-<p><strong>定义</strong><br>
-简单：倍数最小严谨：指一个或多个数中，a1 ～ an ，k 都是他们任何一个的倍数，k 是公倍数，k 最小时即为最小公倍数。</p>
-<h2 id="两个数的最小公倍数">两个数的最小公倍数</h2>
-<p>乘积 = 最小公倍数 * 最大公因数所以 最小公倍数 = 乘积 / 最大公因数</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcm</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> (a * b) / <span class="title function_">gcd</span>(a,b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="多个数的最小公倍数">多个数的最小公倍数</h2>
-<p>原理跟多个数的最大公因数相同。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcmMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">lcm</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考：</p>
-<ol>
-<li>【js计算多个数的最大公约数和最小公倍数】：<a href="https://www.cnblogs.com/Ingots/p/11330355.html">https://www.cnblogs.com/Ingots/p/11330355.html</a></li>
-<li>【前端JS算法之最大公因数】：<a href="https://blog.csdn.net/weixin_44388087/article/details/110388252">https://blog.csdn.net/weixin_44388087/article/details/110388252</a></li>
-<li>【百度百科：更相减损术】：<a href="https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183">https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183</a></li>
-<li>【百度百科：欧几里得算法】：<a href="https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675">https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675</a></li>
-<li>【百度百科：最小公倍数】：<a href="https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375">https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375</a></li>
-</ol>
-<p><strong>首发地址：<a href="https://wu-kave.github.io/2022/gcd-lcm-one-and-more-js.html">https://WU-Kave.github.io/2022/gcd-lcm-one-and-more-js.html</a></strong></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>gcd</tag>
-        <tag>lcm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>结构体指针函数--头节点不头大</title>
-    <url>/2020/StructKeyFunctionOfHead.html</url>
-    <content><![CDATA[<p>近日学习数据结构的时候发现一些以前没有察觉到的点，就是结构体的指针，当修改到头节点的时候，为什么要用二级指针呢？</p>
-<span id="more"></span>
-<p>A：<em>二级指针才可以修改一级指针本身的值，而不是修改一级指针指向的变量的值</em></p>
-<h2 id="详解">详解</h2>
-<p>观察如下代码</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> num,source;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span> <span class="title">a</span>=</span>&#123;<span class="number">1</span>,<span class="number">90</span>&#125;,b=&#123;<span class="number">2</span>,<span class="number">86</span>&#125;,c=&#123;<span class="number">3</span>,<span class="number">20</span>&#125;,d=&#123;<span class="number">8</span>,<span class="number">80</span>&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">head</span>,*<span class="title">p</span>;</span></span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;使用函数前数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change1(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数1后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	change2(&amp;head);                     <span class="comment">//取head变量本身的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数2后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;恢复数据数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change3(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数3后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; head=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>&#123; (*head)=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; *head=d; &#125; </span><br></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用函数前数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数1后：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数2后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line">恢复数据数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数3后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br></pre></td></tr></table></figure>
-<p>数据结构：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/06/10StructKeyFunctionOfHeaddata.png" alt=""></p>
-<p><strong>change1函数</strong></p>
-<p>参数：struct student *head</p>
-<p><code>change1(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)；所以change1函数中的head接收了a的值(注意：主函数的head与change1函数的head不是同一个)，此时新旧head指向的变量相同，但自身不同。</p>
-<p><code>head=&amp;d</code>  将change1函数中的head存储的地址改成d的地址，在change1函数中head指向d，因为没有怼主函数的head进行改动，所以主函数的head还是指向a，所以修改不成功</p>
-<p><strong>change2函数</strong></p>
-<p>参数：struct student **head</p>
-<p><em>change2(&amp;head)</em>  取主函数中head变量自身的值传给change2函数中的head变量，而<code>*</code>的作用是进入指针指向的变量，所以<code>*head</code>即进入了change2函数head指向的变量–&gt;主函数的head，所以此时<code>*head</code>等价于主函数的head，修改<code>*head</code>就可以修改主函数的head</p>
-<p><code>(*head)=&amp;d</code>  将<code>*head</code>改为d的地址等于将主函数的head改为d的地址</p>
-<p><strong>change3函数</strong></p>
-<p>参数：struct student *head</p>
-<p><code>change3(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)</p>
-<p><code>*head=d</code>  <code>*head</code>进入head指向的节点，即进入a，将d赋给<code>*head</code>等价于将d赋给a，此时原来存储a的空间存储的数据与存储d的空间存储的数据一样(有、绕，就是现在没有a，有两个d，因为a变成d)，此时主函数的head、change3函数的head都不变，而是将他们指向的变量重新赋值。<em>此语句会改变数据使得数据丢失，最好不要用</em></p>
-]]></content>
   </entry>
   <entry>
     <title>为什么consolelog在修改之前就输出修改后的值？</title>
@@ -1459,6 +1304,33 @@ d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约�
         <tag>JavaScript</tag>
         <tag>数组</tag>
         <tag>打印输出</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Mac上使用sublime_text3运行Java</title>
+    <url>/2020/MacSublimeText3Java.html</url>
+    <content><![CDATA[<p>在sublime text3中可以编译Java但不能运行，只需要添加一个编译环境即可</p>
+<span id="more"></span>
+<h2 id="1-新建编译系统">1. 新建编译系统</h2>
+<p>英文：Tools–&gt;Build System–&gt;New Build System<br>
+中文：工具–&gt;编译系统–&gt;新建编译系统</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2020/09/NewBuildSystem.png" alt="NewBuildSystem"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&quot;shell_cmd&quot;: &quot;javac -encoding utf-8 $file_name &amp;&amp; java $file_base_name&quot;,</span><br><span class="line"></span><br><span class="line">&quot;file_regex&quot;: &quot;^ *\\[javac\\] (.+):([0-9]+):() (.*)$&quot;,</span><br><span class="line"></span><br><span class="line">&quot;selector&quot;: &quot;source.java&quot;,</span><br><span class="line"></span><br><span class="line">&quot;encoding&quot;: &quot;utf-8&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>复制粘贴上面代码，保存，路径不变，文件名为：<code>xxx.sublime-build</code>，其中xxx为编译系统的名字，随便取，如我的xxx为JavaRun，一目了然知道要用来干嘛的。</p>
+<h2 id="2-选择编译系统">2. 选择编译系统</h2>
+<p>英文：Tools–&gt;Build System–&gt;JavaRun<br>
+中文：工具–&gt;编译系统–&gt;JavaRun</p>
+<h2 id="3-cmd-B编译并运行">3. cmd+B编译并运行</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2020/09/sublimetext3javacoderun.png" alt="sublimetext3javacoderun"></p>
+<p>参考：</p>
+<p><a href="https://www.jianshu.com/p/0fac60f43ca7">Mac 使用Sublime Text 3搭建java环境</a></p>
+]]></content>
+      <categories>
+        <category>Mac</category>
+      </categories>
+      <tags>
+        <tag>Mac</tag>
+        <tag>sublime_text3</tag>
       </tags>
   </entry>
   <entry>
@@ -1616,6 +1488,153 @@ d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约�
         <tag>Mac</tag>
         <tag>SQl_server</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>我的第一篇hexo框架blog</title>
+    <url>/2020/myfisrsthexoblog.html</url>
+    <content><![CDATA[<p>@<a href="%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95">TOC</a></p>
+<h1>我的博客编写</h1>
+<span id="more"></span>
+<blockquote>
+<p>用“<!-- more -->”可以控制博客文章在首页的长度，后面内容不显示</p>
+</blockquote>
+<h1>一级标题</h1>
+<h2 id="二级标题">二级标题</h2>
+<h3 id="三级标题">三级标题</h3>
+<h4 id="四级标题">四级标题</h4>
+<h5 id="五级标题">五级标题</h5>
+<h6 id="六级标题">六级标题</h6>
+<p>注意标题都有索引，而直接换行没有，这就是一个换行</p>
+<h2 id="区块引入">区块引入</h2>
+<blockquote>
+<p>这是一段引入段落，Typora快捷方式为Ctrl+Shitf+Q</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;这是一段引入代码，Typora快捷方式为Ctrl+Shitf+K&quot;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>$$<br>
+这里是一个引入公式，Typora快捷方式为Ctrl+Shitf+M<br>
+x=-2a/s<br>
+$$</p>
+<h2 id="超链接">超链接</h2>
+<p><a href="https://www.baidu.com">百度</a></p>
+<h2 id="图片">图片</h2>
+<p><img src="http://pic2.52pk.com/files/allimg/160510/143922CM-1.jpg" alt="源氏"></p>
+<h2 id="无序列表">无序列表</h2>
+<ul>
+<li>
+<p>无序列表</p>
+</li>
+<li>
+<p>用“ - ”</p>
+</li>
+</ul>
+<ul>
+<li>或者“ * ”</li>
+</ul>
+<ul>
+<li>或者快捷键C+S+]</li>
+</ul>
+<p>##有序列表</p>
+<ol>
+<li>有序列表</li>
+<li>把无序的“ - ”改成“ 1. ”</li>
+</ol>
+<p>##分割线用三个或三个以上的“ — ”或“ *** ”</p>
+<hr>
+<hr>
+<p>最好用五个</p>
+<hr>
+<p>参考网上资料8</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=28133171&auto=1&height=66"></iframe>]]></content>
+      <categories>
+        <category>分类测试</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+        <tag>标签测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法｜最大公因数和最小公倍数多个详细版-JavaScript</title>
+    <url>/2022/gcd-lcm-one-and-more-js.html</url>
+    <content><![CDATA[<p>使用 Javascript 描述了多种求两个数或多个数的 GCD 和 LCM 的方法。</p>
+<span id="more"></span>
+<h1>最大公约数（Greatest Common Divisor）</h1>
+<p><strong>定义</strong><br>
+也叫最大公因数。简单：因数最大严谨：指一个或多个数中，a1 ～ an ，都能被 k 整除，k 是公约数，k 最大时即为最大公约数。</p>
+<h2 id="两个数的最大公约数">两个数的最大公约数</h2>
+<h3 id="倒数遍历求解">倒数遍历求解</h3>
+<p>找到两个数中较小的那个数，称之为a，从a开始遍历到1，找到一个都能被a和b整数的数，符合定义。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">  a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">  b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">  <span class="keyword">if</span> (a - b &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    [a, b] = [b, a]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = a; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( a % i === <span class="number">0</span> &amp;&amp; b % i === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，当两数相差较大时，让a成为较小值是非常必要的。</p>
+<h3 id="辗转相除法（欧几里德算法）">辗转相除法（欧几里德算法）</h3>
+<p>前提：<code>gcd(a, b) === gcd(b, a mod b)</code> (a &gt; b &amp;&amp; a mod b &gt; 0)<br>
+证明：<br>
+a可以表示成a = kb + r  (a，b，k，r皆为正整数，且 r &gt; 0)<br>
+假设d是a,b的一个公约数，即a和b都可以被d整除。而r = a - kb，两边同时除以d，r/d=a/d-kb/d，由等式右边可知r/d为整数，因此d也是r的因数。<br>
+d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约数。因(a,b)和(b,a mod b)的公约数相等，则其最大公约数也相等，得证。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a % b === <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">gcd</span>(b, a % b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简洁版：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> a % b ? <span class="title function_">gcd</span>(b, a % b) : b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="更损相减法">更损相减法</h3>
+<p>第一步：若都为偶数，重复除2直到最少又一个奇数，但要记下除了多少。第二步：重复用大数减小数，直到减数等于差。最大公约数为 第一步被除了多少 * 第二步的差。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="comment">// 若两个相等，不作判断后面死循环</span></span><br><span class="line">	<span class="keyword">if</span> (a === b) &#123;</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 除2</span></span><br><span class="line">	<span class="keyword">let</span> sum = <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> (a % <span class="number">2</span> === <span class="number">0</span> &amp;&amp; b % <span class="number">2</span> === <span class="number">0</span>) &#123;</span><br><span class="line">		a /= <span class="number">2</span></span><br><span class="line">		b /= <span class="number">2</span></span><br><span class="line">		sum *= <span class="number">2</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 开始相减</span></span><br><span class="line">	<span class="keyword">let</span> poor = a - b</span><br><span class="line">	<span class="keyword">while</span> (poor !== b) &#123;</span><br><span class="line">		<span class="keyword">if</span> (poor &lt; b) &#123;</span><br><span class="line">			a = b</span><br><span class="line">			b = poor</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			a = poor</span><br><span class="line">		&#125;</span><br><span class="line">		poor = a - b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> poor * sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多个数的最大公约数">多个数的最大公约数</h2>
+<p>若参数个数为0，返回 undefined ，若参数个数为1，返回该参数。否则先求解前2个参数的最大公约数，然后用该最大公约数和第三个数求最大公约数，以此类推。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcdMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">gcd</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>最小公倍数（Least Common Multiple）</h1>
+<p><strong>定义</strong><br>
+简单：倍数最小严谨：指一个或多个数中，a1 ～ an ，k 都是他们任何一个的倍数，k 是公倍数，k 最小时即为最小公倍数。</p>
+<h2 id="两个数的最小公倍数">两个数的最小公倍数</h2>
+<p>乘积 = 最小公倍数 * 最大公因数所以 最小公倍数 = 乘积 / 最大公因数</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcm</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> (a * b) / <span class="title function_">gcd</span>(a,b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多个数的最小公倍数">多个数的最小公倍数</h2>
+<p>原理跟多个数的最大公因数相同。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcmMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">lcm</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li>【js计算多个数的最大公约数和最小公倍数】：<a href="https://www.cnblogs.com/Ingots/p/11330355.html">https://www.cnblogs.com/Ingots/p/11330355.html</a></li>
+<li>【前端JS算法之最大公因数】：<a href="https://blog.csdn.net/weixin_44388087/article/details/110388252">https://blog.csdn.net/weixin_44388087/article/details/110388252</a></li>
+<li>【百度百科：更相减损术】：<a href="https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183">https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183</a></li>
+<li>【百度百科：欧几里得算法】：<a href="https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675">https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675</a></li>
+<li>【百度百科：最小公倍数】：<a href="https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375">https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375</a></li>
+</ol>
+<p><strong>首发地址：<a href="https://wu-kave.github.io/2022/gcd-lcm-one-and-more-js.html">https://WU-Kave.github.io/2022/gcd-lcm-one-and-more-js.html</a></strong></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>gcd</tag>
+        <tag>lcm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>结构体指针函数--头节点不头大</title>
+    <url>/2020/StructKeyFunctionOfHead.html</url>
+    <content><![CDATA[<p>近日学习数据结构的时候发现一些以前没有察觉到的点，就是结构体的指针，当修改到头节点的时候，为什么要用二级指针呢？</p>
+<span id="more"></span>
+<p>A：<em>二级指针才可以修改一级指针本身的值，而不是修改一级指针指向的变量的值</em></p>
+<h2 id="详解">详解</h2>
+<p>观察如下代码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> num,source;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span> <span class="title">a</span>=</span>&#123;<span class="number">1</span>,<span class="number">90</span>&#125;,b=&#123;<span class="number">2</span>,<span class="number">86</span>&#125;,c=&#123;<span class="number">3</span>,<span class="number">20</span>&#125;,d=&#123;<span class="number">8</span>,<span class="number">80</span>&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">head</span>,*<span class="title">p</span>;</span></span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;使用函数前数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change1(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数1后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	change2(&amp;head);                     <span class="comment">//取head变量本身的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数2后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;恢复数据数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change3(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数3后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; head=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>&#123; (*head)=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; *head=d; &#125; </span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用函数前数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数1后：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数2后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line">恢复数据数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数3后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br></pre></td></tr></table></figure>
+<p>数据结构：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/06/10StructKeyFunctionOfHeaddata.png" alt=""></p>
+<p><strong>change1函数</strong></p>
+<p>参数：struct student *head</p>
+<p><code>change1(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)；所以change1函数中的head接收了a的值(注意：主函数的head与change1函数的head不是同一个)，此时新旧head指向的变量相同，但自身不同。</p>
+<p><code>head=&amp;d</code>  将change1函数中的head存储的地址改成d的地址，在change1函数中head指向d，因为没有怼主函数的head进行改动，所以主函数的head还是指向a，所以修改不成功</p>
+<p><strong>change2函数</strong></p>
+<p>参数：struct student **head</p>
+<p><em>change2(&amp;head)</em>  取主函数中head变量自身的值传给change2函数中的head变量，而<code>*</code>的作用是进入指针指向的变量，所以<code>*head</code>即进入了change2函数head指向的变量–&gt;主函数的head，所以此时<code>*head</code>等价于主函数的head，修改<code>*head</code>就可以修改主函数的head</p>
+<p><code>(*head)=&amp;d</code>  将<code>*head</code>改为d的地址等于将主函数的head改为d的地址</p>
+<p><strong>change3函数</strong></p>
+<p>参数：struct student *head</p>
+<p><code>change3(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)</p>
+<p><code>*head=d</code>  <code>*head</code>进入head指向的节点，即进入a，将d赋给<code>*head</code>等价于将d赋给a，此时原来存储a的空间存储的数据与存储d的空间存储的数据一样(有、绕，就是现在没有a，有两个d，因为a变成d)，此时主函数的head、change3函数的head都不变，而是将他们指向的变量重新赋值。<em>此语句会改变数据使得数据丢失，最好不要用</em></p>
+]]></content>
   </entry>
   <entry>
     <title>蓝桥杯｜2021第十二届蓝桥杯第二次模拟赛真题与解答[Java]</title>
