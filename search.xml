@@ -1,6 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CSS学习笔记｜MDN-层叠与继承</title>
+    <url>/2022/MDN_Cascade_and_inheritance.html</url>
+    <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
+<span id="more"></span>
+<h2 id="三个概念">三个概念</h2>
+<p><strong>层叠、优先级、继承</strong></p>
+<h3 id="层叠">层叠</h3>
+<p>同级别规则，后面覆盖前面的。</p>
+<h3 id="优先级">优先级</h3>
+<p>当有多个规则有不同选择器时会根据优先级决定使用哪个规则。约束范围越小优先级越高。</p>
+<h3 id="继承">继承</h3>
+<p>有些元素可以继承父元素的 CSS 属性，有些则不可以。</p>
+<h2 id="理解继承">理解继承</h2>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#%E7%90%86%E8%A7%A3%E7%BB%A7%E6%89%BF">MDN-理解继承案例</a></p>
+<p>如上面所说，不是所有属性都可以继承，可以根据常识判断：如果某个属性继承之后会对界面或者说编码造成影响，不是我们想要的，那么它很大概率是不能继承的。</p>
+<h3 id="控制继承">控制继承</h3>
+<p>四个特殊值，用于控制继承。</p>
+<h4 id="inherit">inherit</h4>
+<p>继承父元素属性。</p>
+<h4 id="initial">initial</h4>
+<p>设置为 CSS 属性初始值。但并不是浏览器默认样式。</p>
+<p>示例</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;bt&quot;</span>&gt;</span>这是一个按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;bt&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color:initial&quot;</span>&gt;</span>这是一个按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;bt&quot;</span> <span class="attr">style</span>=<span class="string">&quot;all:initial&quot;</span>&gt;</span>这是一个按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.bt</span> &#123;</span><br><span class="line">	<span class="attribute">background-color</span>: aqua;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2022/01/inherit%E7%A4%BA%E4%BE%8B.png" alt="inherit示例"></p>
+<h4 id="unset">unset</h4>
+<p>设置为自然值，可以继承就继承（inherit），没继承就默认值（initial）。</p>
+<h4 id="revert">revert</h4>
+<p>还原成浏览器默认样式。</p>
+<h4 id="注意">注意</h4>
+<p>all：当前元素所有属性</p>
+<h2 id="理解层叠">理解层叠</h2>
+<p>如何应用 CSS 规则，按照这三点排，由前往后：</p>
+<ol>
+<li>重要程度</li>
+<li>优先级</li>
+<li>资源顺序</li>
+</ol>
+<h3 id="重要程度">重要程度</h3>
+<p><code>!important</code></p>
+<p>最高等级，忽略所有。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">border</span>: none <span class="meta">!important</span>;</span><br></pre></td></tr></table></figure>
+<p>覆盖 <code>!important</code> 的唯一方法就是另一个 <code>!important</code> ，但必须在第二第三条规则上胜出。如优先级更高或同等优先级顺序更靠后。</p>
+<blockquote>
+<p>尽量不用 <code>!important</code></p>
+</blockquote>
+<h3 id="优先级-2">优先级</h3>
+<p>范围更小优先级更高，可计算。</p>
+<ol>
+<li>千位1000：内联样式</li>
+<li>百位0100：id选择器</li>
+<li>十位0010：类选择器、属性选择器、伪类</li>
+<li>个位0001：元素、伪元素选择器</li>
+</ol>
+<p>最后根据</p>
+<blockquote>
+<p><strong>注</strong>: 通用选择器 (<code>*</code>)，组合符 (<code>+</code>, <code>&gt;</code>, <code>~</code>, ’ ')，和否定伪类 (<code>:not</code>) 不会影响优先级。</p>
+</blockquote>
+<blockquote>
+<p><strong>警告:</strong> 在进行计算时不允许进行进位，例如，20 个类选择器仅仅意味着 20 个十位，而不能视为 两个百位，也就是说，无论多少个类选择器的权重叠加，都不会超过一个 ID 选择器。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">选择器</th>
+<th style="text-align:left">千位</th>
+<th style="text-align:left">百位</th>
+<th style="text-align:left">十位</th>
+<th style="text-align:left">个位</th>
+<th style="text-align:left">优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>h1</code></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0001</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>h1 + p::first-letter</code></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">0003</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>li &gt; a[href*=&quot;en-US&quot;] &gt; .inline-warning</code></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">0022</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>#identifier</code></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0100</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>内联样式</code></td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">1000</td>
+</tr>
+</tbody>
+</table>
+<h2 id="主动学习">主动学习</h2>
+<p>我的答案</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#outer</span> <span class="selector-id">#inner</span> <span class="selector-tag">ul</span> <span class="selector-class">.nav</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line"> <span class="attribute">background-color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>官方答案</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#outer</span> <span class="selector-id">#inner</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: initial;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考自</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance">MDN-层叠与继承</a></p>
+]]></content>
+      <categories>
+        <category>CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CSS学习笔记｜MDN-CSS选择器</title>
     <url>/2022/MDN_CSS_Selectors.html</url>
     <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
@@ -259,137 +390,6 @@
 <p>使用 <code>/*  */</code> ，不能用 <code>//</code> 。</p>
 <p>参考自</p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/First_steps/How_CSS_is_structured">MDN-如何构建CSS</a></p>
-]]></content>
-      <categories>
-        <category>CSS</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CSS学习笔记｜MDN-层叠与继承</title>
-    <url>/2022/MDN_Cascade_and_inheritance.html</url>
-    <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
-<span id="more"></span>
-<h2 id="三个概念">三个概念</h2>
-<p><strong>层叠、优先级、继承</strong></p>
-<h3 id="层叠">层叠</h3>
-<p>同级别规则，后面覆盖前面的。</p>
-<h3 id="优先级">优先级</h3>
-<p>当有多个规则有不同选择器时会根据优先级决定使用哪个规则。约束范围越小优先级越高。</p>
-<h3 id="继承">继承</h3>
-<p>有些元素可以继承父元素的 CSS 属性，有些则不可以。</p>
-<h2 id="理解继承">理解继承</h2>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#%E7%90%86%E8%A7%A3%E7%BB%A7%E6%89%BF">MDN-理解继承案例</a></p>
-<p>如上面所说，不是所有属性都可以继承，可以根据常识判断：如果某个属性继承之后会对界面或者说编码造成影响，不是我们想要的，那么它很大概率是不能继承的。</p>
-<h3 id="控制继承">控制继承</h3>
-<p>四个特殊值，用于控制继承。</p>
-<h4 id="inherit">inherit</h4>
-<p>继承父元素属性。</p>
-<h4 id="initial">initial</h4>
-<p>设置为 CSS 属性初始值。但并不是浏览器默认样式。</p>
-<p>示例</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;bt&quot;</span>&gt;</span>这是一个按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;bt&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color:initial&quot;</span>&gt;</span>这是一个按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;bt&quot;</span> <span class="attr">style</span>=<span class="string">&quot;all:initial&quot;</span>&gt;</span>这是一个按钮<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.bt</span> &#123;</span><br><span class="line">	<span class="attribute">background-color</span>: aqua;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2022/01/inherit%E7%A4%BA%E4%BE%8B.png" alt="inherit示例"></p>
-<h4 id="unset">unset</h4>
-<p>设置为自然值，可以继承就继承（inherit），没继承就默认值（initial）。</p>
-<h4 id="revert">revert</h4>
-<p>还原成浏览器默认样式。</p>
-<h4 id="注意">注意</h4>
-<p>all：当前元素所有属性</p>
-<h2 id="理解层叠">理解层叠</h2>
-<p>如何应用 CSS 规则，按照这三点排，由前往后：</p>
-<ol>
-<li>重要程度</li>
-<li>优先级</li>
-<li>资源顺序</li>
-</ol>
-<h3 id="重要程度">重要程度</h3>
-<p><code>!important</code></p>
-<p>最高等级，忽略所有。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">border</span>: none <span class="meta">!important</span>;</span><br></pre></td></tr></table></figure>
-<p>覆盖 <code>!important</code> 的唯一方法就是另一个 <code>!important</code> ，但必须在第二第三条规则上胜出。如优先级更高或同等优先级顺序更靠后。</p>
-<blockquote>
-<p>尽量不用 <code>!important</code></p>
-</blockquote>
-<h3 id="优先级-2">优先级</h3>
-<p>范围更小优先级更高，可计算。</p>
-<ol>
-<li>千位1000：内联样式</li>
-<li>百位0100：id选择器</li>
-<li>十位0010：类选择器、属性选择器、伪类</li>
-<li>个位0001：元素、伪元素选择器</li>
-</ol>
-<p>最后根据</p>
-<blockquote>
-<p><strong>注</strong>: 通用选择器 (<code>*</code>)，组合符 (<code>+</code>, <code>&gt;</code>, <code>~</code>, ’ ')，和否定伪类 (<code>:not</code>) 不会影响优先级。</p>
-</blockquote>
-<blockquote>
-<p><strong>警告:</strong> 在进行计算时不允许进行进位，例如，20 个类选择器仅仅意味着 20 个十位，而不能视为 两个百位，也就是说，无论多少个类选择器的权重叠加，都不会超过一个 ID 选择器。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">选择器</th>
-<th style="text-align:left">千位</th>
-<th style="text-align:left">百位</th>
-<th style="text-align:left">十位</th>
-<th style="text-align:left">个位</th>
-<th style="text-align:left">优先级</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>h1</code></td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0001</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>h1 + p::first-letter</code></td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">3</td>
-<td style="text-align:left">0003</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>li &gt; a[href*=&quot;en-US&quot;] &gt; .inline-warning</code></td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">0022</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>#identifier</code></td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0100</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>内联样式</code></td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">1000</td>
-</tr>
-</tbody>
-</table>
-<h2 id="主动学习">主动学习</h2>
-<p>我的答案</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#outer</span> <span class="selector-id">#inner</span> <span class="selector-tag">ul</span> <span class="selector-class">.nav</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line"> <span class="attribute">background-color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>官方答案</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-id">#outer</span> <span class="selector-id">#inner</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: initial;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考自</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance">MDN-层叠与继承</a></p>
 ]]></content>
       <categories>
         <category>CSS</category>
@@ -663,102 +663,299 @@
       </tags>
   </entry>
   <entry>
-    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
-    <url>/2020/QTTabBarInstallationAndUse.html</url>
-    <content><![CDATA[<p>更高效的使用资源管理器</p>
+    <title>Ubuntu18.04使用静态ip</title>
+    <url>/2021/ubuntu1804StaticIp.html</url>
+    <content><![CDATA[<p>如何修改ubuntu的ip并使用静态ip？（半科普</p>
 <span id="more"></span>
-<h1>1. 介绍</h1>
-<h2 id="功能">功能</h2>
-<p>窗口合并</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
-<p>照片视频文本预览，且支持选择哪种格式预览</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
-<p>很多…按需</p>
-<p>缺点</p>
+<p>背景：最近在使用ubuntu，使用ssh连接的方式，ip一直变，很烦，就想到使用静态ip的方式</p>
+<h1>预先知识</h1>
+<h2 id="热心网友的预先知识">热心网友的预先知识</h2>
+<blockquote>
+<p><em>(来源于博主荒野雄兵，链接 <a href="https://blog.csdn.net/daerzei/article/details/85058130">https://blog.csdn.net/daerzei/article/details/85058130</a>)</em><br>
+Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/interfaces</code> （命令行方案）方案2：<code>Network-manager</code> （图形化界面方案）</p>
+<p>两套方案是冲突的，不能同时共存。第一个方案适用于命令行如部署在云服务器上，如果你在阿里云，腾讯云，亚马逊云等等这些地方部署了Ubuntu的云服务器的话，就只能这种情况了。</p>
+<p>第二个方案适图形化界面一般来说我们自己电脑上安装的Ubuntu都是采用这个方案，但是如果你在 <code>/etc/network/interfaces</code> 里设置了网上信息的话， <code>NetworkManager</code> 就不会接管该网上，即使是你开了，系统重启过后也会自动关闭。</p>
+<p>所以嘛，好好想想你最近有没有修改过 <code>/etc/network/interfaces</code> 配置文件。如果你不知道自己有没有修改过的话，这个文件正常应该是这样的（看看有没有谁偷偷修改了你的配置文件）</p>
+</blockquote>
+<p>我们已经知道有两种管理方案了，所以按理说有两种配置方案。</p>
+<h2 id="配置信息的来源去脉">配置信息的来源去脉</h2>
+<h3 id="需要的配置信息">需要的配置信息</h3>
+<p><code>地址(address)、子网掩码(netmask)、网关(gateway)、域名服务器地址(DNS)</code></p>
+<h3 id="配置信息详解">配置信息详解</h3>
+<p>地址(address)：ipv4地址，随便填，但是应该符合分配范围，可以从vmware的配置文件查看分配范围，如果懒得找，直接填原来的或者与原来的差不多且不冲突的</p>
+<p>子网掩码(netmask)：一般是255.255.255.0，否则要去配置文件找</p>
+<p>网关(默认路由)(gateway) 与 DNS：1. 在进入GUI的网络设置前可以看到  2. vm配置文件有</p>
+<h3 id="查找配置信息">查找配置信息</h3>
+<h4 id="方法一：GUI">方法一：GUI</h4>
+<p>ubuntu桌面–&gt;设置–&gt;网络–&gt;有线连接–&gt;设置</p>
+<p>此处可以找到ip、gateway、dns</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpViewInfo.png" alt="ubuntu1804IpViewInfo"></p>
+<h4 id="方法二：vmware配置文件">方法二：vmware配置文件</h4>
+<p>macOS路径： <code>/Library/Preferences/VMware Fusion</code></p>
+<p><code>networking</code> 文件是有关vmware网络的一些基础配置，如是否开启某个网卡的DHCP，此时不用管</p>
+<p>因为我用的是NAT模式，所以进入 <code>vmnet8</code> 文件夹。</p>
 <ol>
-<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
-<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
+<li>首先是 <code>dhcpd.conf</code> 文件</li>
 </ol>
-<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
-<h2 id="Why">Why?</h2>
-<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
-<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
-<h2 id="What？">What？</h2>
-<ol>
-<li>QTTabBar就是一个文件浏览增强工具</li>
-<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">subnet 172.16.10.0 netmask 255.255.255.0 &#123;</span><br><span class="line">	range 172.16.10.128 172.16.10.254;</span><br><span class="line">	option broadcast-address 172.16.10.255;</span><br><span class="line">	option domain-name-servers 172.16.10.2;</span><br><span class="line">	option domain-name localdomain;</span><br><span class="line">	default-lease-time 1800;                # default is 30 minutes</span><br><span class="line">	max-lease-time 7200;                    # default is 2 hours</span><br><span class="line">	option netbios-name-servers 172.16.10.2;</span><br><span class="line">	option routers 172.16.10.2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从中知道</p>
+<blockquote>
+<p><code>ip</code> 地址分配范围是 <code>172.16.10.128</code> 到 <code>172.16.10.254</code></p>
+<p><code>netmask</code> 为 <code>255.255.255.0</code></p>
+<p><code>DNS</code> 为 <code>172.16.10.2</code></p>
+</blockquote>
+<ol start="2">
+<li>其次是 <code>nat.conf</code> 文件</li>
 </ol>
-<h1>2. 安装</h1>
-<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
-官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
-<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
-<h1>3. 使用与配置</h1>
-<h2 id="3-1-开始使用">3.1 开始使用</h2>
-<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># NAT gateway address</span><br><span class="line">ip = 172.16.10.2</span><br><span class="line">netmask = 255.255.255.0</span><br></pre></td></tr></table></figure>
+<p>从中知道</p>
 <blockquote>
-<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
-<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
+<p><code>gateway</code> 为 <code>172.16.10.2</code></p>
+<p><code>netmask</code> 为 <code>255.255.255.0</code></p>
 </blockquote>
-<p>重启资源管理器<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
-<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
-<h2 id="3-2-汉化">3.2 汉化</h2>
-<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
-<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
+<h1>！开始修改！</h1>
+<h1>方法一：GUI</h1>
+<h2 id="在哪里改？">在哪里改？</h2>
+<p>ubuntu桌面–&gt;设置–&gt;网络–&gt;有线连接–&gt;设置–&gt;ipv4–&gt;手动，修改以下配置项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpAlterInfo.png" alt="ubuntu1804IpAlterInfo"></p>
+<p>改完后记得重启  <code>sudo reboot</code></p>
+<h1>方法二：命令行</h1>
+<h2 id="在哪里改？-2">在哪里改？</h2>
+<p>进入 <code>/etc/network/interfaces</code> ，默认内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br></pre></td></tr></table></figure>
+<p>添加以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line">address 172.16.10.135</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 172.16.10.2</span><br><span class="line">dns-nameservers 172.16.10.2</span><br></pre></td></tr></table></figure>
+<p>注：</p>
 <blockquote>
-<p>若失效：任务管理器重启资源管理器</p>
-<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
+<p>iface ens33 inet static：采用静态ip</p>
+<p>其他内容根据预先知识填写就好</p>
 </blockquote>
-<h2 id="3-3-预览">3.3 预览</h2>
-<h3 id="开启">开启</h3>
-<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
-<h3 id="使用">使用</h3>
-<p>默认为鼠标悬停即可预览</p>
-<h3 id="配置">配置</h3>
-<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
-<h3 id="问题">问题</h3>
-<blockquote>
-<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
-</blockquote>
-<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
-<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
-<h2 id="群组">群组</h2>
-<p>加入群组，类似于浏览器的书签，快速访问</p>
-<h2 id="快捷键">快捷键</h2>
-<blockquote>
-<p>鼠标滚轮快速切换标签</p>
-<p>Ctrl + Tab 下一个标签页<br>
-Ctrl + Shift + Tab上一个标签页<br>
-Ctrl + Num0 – Num9 打开几号标签页<br>
-Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
-<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
-Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
-Ctrl + O open dialog for folder<br>
-Ctrl + L 锁定/解除标签页<br>
-Ctrl + N 关闭当然标签页<br>
-Alt + F4 直接把窗口关了，多数软件都使用</p>
-</blockquote>
-<h1>4. 卸载</h1>
-<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
-<h2 id="参考">参考</h2>
+<p>配置完记得重启  <code>sudo reboot</code></p>
+<h2 id="Q-A">Q&amp;A</h2>
+<p>但此时直接重启会出现“有线未托管”情况，原因是ubuntu的网络管理方案出问题了。</p>
+<p>此时需要修改 <code>/etc/NetworkManager/NetworkManager.conf</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[main]</span><br><span class="line">plugins=ifupdown,keyfile</span><br><span class="line"></span><br><span class="line">[ifupdown]</span><br><span class="line">managed=false</span><br><span class="line"></span><br><span class="line">[device]</span><br><span class="line">wifi.scan-rand-mac-address=no</span><br></pre></td></tr></table></figure>
+<p>把 <code>managed=false</code> 改成  <code>managed=true</code></p>
+<p>后重启 <code>network-manager</code> 或重启ubuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service network-manager restart</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+<p>尝试能否ping通百度与能否ssh连接到虚拟机</p>
+<h1>tips</h1>
+<p>之前ip一直变的时候ssh连接上去，都会保存密钥，会占用不需要的ip的密钥</p>
+<p>在主机的 <code>～/.ssh/known_hosts</code> 可以删除</p>
+<p><strong>附录</strong></p>
+<p><strong>参考</strong></p>
 <ol>
-<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
-<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
+<li>Ubuntu18.04连不网 报&quot;有线连接未托管&quot; <a href="https://blog.csdn.net/daerzei/article/details/85058130">https://blog.csdn.net/daerzei/article/details/85058130</a></li>
+<li>Ubuntu 18.04 lts 修改静态ip  <a href="http://ivo-wang.github.io/2019/03/26/Ubuntu-18.04-lts-%E4%BF%AE%E6%94%B9%E9%9D%99%E6%80%81ip/">http://ivo-wang.github.io/2019/03/26/Ubuntu-18.04-lts-%E4%BF%AE%E6%94%B9%E9%9D%99%E6%80%81ip/</a></li>
+<li>ubuntu16.04配置网卡  <a href="https://blog.csdn.net/stay_zezo/article/details/80718369">https://blog.csdn.net/stay_zezo/article/details/80718369</a></li>
+<li>虚拟机Ubuntu 18.04配置固定IP地址（ens33网卡，eth0也一样）ping百度  <a href="https://blog.csdn.net/wu10188/article/details/102985067">https://blog.csdn.net/wu10188/article/details/102985067</a></li>
 </ol>
 ]]></content>
       <categories>
-        <category>软件&amp;工具&amp;技巧</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>windows</tag>
+        <tag>Ubuntu</tag>
+        <tag>Linux</tag>
+        <tag>Mac</tag>
+        <tag>ip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
+    <url>/2021/algs4DijkstraJava.html</url>
+    <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
+<span id="more"></span>
+<h1>一、算法原理</h1>
+<p>计算表达式<code>( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )</code></p>
+<p>分析书上有，不赘述。算法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将操作数压入操作数栈；</span><br><span class="line">将运算符压入运算符栈；</span><br><span class="line">忽略左括号；</span><br><span class="line">在遇到右括号时，弹出一个运算符，弹出所需数量的操作数，并将运算符和操作数的运算结果压入操作数栈。</span><br></pre></td></tr></table></figure>
+<p>书上源码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; </span><br><span class="line">        Stack&lt;String&gt; ops  = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> StdIn.readString();</span><br><span class="line">            <span class="keyword">if</span>      (s.equals(<span class="string">&quot;(&quot;</span>))               ;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;-&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;*&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;/&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;sqrt&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">v</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span>      (op.equals(<span class="string">&quot;+&quot;</span>))    v = vals.pop() + v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>))    v = vals.pop() - v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>))    v = vals.pop() * v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>))    v = vals.pop() / v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;sqrt&quot;</span>)) v = Math.sqrt(v);</span><br><span class="line">                vals.push(v);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> vals.push(Double.parseDouble(s));</span><br><span class="line">        &#125;</span><br><span class="line">        StdOut.println(vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>二、问题</h1>
+<p>算法第四版中的Dijkstra的双栈算术表达式求值算法中，<code>while (!StdIn.isEmpty())</code> 循环无法跳出</p>
+<p><code>StdIn.isEmpty()的实现:</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !scanner.hasNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>三、解决方法</h1>
+<h2 id="法一｜敌动我不动：">法一｜敌动我不动：</h2>
+<p>控制台输入以下快捷键：</p>
+<p><code>macOS</code> ： <code>Command+D</code></p>
+<p><code>Windows</code> ： <code>Ctrl+D</code></p>
+<blockquote>
+<p>原理：⌘D组合键可让您发送EOF(文件末尾)，即表示无法从数据源读取更多数据。</p>
+</blockquote>
+<h2 id="法二｜敌不动我动：">法二｜敌不动我动：</h2>
+<p>不用StdIn，使用Java自己的库重新写一遍</p>
+<blockquote>
+<p>只处理了±*/，没有处理算术平方根</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;请输入算术表达式，中间用空格隔开，括号用英文字符：&quot;</span>);</span><br><span class="line">        str = sc.nextLine();</span><br><span class="line">        String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">            <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">            <span class="comment">//是否为操作符</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                vals.push(val);</span><br><span class="line">            &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运算示例：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx01.png" alt="algs4DijkstraEx01"></p>
+<p><strong>循环输入版本：</strong></p>
+<blockquote>
+<p>如果要循环计算算术表达式：</p>
+<ol>
+<li>请在合适位置添加<code>while(sc.hasNextLine())</code></li>
+<li>除去提示语句，因为会造成输出上逻辑混乱，但是代码本身是可以执行的</li>
+<li>设置退出条件，否则程序循环执行，就跟书上的一样了。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line">        <span class="keyword">while</span> (sc.hasNextLine()) &#123;</span><br><span class="line">            str = sc.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (str.equals(<span class="string">&quot;q&quot;</span>)) &#123; <span class="comment">//退出</span></span><br><span class="line">                System.out.println(<span class="string">&quot;已退出，终止程序！&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">                <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">                    <span class="comment">//是否为操作符</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                    <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                    <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                    vals.push(val);</span><br><span class="line">                &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx02.png" alt="algs4DijkstraEx02"></p>
+<p><strong>附录</strong></p>
+<p>参考：</p>
+<ol>
+<li><a href="http://zzanswer.github.io/2016/03/23/Dijkstra%E7%9A%84%E5%8F%8C%E6%A0%88%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%E7%AE%97%E6%B3%95/">Dijkstra的双栈算术表达式求值算法 Java实现</a>   <em>问题：char型，只能处理个位数</em></li>
+<li><a href="https://www.coder.work/article/1934742">java - 如何使StdIn.isEmpty()返回true？</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>algs4</tag>
+        <tag>Dijkstra</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>algs4｜macOS《算法》idea环境配置及重定位</title>
+    <url>/2021/MacIdeaAlgs4Test.html</url>
+    <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
+<span id="more"></span>
+<h1>一、引</h1>
+<p>最近看在《算法》第四版，想测试一下书上的代码，但是书上的代码使用了自己的库，比如输入输出类，又并且想尝试一下10W个测试数据，折腾了一下。结果发现网上的教程要么无法复现要么系统不对要么软件不对。</p>
+<p>系统：macOS 10.15.6 (19G73)  idea jdk8</p>
+<p>代码和数据在官网可以下载</p>
+<h1>二、使用</h1>
+<h2 id="1-创建项目">1.创建项目</h2>
+<p>正常创建</p>
+<h2 id="2-导入数据">2.导入数据</h2>
+<p>将<code>algs4-data.zip</code>解压放在src目录下(方便重定位指令，但是不美观，可以放在文件夹，指令自行改动)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Data.png" alt="algs4Data"></p>
+<h2 id="3、导入algs4-jar">3、导入algs4.jar</h2>
+<p>先将<code>algs4.jar</code>放入Java目录的EXtensions文件夹下：<code> /Library/Java/Extensions/</code>（位置不对无法编译）</p>
+<p>idea中导入algs4.jar</p>
+<p>文件–&gt;项目结构（ 快捷键com+; ）</p>
+<p>模块 --&gt; 依赖 --&gt; (添加) --&gt; 选择<code> /Library/Java/Extensions/</code>下的<code>algs4.jar</code></p>
+<p>（我测试的时候只要Java目录中有algs4.jar，不管添加存放在哪里的algs4.jar都可以，晕）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs401In.png" alt="algs401In"></p>
+<p>成功添加后，记得确定：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs402In.png" alt="algs402In"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs403In.png" alt="algs403In"></p>
+<p>成功导入后可以看到<code>algs4.jar</code><br>
+<em>注意：直接导入别的目录的也可以看到，但是编译会《找不到》</em></p>
+<p>打开可以复制的代码到src目录下使用，但是注意package路径，且要import这本书自己的库</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br></pre></td></tr></table></figure>
+<p>我的测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">hi</span> <span class="operator">=</span> a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123;</span><br><span class="line">            <span class="comment">// Key is in a[lo..hi] or not present.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>      (key &lt; a[mid]) hi = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (key &gt; a[mid]) lo = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rank</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span>[] a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexOf(a, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read the integers from a file</span></span><br><span class="line">        <span class="type">In</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">In</span>(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span>[] allowlist = in.readAllInts();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sort the array</span></span><br><span class="line">        Arrays.sort(allowlist);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read integer key from standard input; print if not in allowlist</span></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> StdIn.readInt();</span><br><span class="line">            <span class="keyword">if</span> (BinarySearch.indexOf(allowlist, key) == -<span class="number">1</span>)</span><br><span class="line">                StdOut.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-编译运行">4.编译运行</h2>
+<p>idea终端运行，因为要使用重定向</p>
+<p>cd到src目录 —&gt; 编译代码 —&gt; 运行代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac   BinarySearch.java  </span><br><span class="line">java   BinarySearch  largeW.txt &lt; largeT.txt  </span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Run.png" alt="algs4Run"></p>
+<p>只要一直在输出数据就是运行成功了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Y.png" alt="algs4Y"></p>
+<p>附录：</p>
+<p>参考：<a href="https://www.geek-share.com/detail/2733583097.html">如何在Intellij Idea下编译运行《算法》里的程序？</a></p>
+<p>官网：<a href="https://algs4.cs.princeton.edu/home/">算法第四版官网</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>Mac</tag>
+        <tag>algs4</tag>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/cluiofrgp000jrq0u3xfp6ess.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+<h2 id="Quick-Start">Quick Start</h2>
+<h3 id="Create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>为什么consolelog在修改之前就输出修改后的值？</title>
+    <url>/2021/HowCanIMakeConsoleLogShowTheCurrentStateOfAnObject.html</url>
+    <content><![CDATA[<p>本文讲解JavaScript中修改数组中的数据与console.log问题。</p>
+<span id="more"></span>
+<h2 id="背景">背景</h2>
+<p>今天写DP，<code>console.log</code> 打印二维数组，发现无论是修改前打印还是修改后打印都是一样的。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">arr = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>],[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>],[<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>]];</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr);</span><br><span class="line">arr[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">999</span>; arr[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">999</span>; arr[<span class="number">2</span>][<span class="number">2</span>] = <span class="number">999</span>; arr[<span class="number">3</span>][<span class="number">4</span>] = <span class="number">999</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr);</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/10/FirstError.png" alt="FirstError"></p>
+<p>为什么会出现这种现象？如果我非要看修改前的，怎么看？<em>最后有例子</em></p>
+<h2 id="预备知识">预备知识</h2>
+<p><code>console.log</code> 对于六种基本类型是直接输出，对于引用类型是打印引用的<strong>快照</strong>。</p>
+<p>且当有多层时，不会展开多层，而是保存第二层的引用，当你点击展开时才去读取内容。</p>
+<h2 id="分析">分析</h2>
+<h3 id="chrome-devtools-会默认预览下一层。"><code>chrome devtools</code>  会默认预览下一层。</h3>
+<blockquote>
+<p>注意“加载、展开、预览”的区别</p>
+<p>加载：从内存中加载数据</p>
+<p>展开：单击按钮展开数据</p>
+<p>预览：未展开时看到的数据</p>
+</blockquote>
+<p>初始是不展开任何层，但预览第一层。</p>
+<p>当你点第一个展开键(三角形)时，加载第一层的内容，展开的是第一层，预览第二层（无第二层则只展开第一层）。但因为 <code>chrome devtools</code> 有缓存，即使展开看到修改后的内容，但预览不会变。</p>
+<p>点击第二个展开键，加载第二层，展开第二层，预览第三层（没有则只展开第二层）。多层同理。</p>
+<h3 id="若想看到未修改的所有内容">若想看到未修改的所有内容</h3>
+<p>若想看到未修改的所有内容，则要在修改语句执行之前就展开后续层级，这时候 <code>chrome devtools</code> 就会输出未修改的内容，可以用 <code>setTImeout</code> 验证，在 <code>setTImeout</code> 的延时函数执行前展开后续层级。</p>
+<p>如果是修改语句执行结束了，再去展开，就是修改后的内容。</p>
+<h3 id="关闭再展开并不会重新读取内容。">关闭再展开并不会重新读取内容。</h3>
+<p>关闭再展开并不会重新读取内容。当 <code>setTimeout</code> 的延迟函数执行前展开所有，会看到未修改的所有内容，预览和展开都正确。当 <code>setTImeoout</code> 执行完后关闭再展开（此时已修改），输出依然不变，依然是修改前的内容，因为已经加载过了就不重新读取了。</p>
+<h2 id="怎么解决">怎么解决</h2>
+<p>虽然 <code>setTimeoout</code> 可以用，但并不是最优解。毕竟每次都要赶时间去展开所有层级。</p>
+<h3 id="JSON化">JSON化</h3>
+<p>先将对象(二维数组也是对象)转换成json字符串再解析一次。 <code>JSON.parse(JSON.stringify(xxx))</code></p>
+<h4 id="JSON-stringify"><code>JSON.stringify()</code></h4>
+<p>将JavaScript对象或值转换为json字符串</p>
+<h4 id="JSON-paarse"><code>JSON.paarse()</code></h4>
+<p>解析json字符串</p>
+<h3 id="深拷贝">深拷贝</h3>
+<p>对每个层级进行一次深拷贝。但这不是明智的做法。</p>
+<h2 id="代码演示">代码演示</h2>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">testAny</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">		oneArr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">		twoArr = [[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]];</span><br><span class="line">		oneObj = &#123;<span class="string">&quot;a&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;b&quot;</span>:<span class="number">10</span>&#125;;</span><br><span class="line">		twoObj = &#123;<span class="string">&quot;a&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;b&quot;</span>:<span class="number">20</span>,<span class="string">&quot;c&quot;</span>:&#123;<span class="string">&quot;d&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;e&quot;</span>:<span class="string">&quot;对象中的字符串1&quot;</span>&#125;&#125;;</span><br><span class="line">		str = <span class="string">&quot;字符串1&quot;</span>;</span><br><span class="line">		num = <span class="number">1</span>;</span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;修改前的普通输出&quot;</span>); <span class="comment">// 修改前的普通输出</span></span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(oneArr,twoArr,oneObj,twoObj,str,num);</span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;修改前经过json化的输出&quot;</span>);<span class="comment">// 修改前经过json化的输出</span></span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(oneArr)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(twoArr)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(oneObj)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(twoObj)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(str)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(num)));</span><br><span class="line"></span><br><span class="line">		<span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">			oneArr[<span class="number">1</span>] = <span class="number">999</span>;</span><br><span class="line">			twoArr[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">999</span>, twoArr[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">999</span>;</span><br><span class="line">			oneObj.<span class="property">a</span> = <span class="literal">false</span>,oneObj.<span class="property">b</span> = <span class="number">30</span>;</span><br><span class="line">			twoObj.<span class="property">a</span> = <span class="literal">false</span>,twoObj.<span class="property">b</span> = <span class="number">40</span>, twoObj.<span class="property">c</span>.<span class="property">d</span>=<span class="literal">false</span>, twoObj.<span class="property">c</span>.<span class="property">e</span>=<span class="string">&quot;对象中的字符串2&quot;</span>;</span><br><span class="line">			str = <span class="string">&quot;字符串2&quot;</span></span><br><span class="line">			num = <span class="number">999</span>;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;修改后的普通输出&quot;</span>); <span class="comment">// 修改后的普通输出</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(oneArr,twoArr,oneObj,twoObj,str,num);</span><br><span class="line">		&#125;,<span class="number">5000</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="title function_">testAny</span>();</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/10/LastTest.png" alt="LastTest"></p>
+<p><em><strong>附录</strong></em></p>
+<p>参考</p>
+<ol>
+<li>
+<p><a href="https://segmentfault.com/q/1010000017100551">Js中修改数组中的数据与console.log问题</a></p>
+</li>
+<li>
+<p><a href="https://juejin.cn/post/6867746382938603528">问题记录：console.log在对象修改前打印出对象修改后的值</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/7389069/how-can-i-make-console-log-show-the-current-state-of-an-object">How can I make console.log show the current state of an object?</a>   StackOverflow2011年问答</p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/28766338/why-does-console-log-output-modified-values-even-before-they-have-been-modified">Why does console.log output modified values even before they have been modified? </a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>数组</tag>
+        <tag>打印输出</tag>
       </tags>
   </entry>
   <entry>
@@ -1011,232 +1208,103 @@ Alt + F4 直接把窗口关了，多数软件都使用</p>
 ]]></content>
   </entry>
   <entry>
-    <title>Ubuntu18.04使用静态ip</title>
-    <url>/2021/ubuntu1804StaticIp.html</url>
-    <content><![CDATA[<p>如何修改ubuntu的ip并使用静态ip？（半科普</p>
+    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
+    <url>/2020/QTTabBarInstallationAndUse.html</url>
+    <content><![CDATA[<p>更高效的使用资源管理器</p>
 <span id="more"></span>
-<p>背景：最近在使用ubuntu，使用ssh连接的方式，ip一直变，很烦，就想到使用静态ip的方式</p>
-<h1>预先知识</h1>
-<h2 id="热心网友的预先知识">热心网友的预先知识</h2>
-<blockquote>
-<p><em>(来源于博主荒野雄兵，链接 <a href="https://blog.csdn.net/daerzei/article/details/85058130">https://blog.csdn.net/daerzei/article/details/85058130</a>)</em><br>
-Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/interfaces</code> （命令行方案）方案2：<code>Network-manager</code> （图形化界面方案）</p>
-<p>两套方案是冲突的，不能同时共存。第一个方案适用于命令行如部署在云服务器上，如果你在阿里云，腾讯云，亚马逊云等等这些地方部署了Ubuntu的云服务器的话，就只能这种情况了。</p>
-<p>第二个方案适图形化界面一般来说我们自己电脑上安装的Ubuntu都是采用这个方案，但是如果你在 <code>/etc/network/interfaces</code> 里设置了网上信息的话， <code>NetworkManager</code> 就不会接管该网上，即使是你开了，系统重启过后也会自动关闭。</p>
-<p>所以嘛，好好想想你最近有没有修改过 <code>/etc/network/interfaces</code> 配置文件。如果你不知道自己有没有修改过的话，这个文件正常应该是这样的（看看有没有谁偷偷修改了你的配置文件）</p>
-</blockquote>
-<p>我们已经知道有两种管理方案了，所以按理说有两种配置方案。</p>
-<h2 id="配置信息的来源去脉">配置信息的来源去脉</h2>
-<h3 id="需要的配置信息">需要的配置信息</h3>
-<p><code>地址(address)、子网掩码(netmask)、网关(gateway)、域名服务器地址(DNS)</code></p>
-<h3 id="配置信息详解">配置信息详解</h3>
-<p>地址(address)：ipv4地址，随便填，但是应该符合分配范围，可以从vmware的配置文件查看分配范围，如果懒得找，直接填原来的或者与原来的差不多且不冲突的</p>
-<p>子网掩码(netmask)：一般是255.255.255.0，否则要去配置文件找</p>
-<p>网关(默认路由)(gateway) 与 DNS：1. 在进入GUI的网络设置前可以看到  2. vm配置文件有</p>
-<h3 id="查找配置信息">查找配置信息</h3>
-<h4 id="方法一：GUI">方法一：GUI</h4>
-<p>ubuntu桌面–&gt;设置–&gt;网络–&gt;有线连接–&gt;设置</p>
-<p>此处可以找到ip、gateway、dns</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpViewInfo.png" alt="ubuntu1804IpViewInfo"></p>
-<h4 id="方法二：vmware配置文件">方法二：vmware配置文件</h4>
-<p>macOS路径： <code>/Library/Preferences/VMware Fusion</code></p>
-<p><code>networking</code> 文件是有关vmware网络的一些基础配置，如是否开启某个网卡的DHCP，此时不用管</p>
-<p>因为我用的是NAT模式，所以进入 <code>vmnet8</code> 文件夹。</p>
+<h1>1. 介绍</h1>
+<h2 id="功能">功能</h2>
+<p>窗口合并</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
+<p>照片视频文本预览，且支持选择哪种格式预览</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
+<p>很多…按需</p>
+<p>缺点</p>
 <ol>
-<li>首先是 <code>dhcpd.conf</code> 文件</li>
+<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
+<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">subnet 172.16.10.0 netmask 255.255.255.0 &#123;</span><br><span class="line">	range 172.16.10.128 172.16.10.254;</span><br><span class="line">	option broadcast-address 172.16.10.255;</span><br><span class="line">	option domain-name-servers 172.16.10.2;</span><br><span class="line">	option domain-name localdomain;</span><br><span class="line">	default-lease-time 1800;                # default is 30 minutes</span><br><span class="line">	max-lease-time 7200;                    # default is 2 hours</span><br><span class="line">	option netbios-name-servers 172.16.10.2;</span><br><span class="line">	option routers 172.16.10.2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>从中知道</p>
-<blockquote>
-<p><code>ip</code> 地址分配范围是 <code>172.16.10.128</code> 到 <code>172.16.10.254</code></p>
-<p><code>netmask</code> 为 <code>255.255.255.0</code></p>
-<p><code>DNS</code> 为 <code>172.16.10.2</code></p>
-</blockquote>
-<ol start="2">
-<li>其次是 <code>nat.conf</code> 文件</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># NAT gateway address</span><br><span class="line">ip = 172.16.10.2</span><br><span class="line">netmask = 255.255.255.0</span><br></pre></td></tr></table></figure>
-<p>从中知道</p>
-<blockquote>
-<p><code>gateway</code> 为 <code>172.16.10.2</code></p>
-<p><code>netmask</code> 为 <code>255.255.255.0</code></p>
-</blockquote>
-<h1>！开始修改！</h1>
-<h1>方法一：GUI</h1>
-<h2 id="在哪里改？">在哪里改？</h2>
-<p>ubuntu桌面–&gt;设置–&gt;网络–&gt;有线连接–&gt;设置–&gt;ipv4–&gt;手动，修改以下配置项</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/05/ubuntu1804IpAlterInfo.png" alt="ubuntu1804IpAlterInfo"></p>
-<p>改完后记得重启  <code>sudo reboot</code></p>
-<h1>方法二：命令行</h1>
-<h2 id="在哪里改？-2">在哪里改？</h2>
-<p>进入 <code>/etc/network/interfaces</code> ，默认内容如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto lo</span><br><span class="line">iface lo inet loopback</span><br></pre></td></tr></table></figure>
-<p>添加以下内容</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto ens33</span><br><span class="line">iface ens33 inet static</span><br><span class="line">address 172.16.10.135</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 172.16.10.2</span><br><span class="line">dns-nameservers 172.16.10.2</span><br></pre></td></tr></table></figure>
-<p>注：</p>
-<blockquote>
-<p>iface ens33 inet static：采用静态ip</p>
-<p>其他内容根据预先知识填写就好</p>
-</blockquote>
-<p>配置完记得重启  <code>sudo reboot</code></p>
-<h2 id="Q-A">Q&amp;A</h2>
-<p>但此时直接重启会出现“有线未托管”情况，原因是ubuntu的网络管理方案出问题了。</p>
-<p>此时需要修改 <code>/etc/NetworkManager/NetworkManager.conf</code></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[main]</span><br><span class="line">plugins=ifupdown,keyfile</span><br><span class="line"></span><br><span class="line">[ifupdown]</span><br><span class="line">managed=false</span><br><span class="line"></span><br><span class="line">[device]</span><br><span class="line">wifi.scan-rand-mac-address=no</span><br></pre></td></tr></table></figure>
-<p>把 <code>managed=false</code> 改成  <code>managed=true</code></p>
-<p>后重启 <code>network-manager</code> 或重启ubuntu</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo service network-manager restart</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
-<p>尝试能否ping通百度与能否ssh连接到虚拟机</p>
-<h1>tips</h1>
-<p>之前ip一直变的时候ssh连接上去，都会保存密钥，会占用不需要的ip的密钥</p>
-<p>在主机的 <code>～/.ssh/known_hosts</code> 可以删除</p>
-<p><strong>附录</strong></p>
-<p><strong>参考</strong></p>
+<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
+<h2 id="Why">Why?</h2>
+<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
+<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
+<h2 id="What？">What？</h2>
 <ol>
-<li>Ubuntu18.04连不网 报&quot;有线连接未托管&quot; <a href="https://blog.csdn.net/daerzei/article/details/85058130">https://blog.csdn.net/daerzei/article/details/85058130</a></li>
-<li>Ubuntu 18.04 lts 修改静态ip  <a href="http://ivo-wang.github.io/2019/03/26/Ubuntu-18.04-lts-%E4%BF%AE%E6%94%B9%E9%9D%99%E6%80%81ip/">http://ivo-wang.github.io/2019/03/26/Ubuntu-18.04-lts-%E4%BF%AE%E6%94%B9%E9%9D%99%E6%80%81ip/</a></li>
-<li>ubuntu16.04配置网卡  <a href="https://blog.csdn.net/stay_zezo/article/details/80718369">https://blog.csdn.net/stay_zezo/article/details/80718369</a></li>
-<li>虚拟机Ubuntu 18.04配置固定IP地址（ens33网卡，eth0也一样）ping百度  <a href="https://blog.csdn.net/wu10188/article/details/102985067">https://blog.csdn.net/wu10188/article/details/102985067</a></li>
+<li>QTTabBar就是一个文件浏览增强工具</li>
+<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
+</ol>
+<h1>2. 安装</h1>
+<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
+官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
+<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
+<h1>3. 使用与配置</h1>
+<h2 id="3-1-开始使用">3.1 开始使用</h2>
+<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
+<blockquote>
+<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
+<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
+</blockquote>
+<p>重启资源管理器<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
+<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
+<h2 id="3-2-汉化">3.2 汉化</h2>
+<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
+<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
+<blockquote>
+<p>若失效：任务管理器重启资源管理器</p>
+<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
+</blockquote>
+<h2 id="3-3-预览">3.3 预览</h2>
+<h3 id="开启">开启</h3>
+<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
+<h3 id="使用">使用</h3>
+<p>默认为鼠标悬停即可预览</p>
+<h3 id="配置">配置</h3>
+<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
+<h3 id="问题">问题</h3>
+<blockquote>
+<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
+</blockquote>
+<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
+<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
+<h2 id="群组">群组</h2>
+<p>加入群组，类似于浏览器的书签，快速访问</p>
+<h2 id="快捷键">快捷键</h2>
+<blockquote>
+<p>鼠标滚轮快速切换标签</p>
+<p>Ctrl + Tab 下一个标签页<br>
+Ctrl + Shift + Tab上一个标签页<br>
+Ctrl + Num0 – Num9 打开几号标签页<br>
+Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
+<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
+Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
+Ctrl + O open dialog for folder<br>
+Ctrl + L 锁定/解除标签页<br>
+Ctrl + N 关闭当然标签页<br>
+Alt + F4 直接把窗口关了，多数软件都使用</p>
+</blockquote>
+<h1>4. 卸载</h1>
+<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
+<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
 </ol>
 ]]></content>
       <categories>
-        <category>Linux</category>
+        <category>软件&amp;工具&amp;技巧</category>
       </categories>
       <tags>
-        <tag>Ubuntu</tag>
-        <tag>Linux</tag>
-        <tag>Mac</tag>
-        <tag>ip</tag>
+        <tag>windows</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
-    <url>/2021/algs4DijkstraJava.html</url>
-    <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
-<span id="more"></span>
-<h1>一、算法原理</h1>
-<p>计算表达式<code>( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )</code></p>
-<p>分析书上有，不赘述。算法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将操作数压入操作数栈；</span><br><span class="line">将运算符压入运算符栈；</span><br><span class="line">忽略左括号；</span><br><span class="line">在遇到右括号时，弹出一个运算符，弹出所需数量的操作数，并将运算符和操作数的运算结果压入操作数栈。</span><br></pre></td></tr></table></figure>
-<p>书上源码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; </span><br><span class="line">        Stack&lt;String&gt; ops  = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> StdIn.readString();</span><br><span class="line">            <span class="keyword">if</span>      (s.equals(<span class="string">&quot;(&quot;</span>))               ;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;-&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;*&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;/&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;sqrt&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">v</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span>      (op.equals(<span class="string">&quot;+&quot;</span>))    v = vals.pop() + v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>))    v = vals.pop() - v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>))    v = vals.pop() * v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>))    v = vals.pop() / v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;sqrt&quot;</span>)) v = Math.sqrt(v);</span><br><span class="line">                vals.push(v);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> vals.push(Double.parseDouble(s));</span><br><span class="line">        &#125;</span><br><span class="line">        StdOut.println(vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>二、问题</h1>
-<p>算法第四版中的Dijkstra的双栈算术表达式求值算法中，<code>while (!StdIn.isEmpty())</code> 循环无法跳出</p>
-<p><code>StdIn.isEmpty()的实现:</code></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !scanner.hasNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>三、解决方法</h1>
-<h2 id="法一｜敌动我不动：">法一｜敌动我不动：</h2>
-<p>控制台输入以下快捷键：</p>
-<p><code>macOS</code> ： <code>Command+D</code></p>
-<p><code>Windows</code> ： <code>Ctrl+D</code></p>
-<blockquote>
-<p>原理：⌘D组合键可让您发送EOF(文件末尾)，即表示无法从数据源读取更多数据。</p>
-</blockquote>
-<h2 id="法二｜敌不动我动：">法二｜敌不动我动：</h2>
-<p>不用StdIn，使用Java自己的库重新写一遍</p>
-<blockquote>
-<p>只处理了±*/，没有处理算术平方根</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;请输入算术表达式，中间用空格隔开，括号用英文字符：&quot;</span>);</span><br><span class="line">        str = sc.nextLine();</span><br><span class="line">        String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">            <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">            <span class="comment">//是否为操作符</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                vals.push(val);</span><br><span class="line">            &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运算示例：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx01.png" alt="algs4DijkstraEx01"></p>
-<p><strong>循环输入版本：</strong></p>
-<blockquote>
-<p>如果要循环计算算术表达式：</p>
-<ol>
-<li>请在合适位置添加<code>while(sc.hasNextLine())</code></li>
-<li>除去提示语句，因为会造成输出上逻辑混乱，但是代码本身是可以执行的</li>
-<li>设置退出条件，否则程序循环执行，就跟书上的一样了。</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line">        <span class="keyword">while</span> (sc.hasNextLine()) &#123;</span><br><span class="line">            str = sc.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (str.equals(<span class="string">&quot;q&quot;</span>)) &#123; <span class="comment">//退出</span></span><br><span class="line">                System.out.println(<span class="string">&quot;已退出，终止程序！&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">                <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">                    <span class="comment">//是否为操作符</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                    <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                    <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                    vals.push(val);</span><br><span class="line">                &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>示例：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx02.png" alt="algs4DijkstraEx02"></p>
-<p><strong>附录</strong></p>
-<p>参考：</p>
-<ol>
-<li><a href="http://zzanswer.github.io/2016/03/23/Dijkstra%E7%9A%84%E5%8F%8C%E6%A0%88%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%E7%AE%97%E6%B3%95/">Dijkstra的双栈算术表达式求值算法 Java实现</a>   <em>问题：char型，只能处理个位数</em></li>
-<li><a href="https://www.coder.work/article/1934742">java - 如何使StdIn.isEmpty()返回true？</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>algs4</tag>
-        <tag>Dijkstra</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>algs4｜macOS《算法》idea环境配置及重定位</title>
-    <url>/2021/MacIdeaAlgs4Test.html</url>
-    <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
-<span id="more"></span>
-<h1>一、引</h1>
-<p>最近看在《算法》第四版，想测试一下书上的代码，但是书上的代码使用了自己的库，比如输入输出类，又并且想尝试一下10W个测试数据，折腾了一下。结果发现网上的教程要么无法复现要么系统不对要么软件不对。</p>
-<p>系统：macOS 10.15.6 (19G73)  idea jdk8</p>
-<p>代码和数据在官网可以下载</p>
-<h1>二、使用</h1>
-<h2 id="1-创建项目">1.创建项目</h2>
-<p>正常创建</p>
-<h2 id="2-导入数据">2.导入数据</h2>
-<p>将<code>algs4-data.zip</code>解压放在src目录下(方便重定位指令，但是不美观，可以放在文件夹，指令自行改动)</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Data.png" alt="algs4Data"></p>
-<h2 id="3、导入algs4-jar">3、导入algs4.jar</h2>
-<p>先将<code>algs4.jar</code>放入Java目录的EXtensions文件夹下：<code> /Library/Java/Extensions/</code>（位置不对无法编译）</p>
-<p>idea中导入algs4.jar</p>
-<p>文件–&gt;项目结构（ 快捷键com+; ）</p>
-<p>模块 --&gt; 依赖 --&gt; (添加) --&gt; 选择<code> /Library/Java/Extensions/</code>下的<code>algs4.jar</code></p>
-<p>（我测试的时候只要Java目录中有algs4.jar，不管添加存放在哪里的algs4.jar都可以，晕）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs401In.png" alt="algs401In"></p>
-<p>成功添加后，记得确定：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs402In.png" alt="algs402In"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs403In.png" alt="algs403In"></p>
-<p>成功导入后可以看到<code>algs4.jar</code><br>
-<em>注意：直接导入别的目录的也可以看到，但是编译会《找不到》</em></p>
-<p>打开可以复制的代码到src目录下使用，但是注意package路径，且要import这本书自己的库</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br></pre></td></tr></table></figure>
-<p>我的测试代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">hi</span> <span class="operator">=</span> a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123;</span><br><span class="line">            <span class="comment">// Key is in a[lo..hi] or not present.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>      (key &lt; a[mid]) hi = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (key &gt; a[mid]) lo = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rank</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span>[] a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexOf(a, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read the integers from a file</span></span><br><span class="line">        <span class="type">In</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">In</span>(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span>[] allowlist = in.readAllInts();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sort the array</span></span><br><span class="line">        Arrays.sort(allowlist);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read integer key from standard input; print if not in allowlist</span></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> StdIn.readInt();</span><br><span class="line">            <span class="keyword">if</span> (BinarySearch.indexOf(allowlist, key) == -<span class="number">1</span>)</span><br><span class="line">                StdOut.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="4-编译运行">4.编译运行</h2>
-<p>idea终端运行，因为要使用重定向</p>
-<p>cd到src目录 —&gt; 编译代码 —&gt; 运行代码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac   BinarySearch.java  </span><br><span class="line">java   BinarySearch  largeW.txt &lt; largeT.txt  </span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Run.png" alt="algs4Run"></p>
-<p>只要一直在输出数据就是运行成功了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Y.png" alt="algs4Y"></p>
-<p>附录：</p>
-<p>参考：<a href="https://www.geek-share.com/detail/2733583097.html">如何在Intellij Idea下编译运行《算法》里的程序？</a></p>
-<p>官网：<a href="https://algs4.cs.princeton.edu/home/">算法第四版官网</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>Mac</tag>
-        <tag>algs4</tag>
-        <tag>idea</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/clu1j5beu000ntz0u7booae98.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>在Mac上使用sublime_text3运行Java</title>
@@ -1263,74 +1331,6 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
       <tags>
         <tag>Mac</tag>
         <tag>sublime_text3</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>为什么consolelog在修改之前就输出修改后的值？</title>
-    <url>/2021/HowCanIMakeConsoleLogShowTheCurrentStateOfAnObject.html</url>
-    <content><![CDATA[<p>本文讲解JavaScript中修改数组中的数据与console.log问题。</p>
-<span id="more"></span>
-<h2 id="背景">背景</h2>
-<p>今天写DP，<code>console.log</code> 打印二维数组，发现无论是修改前打印还是修改后打印都是一样的。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">arr = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>],[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>],[<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>,<span class="number">20</span>]];</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr);</span><br><span class="line">arr[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">999</span>; arr[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">999</span>; arr[<span class="number">2</span>][<span class="number">2</span>] = <span class="number">999</span>; arr[<span class="number">3</span>][<span class="number">4</span>] = <span class="number">999</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr);</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/10/FirstError.png" alt="FirstError"></p>
-<p>为什么会出现这种现象？如果我非要看修改前的，怎么看？<em>最后有例子</em></p>
-<h2 id="预备知识">预备知识</h2>
-<p><code>console.log</code> 对于六种基本类型是直接输出，对于引用类型是打印引用的<strong>快照</strong>。</p>
-<p>且当有多层时，不会展开多层，而是保存第二层的引用，当你点击展开时才去读取内容。</p>
-<h2 id="分析">分析</h2>
-<h3 id="chrome-devtools-会默认预览下一层。"><code>chrome devtools</code>  会默认预览下一层。</h3>
-<blockquote>
-<p>注意“加载、展开、预览”的区别</p>
-<p>加载：从内存中加载数据</p>
-<p>展开：单击按钮展开数据</p>
-<p>预览：未展开时看到的数据</p>
-</blockquote>
-<p>初始是不展开任何层，但预览第一层。</p>
-<p>当你点第一个展开键(三角形)时，加载第一层的内容，展开的是第一层，预览第二层（无第二层则只展开第一层）。但因为 <code>chrome devtools</code> 有缓存，即使展开看到修改后的内容，但预览不会变。</p>
-<p>点击第二个展开键，加载第二层，展开第二层，预览第三层（没有则只展开第二层）。多层同理。</p>
-<h3 id="若想看到未修改的所有内容">若想看到未修改的所有内容</h3>
-<p>若想看到未修改的所有内容，则要在修改语句执行之前就展开后续层级，这时候 <code>chrome devtools</code> 就会输出未修改的内容，可以用 <code>setTImeout</code> 验证，在 <code>setTImeout</code> 的延时函数执行前展开后续层级。</p>
-<p>如果是修改语句执行结束了，再去展开，就是修改后的内容。</p>
-<h3 id="关闭再展开并不会重新读取内容。">关闭再展开并不会重新读取内容。</h3>
-<p>关闭再展开并不会重新读取内容。当 <code>setTimeout</code> 的延迟函数执行前展开所有，会看到未修改的所有内容，预览和展开都正确。当 <code>setTImeoout</code> 执行完后关闭再展开（此时已修改），输出依然不变，依然是修改前的内容，因为已经加载过了就不重新读取了。</p>
-<h2 id="怎么解决">怎么解决</h2>
-<p>虽然 <code>setTimeoout</code> 可以用，但并不是最优解。毕竟每次都要赶时间去展开所有层级。</p>
-<h3 id="JSON化">JSON化</h3>
-<p>先将对象(二维数组也是对象)转换成json字符串再解析一次。 <code>JSON.parse(JSON.stringify(xxx))</code></p>
-<h4 id="JSON-stringify"><code>JSON.stringify()</code></h4>
-<p>将JavaScript对象或值转换为json字符串</p>
-<h4 id="JSON-paarse"><code>JSON.paarse()</code></h4>
-<p>解析json字符串</p>
-<h3 id="深拷贝">深拷贝</h3>
-<p>对每个层级进行一次深拷贝。但这不是明智的做法。</p>
-<h2 id="代码演示">代码演示</h2>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">testAny</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">		oneArr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">		twoArr = [[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]];</span><br><span class="line">		oneObj = &#123;<span class="string">&quot;a&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;b&quot;</span>:<span class="number">10</span>&#125;;</span><br><span class="line">		twoObj = &#123;<span class="string">&quot;a&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;b&quot;</span>:<span class="number">20</span>,<span class="string">&quot;c&quot;</span>:&#123;<span class="string">&quot;d&quot;</span>:<span class="literal">true</span>,<span class="string">&quot;e&quot;</span>:<span class="string">&quot;对象中的字符串1&quot;</span>&#125;&#125;;</span><br><span class="line">		str = <span class="string">&quot;字符串1&quot;</span>;</span><br><span class="line">		num = <span class="number">1</span>;</span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;修改前的普通输出&quot;</span>); <span class="comment">// 修改前的普通输出</span></span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(oneArr,twoArr,oneObj,twoObj,str,num);</span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;修改前经过json化的输出&quot;</span>);<span class="comment">// 修改前经过json化的输出</span></span><br><span class="line">		<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(oneArr)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(twoArr)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(oneObj)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(twoObj)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(str)),<span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(num)));</span><br><span class="line"></span><br><span class="line">		<span class="built_in">setTimeout</span>(<span class="function">()=&gt;</span>&#123;</span><br><span class="line">			oneArr[<span class="number">1</span>] = <span class="number">999</span>;</span><br><span class="line">			twoArr[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">999</span>, twoArr[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">999</span>;</span><br><span class="line">			oneObj.<span class="property">a</span> = <span class="literal">false</span>,oneObj.<span class="property">b</span> = <span class="number">30</span>;</span><br><span class="line">			twoObj.<span class="property">a</span> = <span class="literal">false</span>,twoObj.<span class="property">b</span> = <span class="number">40</span>, twoObj.<span class="property">c</span>.<span class="property">d</span>=<span class="literal">false</span>, twoObj.<span class="property">c</span>.<span class="property">e</span>=<span class="string">&quot;对象中的字符串2&quot;</span>;</span><br><span class="line">			str = <span class="string">&quot;字符串2&quot;</span></span><br><span class="line">			num = <span class="number">999</span>;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;修改后的普通输出&quot;</span>); <span class="comment">// 修改后的普通输出</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(oneArr,twoArr,oneObj,twoObj,str,num);</span><br><span class="line">		&#125;,<span class="number">5000</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="title function_">testAny</span>();</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/10/LastTest.png" alt="LastTest"></p>
-<p><em><strong>附录</strong></em></p>
-<p>参考</p>
-<ol>
-<li>
-<p><a href="https://segmentfault.com/q/1010000017100551">Js中修改数组中的数据与console.log问题</a></p>
-</li>
-<li>
-<p><a href="https://juejin.cn/post/6867746382938603528">问题记录：console.log在对象修改前打印出对象修改后的值</a></p>
-</li>
-<li>
-<p><a href="https://stackoverflow.com/questions/7389069/how-can-i-make-console-log-show-the-current-state-of-an-object">How can I make console.log show the current state of an object?</a>   StackOverflow2011年问答</p>
-</li>
-<li>
-<p><a href="https://stackoverflow.com/questions/28766338/why-does-console-log-output-modified-values-even-before-they-have-been-modified">Why does console.log output modified values even before they have been modified? </a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-        <tag>数组</tag>
-        <tag>打印输出</tag>
       </tags>
   </entry>
   <entry>
@@ -1494,7 +1494,19 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
     <content><![CDATA[<p>本文介绍了我平时的 VSCode 的配置和设置，以及使用频次较多的插件。</p>
 <span id="more"></span>
 <h2 id="配置文件">配置文件</h2>
+<h3 id="基础配置">基础配置</h3>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// 保存的时候自动格式化</span></span><br><span class="line">  <span class="attr">&quot;editor.formatOnSave&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;editor.codeActionsOnSave&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// 使用eslint来fix，包括格式化会自动fix和代码质量检查会给出错误提示</span></span><br><span class="line">    <span class="attr">&quot;source.fixAll.eslint&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="comment">// 默认格式化工具选择prettier</span></span><br><span class="line">  <span class="attr">&quot;editor.defaultFormatter&quot;</span><span class="punctuation">:</span> <span class="string">&quot;esbenp.prettier-vscode&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="其他配置">其他配置</h3>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">//工作区不显示以下文件夹</span></span><br><span class="line"><span class="comment">// &quot;files.exclude&quot;: &#123;</span></span><br><span class="line"><span class="comment">// 	&quot;node_modules/&quot;: true,</span></span><br><span class="line"><span class="comment">// 	&quot;dist/&quot;: true</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="comment">// 显示面包屑</span></span><br><span class="line"><span class="comment">// &quot;breadcrumbs.enabled&quot;: true,</span></span><br></pre></td></tr></table></figure>
+<h3 id="Prettier-其他配置">Prettier 其他配置</h3>
+<ol>
+<li>配置到 <code>setting.json</code> 中</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// prettier 配置</span></span><br><span class="line"><span class="attr">&quot;prettier.trailingComma&quot;</span><span class="punctuation">:</span> <span class="string">&quot;all&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;prettier.enable&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;prettier.semi&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span> <span class="comment">// 句尾添加分号</span></span><br><span class="line"><span class="attr">&quot;prettier.singleQuote&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span> <span class="comment">// 使用单引号代替双引号</span></span><br><span class="line"><span class="attr">&quot;prettier.printWidth&quot;</span><span class="punctuation">:</span> <span class="number">100</span><span class="punctuation">,</span> <span class="comment">// 超过最大值换行</span></span><br><span class="line"><span class="attr">&quot;prettier.tabWidth&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span> <span class="comment">// 缩进字节数</span></span><br><span class="line"><span class="attr">&quot;prettier.useTabs&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span> <span class="comment">// 缩进不使用tab，使用空格</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>单独的配置文件 <code>.prettierrc.js</code></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// 字符串使用单引号</span></span><br><span class="line">  <span class="attr">singleQuote</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 每行末尾自动添加分号</span></span><br><span class="line">  <span class="attr">semi</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="comment">// 行尾逗号,默认none,可选 none|es5|all</span></span><br><span class="line">  <span class="attr">trailingComma</span>: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">  <span class="comment">// 使用tab缩进，默认false</span></span><br><span class="line">  <span class="attr">useTabs</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="comment">// tab缩进大小,默认为2</span></span><br><span class="line">  <span class="attr">tabWidth</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="comment">// 对象中打印空格 默认true</span></span><br><span class="line">  <span class="comment">// true: &#123; foo: bar &#125;</span></span><br><span class="line">  <span class="comment">// false: &#123;foo: bar&#125;</span></span><br><span class="line">  <span class="attr">bracketSpacing</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 箭头函数参数括号 默认avoid 可选 avoid| always</span></span><br><span class="line">  <span class="comment">// avoid 能省略括号的时候就省略 例如x =&gt; x</span></span><br><span class="line">  <span class="comment">// always 总是有括号</span></span><br><span class="line">  <span class="attr">arrowParens</span>: <span class="string">&#x27;avoid&#x27;</span>,</span><br><span class="line">  <span class="comment">// 换行长度，默认80</span></span><br><span class="line">  <span class="attr">printWidth</span>: <span class="number">120</span>,</span><br><span class="line">  <span class="comment">// jsxBracketSameLine 设置为true时,将多行JSX元素的 &gt; 放在最后一行的末尾，而不是单独放在下一行</span></span><br><span class="line">  <span class="comment">/* </span></span><br><span class="line"><span class="comment">      &lt;button</span></span><br><span class="line"><span class="comment">         className=&quot;prettier-class&quot;</span></span><br><span class="line"><span class="comment">         id=&quot;prettier-id&quot;</span></span><br><span class="line"><span class="comment">         onClick=&#123;this.handleClick&#125;&gt;</span></span><br><span class="line"><span class="comment">         Click Here</span></span><br><span class="line"><span class="comment">      &lt;/button&gt; </span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">  <span class="comment">// 设置为false时</span></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">      &lt;button</span></span><br><span class="line"><span class="comment">          className=&quot;prettier-class&quot;</span></span><br><span class="line"><span class="comment">          id=&quot;prettier-id&quot;</span></span><br><span class="line"><span class="comment">          onClick=&#123;this.handleClick&#125;</span></span><br><span class="line"><span class="comment">      &gt;</span></span><br><span class="line"><span class="comment">          Click Here</span></span><br><span class="line"><span class="comment">      &lt;/button&gt;</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">  <span class="attr">jsxBracketSameLine</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">endOfLine</span>: <span class="string">&#x27;auto&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="设置">设置</h2>
 <h2 id="插件">插件</h2>
 <h3 id="HTMLCSS">HTMLCSS</h3>
@@ -1653,33 +1665,6 @@ $$</p>
       </tags>
   </entry>
   <entry>
-    <title>结构体指针函数--头节点不头大</title>
-    <url>/2020/StructKeyFunctionOfHead.html</url>
-    <content><![CDATA[<p>近日学习数据结构的时候发现一些以前没有察觉到的点，就是结构体的指针，当修改到头节点的时候，为什么要用二级指针呢？</p>
-<span id="more"></span>
-<p>A：<em>二级指针才可以修改一级指针本身的值，而不是修改一级指针指向的变量的值</em></p>
-<h2 id="详解">详解</h2>
-<p>观察如下代码</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> num,source;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span> <span class="title">a</span>=</span>&#123;<span class="number">1</span>,<span class="number">90</span>&#125;,b=&#123;<span class="number">2</span>,<span class="number">86</span>&#125;,c=&#123;<span class="number">3</span>,<span class="number">20</span>&#125;,d=&#123;<span class="number">8</span>,<span class="number">80</span>&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">head</span>,*<span class="title">p</span>;</span></span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;使用函数前数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change1(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数1后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	change2(&amp;head);                     <span class="comment">//取head变量本身的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数2后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;恢复数据数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change3(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数3后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; head=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>&#123; (*head)=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; *head=d; &#125; </span><br></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用函数前数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数1后：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数2后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line">恢复数据数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数3后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br></pre></td></tr></table></figure>
-<p>数据结构：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/06/10StructKeyFunctionOfHeaddata.png" alt=""></p>
-<p><strong>change1函数</strong></p>
-<p>参数：struct student *head</p>
-<p><code>change1(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)；所以change1函数中的head接收了a的值(注意：主函数的head与change1函数的head不是同一个)，此时新旧head指向的变量相同，但自身不同。</p>
-<p><code>head=&amp;d</code>  将change1函数中的head存储的地址改成d的地址，在change1函数中head指向d，因为没有怼主函数的head进行改动，所以主函数的head还是指向a，所以修改不成功</p>
-<p><strong>change2函数</strong></p>
-<p>参数：struct student **head</p>
-<p><em>change2(&amp;head)</em>  取主函数中head变量自身的值传给change2函数中的head变量，而<code>*</code>的作用是进入指针指向的变量，所以<code>*head</code>即进入了change2函数head指向的变量–&gt;主函数的head，所以此时<code>*head</code>等价于主函数的head，修改<code>*head</code>就可以修改主函数的head</p>
-<p><code>(*head)=&amp;d</code>  将<code>*head</code>改为d的地址等于将主函数的head改为d的地址</p>
-<p><strong>change3函数</strong></p>
-<p>参数：struct student *head</p>
-<p><code>change3(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)</p>
-<p><code>*head=d</code>  <code>*head</code>进入head指向的节点，即进入a，将d赋给<code>*head</code>等价于将d赋给a，此时原来存储a的空间存储的数据与存储d的空间存储的数据一样(有、绕，就是现在没有a，有两个d，因为a变成d)，此时主函数的head、change3函数的head都不变，而是将他们指向的变量重新赋值。<em>此语句会改变数据使得数据丢失，最好不要用</em></p>
-]]></content>
-  </entry>
-  <entry>
     <title>算法｜最大公因数和最小公倍数多个详细版-JavaScript</title>
     <url>/2022/gcd-lcm-one-and-more-js.html</url>
     <content><![CDATA[<p>使用 Javascript 描述了多种求两个数或多个数的 GCD 和 LCM 的方法。</p>
@@ -1733,6 +1718,33 @@ d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约�
         <tag>gcd</tag>
         <tag>lcm</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>结构体指针函数--头节点不头大</title>
+    <url>/2020/StructKeyFunctionOfHead.html</url>
+    <content><![CDATA[<p>近日学习数据结构的时候发现一些以前没有察觉到的点，就是结构体的指针，当修改到头节点的时候，为什么要用二级指针呢？</p>
+<span id="more"></span>
+<p>A：<em>二级指针才可以修改一级指针本身的值，而不是修改一级指针指向的变量的值</em></p>
+<h2 id="详解">详解</h2>
+<p>观察如下代码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span>&#123;</span></span><br><span class="line">	<span class="type">int</span> num,source;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">student</span> <span class="title">a</span>=</span>&#123;<span class="number">1</span>,<span class="number">90</span>&#125;,b=&#123;<span class="number">2</span>,<span class="number">86</span>&#125;,c=&#123;<span class="number">3</span>,<span class="number">20</span>&#125;,d=&#123;<span class="number">8</span>,<span class="number">80</span>&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">student</span> *<span class="title">head</span>,*<span class="title">p</span>;</span></span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;使用函数前数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change1(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数1后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	change2(&amp;head);                     <span class="comment">//取head变量本身的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数2后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	head=&amp;a;a.next=&amp;b;b.next=&amp;c;c.next=<span class="literal">NULL</span>;d.next=&amp;b;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;恢复数据数据：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	change3(head);                       <span class="comment">// 取head变量的值，即head指向的节点的地址 </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n使用函数3后：\n&quot;</span>);</span><br><span class="line">	p=head;</span><br><span class="line">	<span class="keyword">while</span>(p)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%-5d%-5d\n&quot;</span>,p-&gt;num,p-&gt;source);</span><br><span class="line">		p=p-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">change1</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; head=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change2</span><span class="params">(<span class="keyword">struct</span> student **head)</span>&#123; (*head)=&amp;d; &#125; </span><br><span class="line"><span class="type">void</span> <span class="title function_">change3</span><span class="params">(<span class="keyword">struct</span> student *head)</span>&#123; *head=d; &#125; </span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用函数前数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数1后：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数2后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line">恢复数据数据：</span><br><span class="line">1    90</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br><span class="line"></span><br><span class="line">使用函数3后：</span><br><span class="line">8    80</span><br><span class="line">2    86</span><br><span class="line">3    20</span><br></pre></td></tr></table></figure>
+<p>数据结构：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/06/10StructKeyFunctionOfHeaddata.png" alt=""></p>
+<p><strong>change1函数</strong></p>
+<p>参数：struct student *head</p>
+<p><code>change1(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)；所以change1函数中的head接收了a的值(注意：主函数的head与change1函数的head不是同一个)，此时新旧head指向的变量相同，但自身不同。</p>
+<p><code>head=&amp;d</code>  将change1函数中的head存储的地址改成d的地址，在change1函数中head指向d，因为没有怼主函数的head进行改动，所以主函数的head还是指向a，所以修改不成功</p>
+<p><strong>change2函数</strong></p>
+<p>参数：struct student **head</p>
+<p><em>change2(&amp;head)</em>  取主函数中head变量自身的值传给change2函数中的head变量，而<code>*</code>的作用是进入指针指向的变量，所以<code>*head</code>即进入了change2函数head指向的变量–&gt;主函数的head，所以此时<code>*head</code>等价于主函数的head，修改<code>*head</code>就可以修改主函数的head</p>
+<p><code>(*head)=&amp;d</code>  将<code>*head</code>改为d的地址等于将主函数的head改为d的地址</p>
+<p><strong>change3函数</strong></p>
+<p>参数：struct student *head</p>
+<p><code>change3(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)</p>
+<p><code>*head=d</code>  <code>*head</code>进入head指向的节点，即进入a，将d赋给<code>*head</code>等价于将d赋给a，此时原来存储a的空间存储的数据与存储d的空间存储的数据一样(有、绕，就是现在没有a，有两个d，因为a变成d)，此时主函数的head、change3函数的head都不变，而是将他们指向的变量重新赋值。<em>此语句会改变数据使得数据丢失，最好不要用</em></p>
+]]></content>
   </entry>
   <entry>
     <title>蓝桥杯｜2021第十二届蓝桥杯第二次模拟赛真题与解答[Java]</title>
