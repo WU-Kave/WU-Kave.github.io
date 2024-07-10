@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/assets/favicon.png">
+  <link rel="mask-icon" href="/uploads/assets/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wu-kave.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在使用了一年的小主机 NAS 后，我决定自己组装并安装新 NAS。本文详细记录了硬件选择、系统安装中的波折、套件与Docker应用、功耗测试及温度监控等过程，分享了从裸奔硬盘到小别墅的升级体验。适合想要了解 NAS 组装和优化的读者。（本摘要由 AI 生成）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从小主机到第一台自组装NAS：升级与优化记录">
+<meta property="og:url" content="https://wu-kave.github.io/2024/recording-the-first-DIY-NAS.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="在使用了一年的小主机 NAS 后，我决定自己组装并安装新 NAS。本文详细记录了硬件选择、系统安装中的波折、套件与Docker应用、功耗测试及温度监控等过程，分享了从裸奔硬盘到小别墅的升级体验。适合想要了解 NAS 组装和优化的读者。（本摘要由 AI 生成）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/nas-ncu-and-disk.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-01.pic.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-02.png">
+<meta property="article:published_time" content="2024-07-08T17:24:29.000Z">
+<meta property="article:modified_time" content="2024-07-08T17:24:29.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="NAS">
+<meta property="article:tag" content="黑群晖">
+<meta property="article:tag" content="装机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/nas-ncu-and-disk.jpg">
+
+
+<link rel="canonical" href="https://wu-kave.github.io/2024/recording-the-first-DIY-NAS.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wu-kave.github.io/2024/recording-the-first-DIY-NAS.html","path":"2024/recording-the-first-DIY-NAS.html","title":"从小主机到第一台自组装NAS：升级与优化记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从小主机到第一台自组装NAS：升级与优化记录 | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E7%9A%84%E6%B3%A2%E6%8A%98"><span class="nav-number">3.</span> <span class="nav-text">系统安装的波折</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">3.2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3"><span class="nav-number">3.3.</span> <span class="nav-text">解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85"><span class="nav-number">3.4.</span> <span class="nav-text">系统安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%97%E4%BB%B6-docker"><span class="nav-number">4.</span> <span class="nav-text">套件&#x2F;docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jellyfin"><span class="nav-number">4.1.</span> <span class="nav-text">jellyfin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%9F%E8%80%97%E6%B5%8B%E8%AF%95"><span class="nav-number">5.</span> <span class="nav-text">功耗测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E5%AE%89%E8%A3%85%E5%A5%BD%E7%B3%BB%E7%BB%9F"><span class="nav-number">5.1.</span> <span class="nav-text">刚安装好系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E4%B8%8A%E7%BC%93%E5%AD%98%E7%9B%98%E4%B8%94%E8%BF%90%E8%A1%8C%E4%BA%86%E6%9B%B4%E5%A4%9A%E7%9A%84%E5%A5%97%E4%BB%B6%E5%92%8C-docker-%E5%AE%B9%E5%99%A8%E4%B9%8B%E5%90%8E"><span class="nav-number">5.2.</span> <span class="nav-text">插上缓存盘且运行了更多的套件和 docker 容器之后</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%A9%E5%BA%A6"><span class="nav-number">6.</span> <span class="nav-text">温度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E4%B8%80"><span class="nav-number">6.1.</span> <span class="nav-text">场景一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E4%BA%8C"><span class="nav-number">6.2.</span> <span class="nav-text">场景二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E4%B8%89"><span class="nav-number">6.3.</span> <span class="nav-text">场景三</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">7.</span> <span class="nav-text">后记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/assets/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wu-kave.github.io/2024/recording-the-first-DIY-NAS.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/assets/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从小主机到第一台自组装NAS：升级与优化记录 | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从小主机到第一台自组装NAS：升级与优化记录
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-07-09 01:24:29" itemprop="dateCreated datePublished" datetime="2024-07-09T01:24:29+08:00">2024-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NAS/" itemprop="url" rel="index"><span itemprop="name">NAS</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在使用了一年的小主机 NAS 后，我决定自己组装并安装新 NAS。本文详细记录了硬件选择、系统安装中的波折、套件与Docker应用、功耗测试及温度监控等过程，分享了从裸奔硬盘到小别墅的升级体验。适合想要了解 NAS 组装和优化的读者。（本摘要由 AI 生成）</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>在使用了一年的小主机NAS之后，我终于更换了一台自己组装自己安装系统的 NAS，恭喜我自己，这里少不了我朋友提供的硬件咨询，感谢他。</p>
+<p>为什么要换一台 NAS 呢？这里不得不提到我之前使用的小主机 NAS。它小巧轻便，功耗低，配备了 j4125 处理器和 8GB 内存，性能完全够用，还支持内置两个 2.5 英寸硬盘。</p>
+<p>问题就出现在这，内置不支持 3.5 寸硬盘，这就导致我3.5寸硬盘要裸奔，刚好 cpu 风扇散热又直接吹倒硬盘上，面临以下问题：</p>
+<ul>
+<li>硬盘没有物理保护，不放心</li>
+<li>容易过热</li>
+<li>拓展型不高</li>
+</ul>
+<p>索性，就直接换个 NAS 吧。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/nas-ncu-and-disk.jpg" alt="nas-ncu-and-disk"></p>
+<h2 id="硬件">硬件</h2>
+<p>由于我对性能需求不大，所以没有选择太好的硬件，够用就行。所以我选择了g4560t cpu，很多都是二手 的。总体配置如下：</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>品牌型号</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>g4560t（二手）</td>
+<td>125</td>
+</tr>
+<tr>
+<td>主板</td>
+<td>技嘉h110m-des2（二手）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>散热器</td>
+<td>板载（二手）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>金士顿 DDR4 2133（二手）</td>
+<td>27</td>
+</tr>
+<tr>
+<td>电源</td>
+<td>长城额定230W 小金刚GW-330</td>
+<td>109</td>
+</tr>
+<tr>
+<td>散热风扇</td>
+<td>利民工包C12C * 2</td>
+<td>30</td>
+</tr>
+<tr>
+<td>机箱</td>
+<td>爱国者商越 matx</td>
+<td>75</td>
+</tr>
+<tr>
+<td>缓存盘</td>
+<td>Intel 傲腾M10 16G 2280</td>
+<td>16</td>
+</tr>
+<tr>
+<td>PCIE转换卡</td>
+<td>NVME m.2转PCIE 拓展卡 x16</td>
+<td>12</td>
+</tr>
+<tr>
+<td>引导U盘</td>
+<td>闪迪酷豆8G</td>
+<td>24</td>
+</tr>
+<tr>
+<td>总计</td>
+<td></td>
+<td>418</td>
+</tr>
+</tbody>
+</table>
+<p>机箱选择是个大问题，其实一开始的机箱不是这个，买了个40多的，安装之后发现，3.5寸一些硬盘只能固定一侧，这让我很不放心，便退了，运费25元（扣除了运费险），血亏！</p>
+<p>这里也推荐一下这个机箱，整体不是很大，最大同时支持2个3.5寸机械硬盘和1个2.5寸硬盘，有前置风扇位，可以直吹硬盘。预算不足没钱上 NAS 专用机箱的，可以考虑这个。毕竟不算电源的话，NAS 专用机箱比我整套还贵了。</p>
+<h2 id="系统安装的波折">系统安装的波折</h2>
+<p>主机安装一步一步来，没啥大问题。</p>
+<p>但是头疼的来了，这里也记录一下，以作参考。</p>
+<h3 id="过程">过程</h3>
+<p>首先，烧录U盘 - 打开引导Web地址 - 选择版本 - 选择型号 - 编译引导，这里都没问题。</p>
+<p>我选择了 <code>DS918+</code> 和 <code>7.2</code> 的版本。</p>
+<p>点了“启动”之后，提示我在浏览器中访问 ``http:xx:5000` 链接 DSM，没有报错，根据指南，我等待一会之后访问这个地址以安装群晖系统。</p>
+<h3 id="问题">问题</h3>
+<p>这个时候出现了问题。系统死机了，风扇还在转，但网口灯不亮，ping 不通，这一下子让我懵了。</p>
+<p>经过一番网络搜索和参考官方问题合集，我尝试了以下各种方法，但都没有成功：</p>
+<ul>
+<li>切换 <code>LKM</code> 版本&quot;到 <code>dev</code></li>
+<li>切换 “直接启动”</li>
+<li>更换型号</li>
+<li>更换引导并尝试以上方法</li>
+</ul>
+<p>（好像还研究了其他来着，忘记了）</p>
+<h3 id="解决">解决</h3>
+<p>第二天，当我一筹莫展的时候，便想着一个一个都尝试一下，随后把 <code>LKM</code> 版本&quot;到 <code>test</code> ，成功安装。</p>
+<p>当时有点无语，毕竟我尝试的第一个方法就是切换 <code>LKM</code> 分支。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-01.pic.png" alt="new-nas-install-01.pic"></p>
+<h3 id="系统安装">系统安装</h3>
+<p>随后便是安装系统，可以选择保留配置或重置配置，但都会保留文件。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-02.png" alt="new-nas-install-02"></p>
+<p>在这个时候，我只插入了一个硬盘。系统成功安装后，我再插入另一个硬盘，它会提示「系统分区不可用」之类的，然后修复即可，数据都会保留。但其实可以一开始就放进去 2 个硬盘，我是因为害怕被格式化，经过这一次折腾，我觉得它应该是不会轻易格式化的。</p>
+<h2 id="套件-docker">套件/docker</h2>
+<p>我装了以下套件和docker。</p>
+<p>套件：</p>
+<ul>
+<li>Hyper Backup：备份</li>
+<li>cloud Sync：同步/备份</li>
+<li>Container Manager：运行docker</li>
+<li>存储空间分析器：分析存储空间并做出报告</li>
+<li>USB copy：备份</li>
+<li>alist 网盘：挂载网盘</li>
+<li>迅雷：下载工具</li>
+<li>Transmission：下载工具</li>
+<li>Synology Drive：文件同步</li>
+<li>NASTool：媒体工具</li>
+<li>ZeroTier：异地组网</li>
+<li>Tailscale：异地组网</li>
+</ul>
+<p>docker：</p>
+<ul>
+<li>nyanmisaka/jellyfin：视频播放</li>
+<li>adolfintel/speedtest：网络测试</li>
+<li>linuxserver/qbittorrent：下载工具</li>
+</ul>
+<h3 id="jellyfin">jellyfin</h3>
+<p>成功开启硬解，CPU 在 20-35%，除了在一开始加载和切换转码时需要加载，其他时候均流畅播放。</p>
+<p>以某个电影资源为例，视频信息如下：</p>
+<ul>
+<li>大小：48 GB</li>
+<li>编码：HEVC</li>
+<li>分辨率：3840 x 2160</li>
+<li>帧率：24</li>
+<li>比特率：72 Mbps</li>
+<li>位深度：10 bit</li>
+<li>动态范围：HDR</li>
+<li>动态范围类型：HDR10</li>
+</ul>
+<p>这个时候自动转码成 <code>4k + 120 Mbps</code>，帧率是 42，手动切换转码成<code>1080P + 10 Mbps</code>，转码帧率是 77。</p>
+<blockquote>
+<p>tips：NAStool 建立完硬链接之后，可以在 jellyfin 媒体库中添加硬链接的目标文件夹，那里有刮削好的数据，可以直接用。</p>
+<p>需要注意的是，如果采用这种方案，媒体库的媒体资料存储方式中勾选上“Nfo”。</p>
+</blockquote>
+<h2 id="功耗测试">功耗测试</h2>
+<p>测试仪器：电小酷 CP1-AM。</p>
+<h3 id="刚安装好系统">刚安装好系统</h3>
+<p>这里还没安装过多的套件，且没有运行 docker 容器。</p>
+<ul>
+<li>开机瞬间：50 w</li>
+<li>开机ing：40 w</li>
+<li>普通使用：28 - 35 w</li>
+<li>跑smart检测：31 w</li>
+<li>迅雷下载电视剧 + smart检测：35 - 36 w</li>
+<li>迅雷下载电视剧 + smart检测：36 w</li>
+<li>迅雷下载电视剧 + smart检测 + drive建立索引（此时 cpu 60%）：37 - 42 w</li>
+</ul>
+<p>估计待机功耗：28w</p>
+<h3 id="插上缓存盘且运行了更多的套件和-docker-容器之后">插上缓存盘且运行了更多的套件和 docker 容器之后</h3>
+<ul>
+<li>jellyfin 转码：47 - 51 w</li>
+<li>待机：30 w</li>
+</ul>
+<p>这天用下来，低强度使用，大多居中在0.7 - 0.8 度之间，其中有一天用 jellyfin 看了一个小时电影，刚超过 0.8 度一点点。虽然说一天不到一度不算很多，但是城中村的电费单价 1.5 元可不是吹的。</p>
+<p>由于上班时很少使用 NAS，我打算设置自动关机、来电自启和使用智能插座，这样应该至少能节省一半的电量。</p>
+<h2 id="温度">温度</h2>
+<p>不知道为什么我的 2.5 英寸固态硬盘看不到温度显示，但好在它不是机械硬盘，所以暂时不管它。</p>
+<p>CPU 温度我是通过 Linux 的 sensors 查看，这与我在 app 上看到的“散热状态”显示的温度有所不同。以便参考，我两个都记录下，总体来说，前者比后者低 16 - 18 ℃ 这样。</p>
+<p>当天天气：28-36 ℃，仅供参考。</p>
+<h3 id="场景一">场景一</h3>
+<p>待机，CPU 占用率低于 3 %。</p>
+<ul>
+<li>室温：29.5 ℃</li>
+<li>机械硬盘：39 ℃</li>
+<li>CPU（sensors）：37 ℃</li>
+<li>CPU（群晖管家）：56 ℃</li>
+</ul>
+<h3 id="场景二">场景二</h3>
+<p>白天，待机，有轻微 CPU 活动，CPU 占用率 4 - 13 %，功率 30 w。</p>
+<ul>
+<li>室温：31.3 ℃</li>
+<li>机械硬盘：41 ℃</li>
+<li>CPU（sensors）：40 ℃</li>
+<li>CPU（群晖管家）：61 ℃</li>
+</ul>
+<h3 id="场景三">场景三</h3>
+<p>白天中强度使用 15 分钟，使用 jellyfin 转码观看视频，CPU 占用率 47 - 50 %，集中在 42 - 45 %，功率 43 - 52 w，集中在 48 - 51 w。</p>
+<ul>
+<li>室温：31.3 ℃</li>
+<li>机械硬盘：43 ℃</li>
+<li>CPU（sensors）：52 ℃</li>
+<li>CPU（群晖管家）：55 - 58 ℃</li>
+</ul>
+<h2 id="后记">后记</h2>
+<p>经过一番折腾，我的裸奔硬盘终于从“露营”住进了“小别墅”，算是告别了一些危险因素。花费了我很多时间，但我乐在其中。虽然安装不上系统的时候确实很苦恼，当时都想着电源要怎么卖好了。</p>
+<p>也许人生亦是如此，得多尝试多犯错才会成功，但在现实社会里，也许是因为没有试错成本，也许是因为看透了社会，我是个害怕犯错、很难接受犯错成本的一个人，这和我面对数码产品/电子设备/代码的心态完全不同，我对这些非常喜欢折腾和尝试。初二的时候亲戚不要的一台电脑给了我，那时候的我压根不会装系统不懂硬件不懂装机，我连电脑都没有，靠着听来的知识和百度来的知识，硬是熬到了凌晨把这台电脑弄开机了，具体是因为没系统还是没法开机，我不太记得了，我只记得那个时候的我非常信任当时的我，相信总会弄好的。有点强行升华了。</p>
+<p>其实我对 NAS 的需求并不高，我只是想要一个能够持续运行的设备来保存我的资料、实现备份功能和局域网内设备能访问我很久很久以前的资料就行，能不能够提供附加功能（套件、docker）其实无所谓，这个时候，NAS 就非常适合我。</p>
+<p>硬盘有价，数据无价。</p>
+<p>这里建议大家都做好数据备份，也不要玩 all in one，在我组装好不久后便在某论坛上看到一个 all in boom 了。</p>
+<p>ZeroTier、ZeroTier Zoom、Tailscale 我也都测试了，下次专门发（水）一篇吧。</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/RROrg/rr">Github - RR 引导 </a></li>
+<li><a target="_blank" rel="noopener" href="https://rrorg.cn/archives/Use%20guide">RR 引导官方使用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://rrorg.cn/archives/issues">RR引导官方问题合集</a></li>
+<li><a target="_blank" rel="noopener" href="https://mi-d.cn/8116">群晖引导成功之后群晖助手/Synology Assistant搜索不到机器ip解决方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1mH4y1T7VX">bilibili - 2024年最新黑群晖安装教程-一键安装DSM7.2超级简单</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ra411i7WY">bilibili - 更好用的Jellyfin——解决封面和字幕方框、绿屏、转码慢</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://wu-kave.github.io/2024/recording-the-first-DIY-NAS.html" title="从小主机到第一台自组装NAS：升级与优化记录">https://wu-kave.github.io/2024/recording-the-first-DIY-NAS.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/NAS/" rel="tag"># NAS</a>
+              <a href="/tags/%E9%BB%91%E7%BE%A4%E6%99%96/" rel="tag"># 黑群晖</a>
+              <a href="/tags/%E8%A3%85%E6%9C%BA/" rel="tag"># 装机</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/why-subcomponents-take-the-default-value-when-passed-undefined.html" rel="prev" title="vue源码|为什么子组件传参为undefined时会取默认值">
+                  <i class="fa fa-angle-left"></i> vue源码|为什么子组件传参为undefined时会取默认值
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">33k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:01</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
