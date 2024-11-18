@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/assets/favicon.png">
+  <link rel="mask-icon" href="/uploads/assets/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.xchive.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="介绍了一种通过 el-select 插槽实现表格样式数据展示的方案，可更直观地辅助用户选择。支持列配置、行数据绑定及自定义搜索，简洁高效，适用于复杂选择场景。完整代码见GitHub 仓库。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="优化表单交互：在 el-select 组件中嵌入表格显示选项">
+<meta property="og:url" content="https://blog.xchive.top/2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="介绍了一种通过 el-select 插槽实现表格样式数据展示的方案，可更直观地辅助用户选择。支持列配置、行数据绑定及自定义搜索，简洁高效，适用于复杂选择场景。完整代码见GitHub 仓库。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/11/el-select-table-click-demo.gif">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/11/el-select-table-input-filter-demo.gif">
+<meta property="article:published_time" content="2024-11-14T13:51:23.000Z">
+<meta property="article:modified_time" content="2024-11-14T13:51:23.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="组件封装">
+<meta property="article:tag" content="element-plus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/11/el-select-table-click-demo.gif">
+
+
+<link rel="canonical" href="https://blog.xchive.top/2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.xchive.top/2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html","path":"2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html","title":"优化表单交互：在 el-select 组件中嵌入表格显示选项"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>优化表单交互：在 el-select 组件中嵌入表格显示选项 | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E4%B8%8E%E4%BE%9D%E8%B5%96"><span class="nav-number">2.1.</span> <span class="nav-text">环境与依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.2.</span> <span class="nav-text">思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">如何使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%85%A8%E8%A1%A8%E6%A0%BC%E6%90%9C%E7%B4%A2"><span class="nav-number">4.</span> <span class="nav-text">自定义全表格搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95"><span class="nav-number">5.</span> <span class="nav-text">扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text">组件代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">7.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/assets/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.xchive.top/2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/assets/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="优化表单交互：在 el-select 组件中嵌入表格显示选项 | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          优化表单交互：在 el-select 组件中嵌入表格显示选项
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-14 21:51:23" itemprop="dateCreated datePublished" datetime="2024-11-14T21:51:23+08:00">2024-11-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>介绍了一种通过 <code>el-select</code> 插槽实现表格样式数据展示的方案，可更直观地辅助用户选择。支持列配置、行数据绑定及自定义搜索，简洁高效，适用于复杂选择场景。完整代码见<a target="_blank" rel="noopener" href="https://github.com/WU-Kave/el-select-table-option">GitHub 仓库</a>。</p>
+<span id="more"></span>
+<h2 id="背景">背景</h2>
+<p>在进行业务开发选择订单时，如果单纯的根据单号是无法编写是哪一条订单的，这个时候就可以通过表格的方式去展示这条订单的其他信息，辅助用户分辨出订单，不用再去查，更快速、更友好。</p>
+<p>效果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/11/el-select-table-click-demo.gif" alt="el-select-table-click-demo"></p>
+<h2 id="实现">实现</h2>
+<h3 id="环境与依赖">环境与依赖</h3>
+<ul>
+<li>node 22</li>
+<li>vue 3</li>
+<li>element-plus</li>
+</ul>
+<h3 id="思路">思路</h3>
+<p>原理很简单，利用插槽。</p>
+<p>虽然通过 <code>el-table</code> 可以实现表格效果，但对这种简单需求来说过于臃肿。而直接使用原生 <code>table</code> 标签结构实现太过于繁琐，不便于实现遍历 <code>el-option</code>。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">el-select</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 表头，遍历 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 表体，遍历 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">el-option</span>&gt;</span></span><br><span class="line">    	<span class="comment">&lt;!-- 行数据，遍历 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">el-option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">el-select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>因此，我采用列表结构实现，结合 CSS 美化出表格效果。具体做法是遍历「列配置」生成表头，再遍历「options」生成行数据。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-select </span><br><span class="line">  ref=&quot;inputRef&quot; </span><br><span class="line">  v-model=&quot;selectValue&quot;</span><br><span class="line">  clearable</span><br><span class="line">  filterable</span><br><span class="line">  :placeholder=&quot;placeholder&quot; </span><br><span class="line">  :disabled=&quot;disabled&quot; </span><br><span class="line">  :filter-method=&quot;filterMethod&quot; </span><br><span class="line">  @change=&quot;handleChange&quot;</span><br><span class="line">&gt;</span><br><span class="line">  &lt;!-- 表头 --&gt;</span><br><span class="line">  &lt;ul class=&quot;select-ul&quot;&gt;</span><br><span class="line">    &lt;li v-for=&quot;column in columnConfig&quot; :key=&quot;column.label&quot;&gt;&#123;&#123; column.label &#125;&#125;&lt;/li&gt;</span><br><span class="line">  &lt;/ul&gt;</span><br><span class="line">  &lt;el-option v-for=&quot;item in showOptions&quot; :key=&quot;item[keyNameCom]&quot; :value=&quot;item[valueName]&quot;&gt;</span><br><span class="line">    &lt;ul class=&quot;select-ul select-ul-data&quot;&gt;</span><br><span class="line">      &lt;li v-for=&quot;column in columnConfig&quot; :key=&quot;column.label&quot;&gt;&#123;&#123; item[column.prop] &#125;&#125;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">  &lt;/el-option&gt;</span><br><span class="line">&lt;/el-select&gt;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>el-option</code> 的数据绑定属性名默认是 <code>id</code>，可通过配置修改。同时，遍历 <code>key</code> 属性支持自定义，若为空则默认使用 <code>value</code> 属性名，减少额外数据处理。</p>
+<h2 id="如何使用">如何使用</h2>
+<p>一个简单演示。</p>
+<ul>
+<li><code>options</code>：行数据</li>
+<li><code>columnConfig</code>：列配置</li>
+</ul>
+<p><code>template</code> 结构和 <code>js</code> 部分如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;BaseTableSelect </span><br><span class="line">  v-model=&quot;selectValue&quot; </span><br><span class="line">  :options=&quot;options&quot; </span><br><span class="line">  :columnConfig=&quot;columnConfig&quot; </span><br><span class="line">&gt;</span><br><span class="line">&lt;/BaseTableSelect&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> options = <span class="title function_">ref</span>([</span><br><span class="line">  &#123;<span class="attr">id</span>: <span class="string">&quot;213&quot;</span>, <span class="attr">department</span>: <span class="string">&#x27;古典风格号&#x27;</span>, <span class="attr">createTime</span>: <span class="string">&#x27;2024-12-23&#x27;</span>, <span class="attr">place</span>: <span class="string">&#x27;学校&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">id</span>: <span class="string">&quot;546&quot;</span>, <span class="attr">department</span>: <span class="string">&#x27;都听好&#x27;</span>, <span class="attr">createTime</span>: <span class="string">&#x27;2024-12-23&#x27;</span>, <span class="attr">place</span>: <span class="string">&#x27;家里&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">id</span>: <span class="string">&quot;345&quot;</span>, <span class="attr">department</span>: <span class="string">&#x27;按时到岗&#x27;</span>, <span class="attr">createTime</span>: <span class="string">&#x27;2024-12-23&#x27;</span>, <span class="attr">place</span>: <span class="string">&#x27;医院&#x27;</span>&#125;</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> columnConfig = <span class="title function_">ref</span>([</span><br><span class="line">  &#123;<span class="attr">label</span>: <span class="string">&#x27;单号&#x27;</span>, <span class="attr">prop</span>: <span class="string">&#x27;id&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">label</span>: <span class="string">&#x27;部门&#x27;</span>, <span class="attr">prop</span>: <span class="string">&#x27;department&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">label</span>: <span class="string">&#x27;时间&#x27;</span>, <span class="attr">prop</span>: <span class="string">&#x27;createTime&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">label</span>: <span class="string">&#x27;地点&#x27;</span>, <span class="attr">prop</span>: <span class="string">&#x27;place&#x27;</span>&#125;,</span><br><span class="line">])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="自定义全表格搜索">自定义全表格搜索</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/11/el-select-table-input-filter-demo.gif" alt="el-select-table-input-filter-demo"></p>
+<p>组件 <code>el-select</code> 默认的搜索功能只会根据 <code>label</code> 属性的值去搜索，在表格展示的场景下并不符合，因此需要用到 <code>filter-method</code> 自定义搜索方法属性。</p>
+<p>初步简单实现可使用 <code>JSON.stringify()</code> 将选项对象转为字符串，并检测是否包含搜索关键词：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">filterMethod</span> = queryString =&gt; &#123;</span><br><span class="line">  showOptions.<span class="property">value</span> = props.<span class="property">options</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> (<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(item).<span class="title function_">includes</span>(queryString) ? <span class="literal">true</span> : <span class="literal">false</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不过，这种方式会将未展示的属性也纳入搜索，导致结果不准确。因此，优化后的搜索方法仅匹配已展示的列数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">filterMethod</span> = queryString =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (!queryString) &#123;</span><br><span class="line">    showOptions.<span class="property">value</span> = props.<span class="property">options</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  showOptions.<span class="property">value</span> = props.<span class="property">options</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 针对每个要过滤的列进行判断</span></span><br><span class="line">    <span class="keyword">return</span> props.<span class="property">columnConfig</span>.<span class="title function_">some</span>(<span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> propValue = item[config.<span class="property">prop</span>];</span><br><span class="line">      <span class="comment">// 将属性值转换为字符串并检查是否包含查询字符串</span></span><br><span class="line">      <span class="keyword">return</span> propValue &amp;&amp; propValue.<span class="title function_">toString</span>().<span class="title function_">includes</span>(queryString);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="扩展">扩展</h2>
+<p>本文提供的是基础实现。如果需要进一步功能扩展，例如控制搜索功能 (<code>filterable</code>) 或其他交互行为，可通过额外配置实现。但基础版本已满足我的需求，便不写太多不利于阅读代码。</p>
+<h2 id="组件代码">组件代码</h2>
+<p>仓库：<a target="_blank" rel="noopener" href="https://github.com/WU-Kave/el-select-table-option">🔗 el-select-table-option</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;el-select </span><br><span class="line">    ref=&quot;inputRef&quot; </span><br><span class="line">    v-model=&quot;selectValue&quot;</span><br><span class="line">    clearable</span><br><span class="line">    filterable</span><br><span class="line">    :placeholder=&quot;placeholder&quot; </span><br><span class="line">    :disabled=&quot;disabled&quot; </span><br><span class="line">    :filter-method=&quot;filterMethod&quot; </span><br><span class="line">    @change=&quot;handleChange&quot;</span><br><span class="line">  &gt;</span><br><span class="line">    &lt;!-- 表头 --&gt;</span><br><span class="line">    &lt;ul class=&quot;select-ul&quot;&gt;</span><br><span class="line">      &lt;li v-for=&quot;column in columnConfig&quot; :key=&quot;column.label&quot;&gt;&#123;&#123; column.label &#125;&#125;&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;el-option v-for=&quot;item in showOptions&quot; :key=&quot;item[keyNameCom]&quot; :value=&quot;item[valueName]&quot;&gt;</span><br><span class="line">      &lt;ul class=&quot;select-ul select-ul-data&quot;&gt;</span><br><span class="line">        &lt;li v-for=&quot;column in columnConfig&quot; :key=&quot;column.label&quot;&gt;&#123;&#123; item[column.prop] &#125;&#125;&lt;/li&gt;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">    &lt;/el-option&gt;</span><br><span class="line">  &lt;/el-select&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, reactive, onMounted, computed, watch, nextTick &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">defineOptions(&#123;</span><br><span class="line">  name: &#x27;BaseTableSelect&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const emit = defineEmits([&#x27;update:modelValue&#x27;, &#x27;keyup-enter&#x27;, &#x27;focus&#x27;, &#x27;change&#x27;])</span><br><span class="line"></span><br><span class="line">const props = defineProps(&#123;</span><br><span class="line">  modelValue: null,</span><br><span class="line">  disabled: &#123;</span><br><span class="line">    type: Boolean,</span><br><span class="line">    default: false</span><br><span class="line">  &#125;,</span><br><span class="line">  placeholder: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    default: &#x27;请选择&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  /* 列配置 */</span><br><span class="line">  columnConfig: &#123;</span><br><span class="line">    type: Array,</span><br><span class="line">    default(rawProps) &#123;</span><br><span class="line">      return []</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  options: &#123;</span><br><span class="line">    type: Array,</span><br><span class="line">    default(rawProps) &#123;</span><br><span class="line">      return []</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  valueName: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    default: &#x27;id&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  keyName: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    default: &#x27;&#x27;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const selectValue = computed(&#123;</span><br><span class="line">  get: () =&gt; props.modelValue,</span><br><span class="line">  set: val =&gt; &#123;</span><br><span class="line">    emit(&#x27;update:modelValue&#x27;, val)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 实际 keyName</span><br><span class="line">// 优先使用 keyName，keyName 为空时，使用 valueName</span><br><span class="line">const keyNameCom = computed(() =&gt; &#123;</span><br><span class="line">  return props.keyName !== &#x27;&#x27; ? props.keyName : props.valueName</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const handleChange = val =&gt; &#123;</span><br><span class="line">  emit(&#x27;change&#x27;, val)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// ref</span><br><span class="line">const inputRef = ref(null)</span><br><span class="line"></span><br><span class="line">// 渲染用的options</span><br><span class="line">const showOptions = ref(props.options)</span><br><span class="line">watch(</span><br><span class="line">  () =&gt; props.options,</span><br><span class="line">  newValue =&gt; &#123;</span><br><span class="line">    showOptions.value = newValue</span><br><span class="line">    selectValue.value = &#x27;&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">)</span><br><span class="line">// 筛选</span><br><span class="line">const filterMethod = queryString =&gt; &#123;</span><br><span class="line">  if (!queryString) &#123;</span><br><span class="line">    showOptions.value = props.options;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  showOptions.value = props.options.filter(item =&gt; &#123;</span><br><span class="line">    // 针对每个要过滤的列进行判断</span><br><span class="line">    return props.columnConfig.some(config =&gt; &#123;</span><br><span class="line">      const propValue = item[config.prop];</span><br><span class="line">      // 将属性值转换为字符串并检查是否包含查询字符串</span><br><span class="line">      return propValue &amp;&amp; propValue.toString().includes(queryString);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 得到焦点</span><br><span class="line">const getFocus = () =&gt; &#123;</span><br><span class="line">  nextTick(() =&gt; &#123;</span><br><span class="line">    inputRef.value.focus()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">defineExpose(&#123;</span><br><span class="line">  getFocus</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang=&quot;scss&quot; scoped&gt;&lt;/style&gt;</span><br><span class="line">&lt;style scoped lang=&quot;scss&quot;&gt;</span><br><span class="line">.select-ul &#123;</span><br><span class="line">  padding-right: 0;</span><br><span class="line">  list-style: none;</span><br><span class="line">  display: flex;</span><br><span class="line">  justify-content: space-between;</span><br><span class="line">  text-align: center;</span><br><span class="line">  padding-inline-start: 0;</span><br><span class="line">  padding: 0 20px;</span><br><span class="line">  &gt; li &#123;</span><br><span class="line">    display: inline-block;</span><br><span class="line">    width: 100px;</span><br><span class="line">    // margin: 6px;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">    text-overflow: ellipsis;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">.el-select-dropdown__item &#123;</span><br><span class="line">  padding: 0;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="属性">属性</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>类型</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>disabled</td>
+<td>是否禁用</td>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>placeholder</td>
+<td>请选择</td>
+<td>string</td>
+<td>‘请选择’</td>
+</tr>
+<tr>
+<td>columnConfig</td>
+<td>列配置，[{label: ‘’, prop: ‘’}]</td>
+<td>array</td>
+<td>[]</td>
+</tr>
+<tr>
+<td>options</td>
+<td>选项</td>
+<td>array</td>
+<td>[]</td>
+</tr>
+<tr>
+<td>valueName</td>
+<td>选项值的属性名</td>
+<td>string</td>
+<td>‘id’</td>
+</tr>
+<tr>
+<td>keyName</td>
+<td>遍历选项时的 <code>key</code></td>
+<td>string</td>
+<td>‘’</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考">参考</h2>
+<p>无</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.xchive.top/2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html" title="优化表单交互：在 el-select 组件中嵌入表格显示选项">https://blog.xchive.top/2024/optimizing-form-interactions-embedding-table-display-options-in-el-select-components.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+              <a href="/tags/%E7%BB%84%E4%BB%B6%E5%B0%81%E8%A3%85/" rel="tag"># 组件封装</a>
+              <a href="/tags/element-plus/" rel="tag"># element-plus</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/Access-Control-Allow-Origin-is-*-and-withCredentials-is-true-cookies-cannot-be-sent.html" rel="prev" title="Access-Control-Allow-Origin 为 * 时 withCredentials 为 true 也不能发送 cookie">
+                  <i class="fa fa-angle-left"></i> Access-Control-Allow-Origin 为 * 时 withCredentials 为 true 也不能发送 cookie
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">35k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:07</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
