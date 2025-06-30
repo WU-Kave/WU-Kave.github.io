@@ -1,39 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Access-Control-Allow-Origin 为 * 时 withCredentials 为 true 也不能发送 cookie</title>
-    <url>/2024/Access-Control-Allow-Origin-is-*-and-withCredentials-is-true-cookies-cannot-be-sent.html</url>
-    <content><![CDATA[<p>开发时遇到的一个问题，记录一下。</p>
-<span id="more"></span>
-<h2 id="遇到的问题">遇到的问题</h2>
-<p>跨域请求失败，经过一番搜寻发现，</p>
-<p>当设置了 <code>withCredentials</code> 为 <code>true</code> 时且 <code>Access-Control-Allow-Origin</code> 为 <code>*</code> 时，请求会失败。</p>
-<p>字段解释</p>
-<ul>
-<li><code>withCredentials</code>：跨域请求是否携带 <code>cookie</code></li>
-</ul>
-<h2 id="解决">解决</h2>
-<ol>
-<li><code>withCredentials</code> 改为 false：跨域不发送 <code>cookie</code></li>
-<li>服务端设置具体的 <code>Access-Control-Allow-Origin</code> ，<code>Access-Control-Allow-Credentials</code> 设为 <code>true</code> 。</li>
-</ol>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://segmentfault.com/a/1190000015552557">javascript - 踩坑记录-前端请求如果携带Cookie信息，那么后端Access-Control-Allow-Origin不能为 * - 个人文章 - SegmentFault 思否</a></li>
-<li><a href="https://www.jianshu.com/p/624718082e69">【web前端】withCredentials有什么作用 - 简书</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>计算机网络</category>
-      </categories>
-      <tags>
-        <tag>计算机网络</tag>
-        <tag>cookie</tag>
-        <tag>跨域</tag>
-        <tag>CORS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSS学习笔记｜MDN-CSS选择器</title>
     <url>/2022/MDN_CSS_Selectors.html</url>
     <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
@@ -252,6 +219,39 @@
         <tag>选择器</tag>
         <tag>伪类</tag>
         <tag>伪元素</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Access-Control-Allow-Origin 为 * 时 withCredentials 为 true 也不能发送 cookie</title>
+    <url>/2024/Access-Control-Allow-Origin-is-*-and-withCredentials-is-true-cookies-cannot-be-sent.html</url>
+    <content><![CDATA[<p>开发时遇到的一个问题，记录一下。</p>
+<span id="more"></span>
+<h2 id="遇到的问题">遇到的问题</h2>
+<p>跨域请求失败，经过一番搜寻发现，</p>
+<p>当设置了 <code>withCredentials</code> 为 <code>true</code> 时且 <code>Access-Control-Allow-Origin</code> 为 <code>*</code> 时，请求会失败。</p>
+<p>字段解释</p>
+<ul>
+<li><code>withCredentials</code>：跨域请求是否携带 <code>cookie</code></li>
+</ul>
+<h2 id="解决">解决</h2>
+<ol>
+<li><code>withCredentials</code> 改为 false：跨域不发送 <code>cookie</code></li>
+<li>服务端设置具体的 <code>Access-Control-Allow-Origin</code> ，<code>Access-Control-Allow-Credentials</code> 设为 <code>true</code> 。</li>
+</ol>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000015552557">javascript - 踩坑记录-前端请求如果携带Cookie信息，那么后端Access-Control-Allow-Origin不能为 * - 个人文章 - SegmentFault 思否</a></li>
+<li><a href="https://www.jianshu.com/p/624718082e69">【web前端】withCredentials有什么作用 - 简书</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>cookie</tag>
+        <tag>跨域</tag>
+        <tag>CORS</tag>
       </tags>
   </entry>
   <entry>
@@ -696,6 +696,221 @@
       </tags>
   </entry>
   <entry>
+    <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
+    <url>/2021/algs4DijkstraJava.html</url>
+    <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
+<span id="more"></span>
+<h1>一、算法原理</h1>
+<p>计算表达式<code>( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )</code></p>
+<p>分析书上有，不赘述。算法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将操作数压入操作数栈；</span><br><span class="line">将运算符压入运算符栈；</span><br><span class="line">忽略左括号；</span><br><span class="line">在遇到右括号时，弹出一个运算符，弹出所需数量的操作数，并将运算符和操作数的运算结果压入操作数栈。</span><br></pre></td></tr></table></figure>
+<p>书上源码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; </span><br><span class="line">        Stack&lt;String&gt; ops  = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> StdIn.readString();</span><br><span class="line">            <span class="keyword">if</span>      (s.equals(<span class="string">&quot;(&quot;</span>))               ;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;-&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;*&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;/&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;sqrt&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">v</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span>      (op.equals(<span class="string">&quot;+&quot;</span>))    v = vals.pop() + v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>))    v = vals.pop() - v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>))    v = vals.pop() * v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>))    v = vals.pop() / v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;sqrt&quot;</span>)) v = Math.sqrt(v);</span><br><span class="line">                vals.push(v);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> vals.push(Double.parseDouble(s));</span><br><span class="line">        &#125;</span><br><span class="line">        StdOut.println(vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>二、问题</h1>
+<p>算法第四版中的Dijkstra的双栈算术表达式求值算法中，<code>while (!StdIn.isEmpty())</code> 循环无法跳出</p>
+<p><code>StdIn.isEmpty()的实现:</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !scanner.hasNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>三、解决方法</h1>
+<h2 id="法一｜敌动我不动：">法一｜敌动我不动：</h2>
+<p>控制台输入以下快捷键：</p>
+<p><code>macOS</code> ： <code>Command+D</code></p>
+<p><code>Windows</code> ： <code>Ctrl+D</code></p>
+<blockquote>
+<p>原理：⌘D组合键可让您发送EOF(文件末尾)，即表示无法从数据源读取更多数据。</p>
+</blockquote>
+<h2 id="法二｜敌不动我动：">法二｜敌不动我动：</h2>
+<p>不用StdIn，使用Java自己的库重新写一遍</p>
+<blockquote>
+<p>只处理了±*/，没有处理算术平方根</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;请输入算术表达式，中间用空格隔开，括号用英文字符：&quot;</span>);</span><br><span class="line">        str = sc.nextLine();</span><br><span class="line">        String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">            <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">            <span class="comment">//是否为操作符</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                vals.push(val);</span><br><span class="line">            &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运算示例：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx01.png" alt="algs4DijkstraEx01"></p>
+<p><strong>循环输入版本：</strong></p>
+<blockquote>
+<p>如果要循环计算算术表达式：</p>
+<ol>
+<li>请在合适位置添加<code>while(sc.hasNextLine())</code></li>
+<li>除去提示语句，因为会造成输出上逻辑混乱，但是代码本身是可以执行的</li>
+<li>设置退出条件，否则程序循环执行，就跟书上的一样了。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line">        <span class="keyword">while</span> (sc.hasNextLine()) &#123;</span><br><span class="line">            str = sc.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (str.equals(<span class="string">&quot;q&quot;</span>)) &#123; <span class="comment">//退出</span></span><br><span class="line">                System.out.println(<span class="string">&quot;已退出，终止程序！&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">                <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">                    <span class="comment">//是否为操作符</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                    <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                    <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                    vals.push(val);</span><br><span class="line">                &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例：<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx02.png" alt="algs4DijkstraEx02"></p>
+<p><strong>附录</strong></p>
+<p>参考：</p>
+<ol>
+<li><a href="http://zzanswer.github.io/2016/03/23/Dijkstra%E7%9A%84%E5%8F%8C%E6%A0%88%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%E7%AE%97%E6%B3%95/">Dijkstra的双栈算术表达式求值算法 Java实现</a>   <em>问题：char型，只能处理个位数</em></li>
+<li><a href="https://www.coder.work/article/1934742">java - 如何使StdIn.isEmpty()返回true？</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>algs4</tag>
+        <tag>Dijkstra</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
+    <url>/2020/QTTabBarInstallationAndUse.html</url>
+    <content><![CDATA[<p>更高效的使用资源管理器</p>
+<span id="more"></span>
+<h1>1. 介绍</h1>
+<h2 id="功能">功能</h2>
+<p>窗口合并</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
+<p>照片视频文本预览，且支持选择哪种格式预览</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
+<p>很多…按需</p>
+<p>缺点</p>
+<ol>
+<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
+<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
+</ol>
+<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
+<h2 id="Why">Why?</h2>
+<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
+<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
+<h2 id="What？">What？</h2>
+<ol>
+<li>QTTabBar就是一个文件浏览增强工具</li>
+<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
+</ol>
+<h1>2. 安装</h1>
+<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
+官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
+<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
+<h1>3. 使用与配置</h1>
+<h2 id="3-1-开始使用">3.1 开始使用</h2>
+<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
+<blockquote>
+<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
+<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
+</blockquote>
+<p>重启资源管理器<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
+<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
+<h2 id="3-2-汉化">3.2 汉化</h2>
+<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
+<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
+<blockquote>
+<p>若失效：任务管理器重启资源管理器</p>
+<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
+</blockquote>
+<h2 id="3-3-预览">3.3 预览</h2>
+<h3 id="开启">开启</h3>
+<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
+<h3 id="使用">使用</h3>
+<p>默认为鼠标悬停即可预览</p>
+<h3 id="配置">配置</h3>
+<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
+<h3 id="问题">问题</h3>
+<blockquote>
+<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
+</blockquote>
+<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
+<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
+<h2 id="群组">群组</h2>
+<p>加入群组，类似于浏览器的书签，快速访问</p>
+<h2 id="快捷键">快捷键</h2>
+<blockquote>
+<p>鼠标滚轮快速切换标签</p>
+<p>Ctrl + Tab 下一个标签页<br>
+Ctrl + Shift + Tab上一个标签页<br>
+Ctrl + Num0 – Num9 打开几号标签页<br>
+Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
+<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
+Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
+Ctrl + O open dialog for folder<br>
+Ctrl + L 锁定/解除标签页<br>
+Ctrl + N 关闭当然标签页<br>
+Alt + F4 直接把窗口关了，多数软件都使用</p>
+</blockquote>
+<h1>4. 卸载</h1>
+<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
+<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>软件&amp;工具&amp;技巧</category>
+      </categories>
+      <tags>
+        <tag>windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vue3里如何使用本地lottie动画以及如何更优雅的批量引入图片</title>
+    <url>/2024/how-to-use-local-lottie-animation-in-Vue3-and-how-to-import-pictures-in-batches-more-elegantly.html</url>
+    <content><![CDATA[<p>介绍了 Lottie 动画及其在 Vue 3 项目中的使用方法，重点解决了批量引入图片和相对路径问题，确保动画正常显示。</p>
+<span id="more"></span>
+<p>如果着急直接跳到「解决」章节。</p>
+<h2 id="前言">前言</h2>
+<p>什么是 Lottie 动画？</p>
+<blockquote>
+<p>Lottie 动画是一种轻量级的动画文件格式，它使用 JSON 描述动画数据，可以通过Lottie库在网页和移动应用中快速加载和渲染高质量的动画。它支持 AE 动画导出，并能够实现复杂的动效，同时保持<strong>小文件</strong>体积和<strong>高性能</strong>。</p>
+<p>----chatGPT</p>
+</blockquote>
+<p>简单来说，Lottie 动画是一种用 JSON 格式描述的动画。由于其小体积和高性能，常用于实现复杂动画，UI 设计师可以将其导出给前端，前端导入后即可使用。</p>
+<h2 id="如何使用-lottie-动画">如何使用 lottie 动画</h2>
+<p>只需三步。</p>
+<h3 id="1、安装-vue3-lottie">1、安装 vue3-lottie</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install vue3-lottie@latest --save</span><br></pre></td></tr></table></figure>
+<h3 id="2、注册组件">2、注册组件</h3>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Vue3Lottie</span> <span class="keyword">from</span> <span class="string">&#x27;vue3-lottie&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">createApp</span>(<span class="title class_">App</span>).<span class="title function_">use</span>(<span class="title class_">Vue3Lottie</span>).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="3、在-template-中使用">3、在 template 中使用</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;h1&gt;Vue3 lottie test&lt;/h1&gt;</span><br><span class="line">  &lt;Vue3Lottie :animationData=&quot;TestLottieJSONData&quot; :height=&quot;200&quot; :width=&quot;200&quot; /&gt;</span><br><span class="line">&lt;div&gt;</span><br><span class="line">  </span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import TestLottieJSONData from &#x27;./assets/lottie/data.json&#x27; // 引入 JSON 文件</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>但是在我的使用场景中出现了问题。</p>
+<h2 id="问题">问题</h2>
+<p>UI 导出的动画带有图片，但无论是 JSON 文件命名，还是图片命名都是一样的，而且 JSON 文件里使用的图片都是相对路径。例如，有两个动画，它们的文件结构如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── data.json</span><br><span class="line">└── images</span><br><span class="line">    ├── img_0.png</span><br><span class="line">    └── img_1.png</span><br></pre></td></tr></table></figure>
+<p>这就带来了2个问题。</p>
+<ol>
+<li>如何批量引入 <code>images</code> 文件夹下的图片？</li>
+<li>如何解决相对路径的问题？</li>
+</ol>
+<h2 id="排查">排查</h2>
+<p>把引入的 JSON 文件打印出来，可以看到静态文件（即图片）都存在于 <code>TestLottieJSONData.assets</code> 这个对象数组下，打印其中一项如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;image_0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;w&quot;</span><span class="punctuation">:</span> <span class="number">107</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;h&quot;</span><span class="punctuation">:</span> <span class="number">140</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;u&quot;</span><span class="punctuation">:</span> <span class="string">&quot;images/&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;p&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img_0.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;e&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>u</code> 项是文件夹，<code>p</code> 项是文件名，也就是说只要遍历这个数组，修改这两个项就好。</p>
+<h2 id="解决">解决</h2>
+<h3 id="问题一：如何批量引入-images-文件夹下的图片？">问题一：如何批量引入 <code>images</code> 文件夹下的图片？</h3>
+<p>使用 <code>import.meta.glob</code> 批量引入：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> testLottieImages = <span class="keyword">import</span>.<span class="property">meta</span>.<span class="title function_">glob</span>(<span class="string">&#x27;./assets/lottie/images/*.png&#x27;</span>, &#123;<span class="attr">eager</span>: <span class="literal">true</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="问题二：如何解决相对路径的问题？">问题二：如何解决相对路径的问题？</h3>
+<p>遍历静态资源数组，修改路径：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">TestLottieJSONData</span>.<span class="property">assets</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> imagePath = <span class="string">`./assets/lottie/images/<span class="subst">$&#123;item.p&#125;</span>`</span></span><br><span class="line">  item.<span class="property">u</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="keyword">if</span> (testLottieImages[imagePath]) &#123;</span><br><span class="line">    item.<span class="property">p</span> = testLottieImages[imagePath].<span class="property">default</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://www.npmjs.com/package/vue3-lottie">npmjs - vue3-lottie</a></li>
+<li><a href="https://github.com/chenqingspring/vue-lottie/issues/30">Github - 怎么处理需要图片资源的动画</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>vue</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>vue3</tag>
+        <tag>lottie</tag>
+        <tag>动画</tag>
+        <tag>优雅</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言学生成绩管理系统</title>
     <url>/2020/StudentAchievementManagementSystem.html</url>
     <content><![CDATA[<p>C语言——学生成绩管理系统详解</p>
@@ -945,61 +1160,105 @@
 ]]></content>
   </entry>
   <entry>
-    <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
-    <url>/2021/algs4DijkstraJava.html</url>
-    <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
+    <title>algs4｜macOS《算法》idea环境配置及重定位</title>
+    <url>/2021/MacIdeaAlgs4Test.html</url>
+    <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
 <span id="more"></span>
-<h1>一、算法原理</h1>
-<p>计算表达式<code>( 1 + ( ( 2 + 3 ) * ( 4 * 5 ) ) )</code></p>
-<p>分析书上有，不赘述。算法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将操作数压入操作数栈；</span><br><span class="line">将运算符压入运算符栈；</span><br><span class="line">忽略左括号；</span><br><span class="line">在遇到右括号时，弹出一个运算符，弹出所需数量的操作数，并将运算符和操作数的运算结果压入操作数栈。</span><br></pre></td></tr></table></figure>
-<p>书上源码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Evaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123; </span><br><span class="line">        Stack&lt;String&gt; ops  = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> StdIn.readString();</span><br><span class="line">            <span class="keyword">if</span>      (s.equals(<span class="string">&quot;(&quot;</span>))               ;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;-&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;*&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;/&quot;</span>))    ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;sqrt&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">v</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span>      (op.equals(<span class="string">&quot;+&quot;</span>))    v = vals.pop() + v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>))    v = vals.pop() - v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>))    v = vals.pop() * v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>))    v = vals.pop() / v;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;sqrt&quot;</span>)) v = Math.sqrt(v);</span><br><span class="line">                vals.push(v);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> vals.push(Double.parseDouble(s));</span><br><span class="line">        &#125;</span><br><span class="line">        StdOut.println(vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>二、问题</h1>
-<p>算法第四版中的Dijkstra的双栈算术表达式求值算法中，<code>while (!StdIn.isEmpty())</code> 循环无法跳出</p>
-<p><code>StdIn.isEmpty()的实现:</code></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !scanner.hasNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>三、解决方法</h1>
-<h2 id="法一｜敌动我不动：">法一｜敌动我不动：</h2>
-<p>控制台输入以下快捷键：</p>
-<p><code>macOS</code> ： <code>Command+D</code></p>
-<p><code>Windows</code> ： <code>Ctrl+D</code></p>
-<blockquote>
-<p>原理：⌘D组合键可让您发送EOF(文件末尾)，即表示无法从数据源读取更多数据。</p>
-</blockquote>
-<h2 id="法二｜敌不动我动：">法二｜敌不动我动：</h2>
-<p>不用StdIn，使用Java自己的库重新写一遍</p>
-<blockquote>
-<p>只处理了±*/，没有处理算术平方根</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;请输入算术表达式，中间用空格隔开，括号用英文字符：&quot;</span>);</span><br><span class="line">        str = sc.nextLine();</span><br><span class="line">        String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">            <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">            <span class="comment">//是否为操作符</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                vals.push(val);</span><br><span class="line">            &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运算示例：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx01.png" alt="algs4DijkstraEx01"></p>
-<p><strong>循环输入版本：</strong></p>
-<blockquote>
-<p>如果要循环计算算术表达式：</p>
-<ol>
-<li>请在合适位置添加<code>while(sc.hasNextLine())</code></li>
-<li>除去提示语句，因为会造成输出上逻辑混乱，但是代码本身是可以执行的</li>
-<li>设置退出条件，否则程序循环执行，就跟书上的一样了。</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Stack;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEvaluate</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Stack&lt;String&gt; ops = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;String&gt;();</span><br><span class="line">        Stack&lt;Double&gt; vals = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;Double&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">sc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        String str;</span><br><span class="line">        <span class="keyword">while</span> (sc.hasNextLine()) &#123;</span><br><span class="line">            str = sc.nextLine();</span><br><span class="line">            <span class="keyword">if</span> (str.equals(<span class="string">&quot;q&quot;</span>)) &#123; <span class="comment">//退出</span></span><br><span class="line">                System.out.println(<span class="string">&quot;已退出，终止程序！&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            String[] sArray = str.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">            <span class="keyword">for</span> (String s : sArray) &#123; <span class="comment">// 迭代处理</span></span><br><span class="line">                <span class="keyword">if</span> (s.equals(<span class="string">&quot;(&quot;</span>)) ; <span class="comment">//不做处理</span></span><br><span class="line">                    <span class="comment">//是否为操作符</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;+&quot;</span>) || s.equals(<span class="string">&quot;-&quot;</span>) || s.equals(<span class="string">&quot;*&quot;</span>) || s.equals(<span class="string">&quot;/&quot;</span>)) ops.push(s);</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (s.equals(<span class="string">&quot;)&quot;</span>)) &#123; <span class="comment">//右括号，取操作符和数字计算</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">op</span> <span class="operator">=</span> ops.pop();</span><br><span class="line">                    <span class="type">double</span> <span class="variable">val</span> <span class="operator">=</span> vals.pop();</span><br><span class="line">                    <span class="keyword">if</span> (op.equals(<span class="string">&quot;+&quot;</span>)) val = vals.pop() + val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;-&quot;</span>)) val = vals.pop() - val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;*&quot;</span>)) val = vals.pop() * val;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (op.equals(<span class="string">&quot;/&quot;</span>)) val = vals.pop() / val;</span><br><span class="line">                    vals.push(val);</span><br><span class="line">                &#125; <span class="keyword">else</span> vals.push(Double.parseDouble(s));  <span class="comment">//数，存入栈中</span></span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str + <span class="string">&quot; = &quot;</span> + vals.pop());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>示例：<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4DijkstraEx02.png" alt="algs4DijkstraEx02"></p>
-<p><strong>附录</strong></p>
-<p>参考：</p>
-<ol>
-<li><a href="http://zzanswer.github.io/2016/03/23/Dijkstra%E7%9A%84%E5%8F%8C%E6%A0%88%E7%AE%97%E6%9C%AF%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC%E7%AE%97%E6%B3%95/">Dijkstra的双栈算术表达式求值算法 Java实现</a>   <em>问题：char型，只能处理个位数</em></li>
-<li><a href="https://www.coder.work/article/1934742">java - 如何使StdIn.isEmpty()返回true？</a></li>
-</ol>
+<h1>一、引</h1>
+<p>最近看在《算法》第四版，想测试一下书上的代码，但是书上的代码使用了自己的库，比如输入输出类，又并且想尝试一下10W个测试数据，折腾了一下。结果发现网上的教程要么无法复现要么系统不对要么软件不对。</p>
+<p>系统：macOS 10.15.6 (19G73)  idea jdk8</p>
+<p>代码和数据在官网可以下载</p>
+<h1>二、使用</h1>
+<h2 id="1-创建项目">1.创建项目</h2>
+<p>正常创建</p>
+<h2 id="2-导入数据">2.导入数据</h2>
+<p>将<code>algs4-data.zip</code>解压放在src目录下(方便重定位指令，但是不美观，可以放在文件夹，指令自行改动)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Data.png" alt="algs4Data"></p>
+<h2 id="3、导入algs4-jar">3、导入algs4.jar</h2>
+<p>先将<code>algs4.jar</code>放入Java目录的EXtensions文件夹下：<code> /Library/Java/Extensions/</code>（位置不对无法编译）</p>
+<p>idea中导入algs4.jar</p>
+<p>文件–&gt;项目结构（ 快捷键com+; ）</p>
+<p>模块 --&gt; 依赖 --&gt; (添加) --&gt; 选择<code> /Library/Java/Extensions/</code>下的<code>algs4.jar</code></p>
+<p>（我测试的时候只要Java目录中有algs4.jar，不管添加存放在哪里的algs4.jar都可以，晕）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs401In.png" alt="algs401In"></p>
+<p>成功添加后，记得确定：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs402In.png" alt="algs402In"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs403In.png" alt="algs403In"></p>
+<p>成功导入后可以看到<code>algs4.jar</code><br>
+<em>注意：直接导入别的目录的也可以看到，但是编译会《找不到》</em></p>
+<p>打开可以复制的代码到src目录下使用，但是注意package路径，且要import这本书自己的库</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br></pre></td></tr></table></figure>
+<p>我的测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">hi</span> <span class="operator">=</span> a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123;</span><br><span class="line">            <span class="comment">// Key is in a[lo..hi] or not present.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>      (key &lt; a[mid]) hi = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (key &gt; a[mid]) lo = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rank</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span>[] a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexOf(a, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read the integers from a file</span></span><br><span class="line">        <span class="type">In</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">In</span>(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span>[] allowlist = in.readAllInts();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sort the array</span></span><br><span class="line">        Arrays.sort(allowlist);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read integer key from standard input; print if not in allowlist</span></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> StdIn.readInt();</span><br><span class="line">            <span class="keyword">if</span> (BinarySearch.indexOf(allowlist, key) == -<span class="number">1</span>)</span><br><span class="line">                StdOut.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-编译运行">4.编译运行</h2>
+<p>idea终端运行，因为要使用重定向</p>
+<p>cd到src目录 —&gt; 编译代码 —&gt; 运行代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac   BinarySearch.java  </span><br><span class="line">java   BinarySearch  largeW.txt &lt; largeT.txt  </span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Run.png" alt="algs4Run"></p>
+<p>只要一直在输出数据就是运行成功了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Y.png" alt="algs4Y"></p>
+<p>附录：</p>
+<p>参考：<a href="https://www.geek-share.com/detail/2733583097.html">如何在Intellij Idea下编译运行《算法》里的程序？</a></p>
+<p>官网：<a href="https://algs4.cs.princeton.edu/home/">算法第四版官网</a></p>
 ]]></content>
       <categories>
         <category>算法</category>
       </categories>
       <tags>
         <tag>algs4</tag>
-        <tag>Dijkstra</tag>
+        <tag>Mac</tag>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/cmcje14sb000quoykg3vhe3ov.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+<h2 id="Quick-Start">Quick Start</h2>
+<h3 id="Create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>vue源码|为什么子组件传参为undefined时会取默认值</title>
+    <url>/2024/why-subcomponents-take-the-default-value-when-passed-undefined.html</url>
+    <content><![CDATA[<p>本文从源码来分析为什么子组件传参为undefined时会取默认值。</p>
+<span id="more"></span>
+<h2 id="问题背景">问题背景</h2>
+<p>某个组件有默认值，但是我不想用默认值，便传参传了个 <code>undefined</code> ，发现用的还是默认值，为了一探究竟，我决定探索一下 vue 源码。</p>
+<h2 id="结论">结论</h2>
+<p>vue 2，子组件 prop 传递参数值为 undefined 时，会取默认值，vue 3 如此（resolvePropValue）。</p>
+<p>从 vue2 源码的 <code>vue/src/core/util/props.ts</code> 的 <code>validateProp</code> 中可以体现。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">validateProp</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ......</span></span><br><span class="line">  <span class="keyword">let</span> value = propsData[key]</span><br><span class="line">	<span class="comment">// check default value</span></span><br><span class="line">	<span class="keyword">if</span> (value === <span class="literal">undefined</span>) &#123;</span><br><span class="line">		value = <span class="title function_">getPropDefaultValue</span>(vm, prop, key) <span class="comment">// look this</span></span><br><span class="line">		<span class="keyword">const</span> prevShouldObserve = shouldObserve</span><br><span class="line">		<span class="title function_">toggleObserving</span>(<span class="literal">true</span>)</span><br><span class="line">		<span class="title function_">observe</span>(value)</span><br><span class="line">		<span class="title function_">toggleObserving</span>(prevShouldObserve)</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="comment">// ......</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>变量 value 是传递进来的值，当 value 是 undefined，就会取默认值。</p>
+<h2 id="为什么这么做">为什么这么做</h2>
+<p>因为从 JavaScript 的角度来说，null 才是空值，undefined 是未定义，可以理解为没有值，null 也是值，是空值，既然未定义那就取默认值。</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://github.com/vuejs/vue/blob/main/src/core/util/props.ts#L46">vue2源码 - props 部分 - validateProp - 当值为 undefined 时</a></li>
+<li><a href="https://juejin.cn/post/7303392509664067611">Vue3 源码解读系列（十）——props/emit - 掘金</a></li>
+<li><a href="https://juejin.cn/post/7156531823852388360">Vue3源码分析(6)-组件挂载之初始化props与slots - 掘金</a>，</li>
+</ol>
+]]></content>
+      <categories>
+        <category>vue</category>
+      </categories>
+      <tags>
+        <tag>vue</tag>
+        <tag>源码</tag>
+        <tag>子组件</tag>
+        <tag>props</tag>
       </tags>
   </entry>
   <entry>
@@ -1095,140 +1354,11 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
         <category>Linux</category>
       </categories>
       <tags>
+        <tag>Mac</tag>
         <tag>Ubuntu</tag>
         <tag>Linux</tag>
-        <tag>Mac</tag>
         <tag>ip</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>algs4｜macOS《算法》idea环境配置及重定位</title>
-    <url>/2021/MacIdeaAlgs4Test.html</url>
-    <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
-<span id="more"></span>
-<h1>一、引</h1>
-<p>最近看在《算法》第四版，想测试一下书上的代码，但是书上的代码使用了自己的库，比如输入输出类，又并且想尝试一下10W个测试数据，折腾了一下。结果发现网上的教程要么无法复现要么系统不对要么软件不对。</p>
-<p>系统：macOS 10.15.6 (19G73)  idea jdk8</p>
-<p>代码和数据在官网可以下载</p>
-<h1>二、使用</h1>
-<h2 id="1-创建项目">1.创建项目</h2>
-<p>正常创建</p>
-<h2 id="2-导入数据">2.导入数据</h2>
-<p>将<code>algs4-data.zip</code>解压放在src目录下(方便重定位指令，但是不美观，可以放在文件夹，指令自行改动)</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Data.png" alt="algs4Data"></p>
-<h2 id="3、导入algs4-jar">3、导入algs4.jar</h2>
-<p>先将<code>algs4.jar</code>放入Java目录的EXtensions文件夹下：<code> /Library/Java/Extensions/</code>（位置不对无法编译）</p>
-<p>idea中导入algs4.jar</p>
-<p>文件–&gt;项目结构（ 快捷键com+; ）</p>
-<p>模块 --&gt; 依赖 --&gt; (添加) --&gt; 选择<code> /Library/Java/Extensions/</code>下的<code>algs4.jar</code></p>
-<p>（我测试的时候只要Java目录中有algs4.jar，不管添加存放在哪里的algs4.jar都可以，晕）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs401In.png" alt="algs401In"></p>
-<p>成功添加后，记得确定：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs402In.png" alt="algs402In"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs403In.png" alt="algs403In"></p>
-<p>成功导入后可以看到<code>algs4.jar</code><br>
-<em>注意：直接导入别的目录的也可以看到，但是编译会《找不到》</em></p>
-<p>打开可以复制的代码到src目录下使用，但是注意package路径，且要import这本书自己的库</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br></pre></td></tr></table></figure>
-<p>我的测试代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">hi</span> <span class="operator">=</span> a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123;</span><br><span class="line">            <span class="comment">// Key is in a[lo..hi] or not present.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>      (key &lt; a[mid]) hi = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (key &gt; a[mid]) lo = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rank</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span>[] a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexOf(a, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read the integers from a file</span></span><br><span class="line">        <span class="type">In</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">In</span>(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span>[] allowlist = in.readAllInts();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sort the array</span></span><br><span class="line">        Arrays.sort(allowlist);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read integer key from standard input; print if not in allowlist</span></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> StdIn.readInt();</span><br><span class="line">            <span class="keyword">if</span> (BinarySearch.indexOf(allowlist, key) == -<span class="number">1</span>)</span><br><span class="line">                StdOut.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="4-编译运行">4.编译运行</h2>
-<p>idea终端运行，因为要使用重定向</p>
-<p>cd到src目录 —&gt; 编译代码 —&gt; 运行代码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac   BinarySearch.java  </span><br><span class="line">java   BinarySearch  largeW.txt &lt; largeT.txt  </span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Run.png" alt="algs4Run"></p>
-<p>只要一直在输出数据就是运行成功了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Y.png" alt="algs4Y"></p>
-<p>附录：</p>
-<p>参考：<a href="https://www.geek-share.com/detail/2733583097.html">如何在Intellij Idea下编译运行《算法》里的程序？</a></p>
-<p>官网：<a href="https://algs4.cs.princeton.edu/home/">算法第四版官网</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>algs4</tag>
-        <tag>Mac</tag>
-        <tag>idea</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vue3里如何使用本地lottie动画以及如何更优雅的批量引入图片</title>
-    <url>/2024/how-to-use-local-lottie-animation-in-Vue3-and-how-to-import-pictures-in-batches-more-elegantly.html</url>
-    <content><![CDATA[<p>介绍了 Lottie 动画及其在 Vue 3 项目中的使用方法，重点解决了批量引入图片和相对路径问题，确保动画正常显示。</p>
-<span id="more"></span>
-<p>如果着急直接跳到「解决」章节。</p>
-<h2 id="前言">前言</h2>
-<p>什么是 Lottie 动画？</p>
-<blockquote>
-<p>Lottie 动画是一种轻量级的动画文件格式，它使用 JSON 描述动画数据，可以通过Lottie库在网页和移动应用中快速加载和渲染高质量的动画。它支持 AE 动画导出，并能够实现复杂的动效，同时保持<strong>小文件</strong>体积和<strong>高性能</strong>。</p>
-<p>----chatGPT</p>
-</blockquote>
-<p>简单来说，Lottie 动画是一种用 JSON 格式描述的动画。由于其小体积和高性能，常用于实现复杂动画，UI 设计师可以将其导出给前端，前端导入后即可使用。</p>
-<h2 id="如何使用-lottie-动画">如何使用 lottie 动画</h2>
-<p>只需三步。</p>
-<h3 id="1、安装-vue3-lottie">1、安装 vue3-lottie</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install vue3-lottie@latest --save</span><br></pre></td></tr></table></figure>
-<h3 id="2、注册组件">2、注册组件</h3>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Vue3Lottie</span> <span class="keyword">from</span> <span class="string">&#x27;vue3-lottie&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">createApp</span>(<span class="title class_">App</span>).<span class="title function_">use</span>(<span class="title class_">Vue3Lottie</span>).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="3、在-template-中使用">3、在 template 中使用</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;h1&gt;Vue3 lottie test&lt;/h1&gt;</span><br><span class="line">  &lt;Vue3Lottie :animationData=&quot;TestLottieJSONData&quot; :height=&quot;200&quot; :width=&quot;200&quot; /&gt;</span><br><span class="line">&lt;div&gt;</span><br><span class="line">  </span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import TestLottieJSONData from &#x27;./assets/lottie/data.json&#x27; // 引入 JSON 文件</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>但是在我的使用场景中出现了问题。</p>
-<h2 id="问题">问题</h2>
-<p>UI 导出的动画带有图片，但无论是 JSON 文件命名，还是图片命名都是一样的，而且 JSON 文件里使用的图片都是相对路径。例如，有两个动画，它们的文件结构如下所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── data.json</span><br><span class="line">└── images</span><br><span class="line">    ├── img_0.png</span><br><span class="line">    └── img_1.png</span><br></pre></td></tr></table></figure>
-<p>这就带来了2个问题。</p>
-<ol>
-<li>如何批量引入 <code>images</code> 文件夹下的图片？</li>
-<li>如何解决相对路径的问题？</li>
-</ol>
-<h2 id="排查">排查</h2>
-<p>把引入的 JSON 文件打印出来，可以看到静态文件（即图片）都存在于 <code>TestLottieJSONData.assets</code> 这个对象数组下，打印其中一项如下：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;image_0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;w&quot;</span><span class="punctuation">:</span> <span class="number">107</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;h&quot;</span><span class="punctuation">:</span> <span class="number">140</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;u&quot;</span><span class="punctuation">:</span> <span class="string">&quot;images/&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;p&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img_0.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;e&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>可以看到，<code>u</code> 项是文件夹，<code>p</code> 项是文件名，也就是说只要遍历这个数组，修改这两个项就好。</p>
-<h2 id="解决">解决</h2>
-<h3 id="问题一：如何批量引入-images-文件夹下的图片？">问题一：如何批量引入 <code>images</code> 文件夹下的图片？</h3>
-<p>使用 <code>import.meta.glob</code> 批量引入：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> testLottieImages = <span class="keyword">import</span>.<span class="property">meta</span>.<span class="title function_">glob</span>(<span class="string">&#x27;./assets/lottie/images/*.png&#x27;</span>, &#123;<span class="attr">eager</span>: <span class="literal">true</span>&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="问题二：如何解决相对路径的问题？">问题二：如何解决相对路径的问题？</h3>
-<p>遍历静态资源数组，修改路径：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">TestLottieJSONData</span>.<span class="property">assets</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> imagePath = <span class="string">`./assets/lottie/images/<span class="subst">$&#123;item.p&#125;</span>`</span></span><br><span class="line">  item.<span class="property">u</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="keyword">if</span> (testLottieImages[imagePath]) &#123;</span><br><span class="line">    item.<span class="property">p</span> = testLottieImages[imagePath].<span class="property">default</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="参考">参考</h2>
-<ol>
-<li><a href="https://www.npmjs.com/package/vue3-lottie">npmjs - vue3-lottie</a></li>
-<li><a href="https://github.com/chenqingspring/vue-lottie/issues/30">Github - 怎么处理需要图片资源的动画</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>vue</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>vue3</tag>
-        <tag>lottie</tag>
-        <tag>动画</tag>
-        <tag>优雅</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/cm7vw8zsy000oze0u058n1vt3.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>为什么consolelog在修改之前就输出修改后的值？</title>
@@ -1296,363 +1426,6 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
         <tag>JavaScript</tag>
         <tag>数组</tag>
         <tag>打印输出</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
-    <url>/2020/QTTabBarInstallationAndUse.html</url>
-    <content><![CDATA[<p>更高效的使用资源管理器</p>
-<span id="more"></span>
-<h1>1. 介绍</h1>
-<h2 id="功能">功能</h2>
-<p>窗口合并</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
-<p>照片视频文本预览，且支持选择哪种格式预览</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
-<p>很多…按需</p>
-<p>缺点</p>
-<ol>
-<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
-<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
-</ol>
-<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
-<h2 id="Why">Why?</h2>
-<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
-<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
-<h2 id="What？">What？</h2>
-<ol>
-<li>QTTabBar就是一个文件浏览增强工具</li>
-<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
-</ol>
-<h1>2. 安装</h1>
-<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
-官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
-<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
-<h1>3. 使用与配置</h1>
-<h2 id="3-1-开始使用">3.1 开始使用</h2>
-<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
-<blockquote>
-<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
-<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
-</blockquote>
-<p>重启资源管理器<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
-<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
-<h2 id="3-2-汉化">3.2 汉化</h2>
-<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
-<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
-<blockquote>
-<p>若失效：任务管理器重启资源管理器</p>
-<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
-</blockquote>
-<h2 id="3-3-预览">3.3 预览</h2>
-<h3 id="开启">开启</h3>
-<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
-<h3 id="使用">使用</h3>
-<p>默认为鼠标悬停即可预览</p>
-<h3 id="配置">配置</h3>
-<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
-<h3 id="问题">问题</h3>
-<blockquote>
-<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
-</blockquote>
-<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
-<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
-<h2 id="群组">群组</h2>
-<p>加入群组，类似于浏览器的书签，快速访问</p>
-<h2 id="快捷键">快捷键</h2>
-<blockquote>
-<p>鼠标滚轮快速切换标签</p>
-<p>Ctrl + Tab 下一个标签页<br>
-Ctrl + Shift + Tab上一个标签页<br>
-Ctrl + Num0 – Num9 打开几号标签页<br>
-Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
-<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
-Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
-Ctrl + O open dialog for folder<br>
-Ctrl + L 锁定/解除标签页<br>
-Ctrl + N 关闭当然标签页<br>
-Alt + F4 直接把窗口关了，多数软件都使用</p>
-</blockquote>
-<h1>4. 卸载</h1>
-<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
-<h2 id="参考">参考</h2>
-<ol>
-<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
-<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>软件&amp;工具&amp;技巧</category>
-      </categories>
-      <tags>
-        <tag>windows</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vue源码|为什么子组件传参为undefined时会取默认值</title>
-    <url>/2024/why-subcomponents-take-the-default-value-when-passed-undefined.html</url>
-    <content><![CDATA[<p>本文从源码来分析为什么子组件传参为undefined时会取默认值。</p>
-<span id="more"></span>
-<h2 id="问题背景">问题背景</h2>
-<p>某个组件有默认值，但是我不想用默认值，便传参传了个 <code>undefined</code> ，发现用的还是默认值，为了一探究竟，我决定探索一下 vue 源码。</p>
-<h2 id="结论">结论</h2>
-<p>vue 2，子组件 prop 传递参数值为 undefined 时，会取默认值，vue 3 如此（resolvePropValue）。</p>
-<p>从 vue2 源码的 <code>vue/src/core/util/props.ts</code> 的 <code>validateProp</code> 中可以体现。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">validateProp</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ......</span></span><br><span class="line">  <span class="keyword">let</span> value = propsData[key]</span><br><span class="line">	<span class="comment">// check default value</span></span><br><span class="line">	<span class="keyword">if</span> (value === <span class="literal">undefined</span>) &#123;</span><br><span class="line">		value = <span class="title function_">getPropDefaultValue</span>(vm, prop, key) <span class="comment">// look this</span></span><br><span class="line">		<span class="keyword">const</span> prevShouldObserve = shouldObserve</span><br><span class="line">		<span class="title function_">toggleObserving</span>(<span class="literal">true</span>)</span><br><span class="line">		<span class="title function_">observe</span>(value)</span><br><span class="line">		<span class="title function_">toggleObserving</span>(prevShouldObserve)</span><br><span class="line">	&#125;</span><br><span class="line">  <span class="comment">// ......</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>变量 value 是传递进来的值，当 value 是 undefined，就会取默认值。</p>
-<h2 id="为什么这么做">为什么这么做</h2>
-<p>因为从 JavaScript 的角度来说，null 才是空值，undefined 是未定义，可以理解为没有值，null 也是值，是空值，既然未定义那就取默认值。</p>
-<h2 id="参考">参考</h2>
-<ol>
-<li><a href="https://github.com/vuejs/vue/blob/main/src/core/util/props.ts#L46">vue2源码 - props 部分 - validateProp - 当值为 undefined 时</a></li>
-<li><a href="https://juejin.cn/post/7303392509664067611">Vue3 源码解读系列（十）——props/emit - 掘金</a></li>
-<li><a href="https://juejin.cn/post/7156531823852388360">Vue3源码分析(6)-组件挂载之初始化props与slots - 掘金</a>，</li>
-</ol>
-]]></content>
-      <categories>
-        <category>vue</category>
-      </categories>
-      <tags>
-        <tag>vue</tag>
-        <tag>源码</tag>
-        <tag>子组件</tag>
-        <tag>props</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从小主机到第一台自组装NAS：升级与优化记录</title>
-    <url>/2024/recording-the-first-DIY-NAS.html</url>
-    <content><![CDATA[<p>在使用了一年的小主机 NAS 后，我决定自己组装并安装新 NAS。本文详细记录了硬件选择、系统安装中的波折、套件与Docker应用、功耗测试及温度监控等过程，分享了从裸奔硬盘到小别墅的升级体验。适合想要了解 NAS 组装和优化的读者。（本摘要由 AI 生成）</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>在使用了一年的小主机NAS之后，我终于更换了一台自己组装自己安装系统的 NAS，恭喜我自己，这里少不了我朋友提供的硬件咨询，感谢他。</p>
-<p>为什么要换一台 NAS 呢？这里不得不提到我之前使用的小主机 NAS。它小巧轻便，功耗低，配备了 j4125 处理器和 8GB 内存，性能完全够用，还支持内置两个 2.5 英寸硬盘。</p>
-<p>问题就出现在这，内置不支持 3.5 寸硬盘，这就导致我3.5寸硬盘要裸奔，刚好 cpu 风扇散热又直接吹倒硬盘上，面临以下问题：</p>
-<ul>
-<li>硬盘没有物理保护，不放心</li>
-<li>容易过热</li>
-<li>拓展型不高</li>
-</ul>
-<p>索性，就直接换个 NAS 吧。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/nas-ncu-and-disk.jpg" alt="nas-ncu-and-disk"></p>
-<h2 id="硬件">硬件</h2>
-<p>由于我对性能需求不大，所以没有选择太好的硬件，够用就行。所以我选择了g4560t cpu，很多都是二手 的。总体配置如下：</p>
-<table>
-<thead>
-<tr>
-<th>配置</th>
-<th>品牌型号</th>
-<th>价格</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CPU</td>
-<td>g4560t（二手）</td>
-<td>125</td>
-</tr>
-<tr>
-<td>主板</td>
-<td>技嘉h110m-des2（二手）</td>
-<td>0</td>
-</tr>
-<tr>
-<td>散热器</td>
-<td>板载（二手）</td>
-<td>0</td>
-</tr>
-<tr>
-<td>内存</td>
-<td>金士顿 DDR4 2133（二手）</td>
-<td>27</td>
-</tr>
-<tr>
-<td>电源</td>
-<td>长城额定230W 小金刚GW-330</td>
-<td>109</td>
-</tr>
-<tr>
-<td>散热风扇</td>
-<td>利民工包C12C * 2</td>
-<td>30</td>
-</tr>
-<tr>
-<td>机箱</td>
-<td>爱国者商越 matx</td>
-<td>75</td>
-</tr>
-<tr>
-<td>缓存盘</td>
-<td>Intel 傲腾M10 16G 2280</td>
-<td>16</td>
-</tr>
-<tr>
-<td>PCIE转换卡</td>
-<td>NVME m.2转PCIE 拓展卡 x16</td>
-<td>12</td>
-</tr>
-<tr>
-<td>引导U盘</td>
-<td>闪迪酷豆8G</td>
-<td>24</td>
-</tr>
-<tr>
-<td>总计</td>
-<td></td>
-<td>418</td>
-</tr>
-</tbody>
-</table>
-<p>机箱选择是个大问题，其实一开始的机箱不是这个，买了个40多的，安装之后发现，3.5寸一些硬盘只能固定一侧，这让我很不放心，便退了，运费25元（扣除了运费险），血亏！</p>
-<p>这里也推荐一下这个机箱，整体不是很大，最大同时支持2个3.5寸机械硬盘和1个2.5寸硬盘，有前置风扇位，可以直吹硬盘。预算不足没钱上 NAS 专用机箱的，可以考虑这个。毕竟不算电源的话，NAS 专用机箱比我整套还贵了。</p>
-<h2 id="系统安装的波折">系统安装的波折</h2>
-<p>主机安装一步一步来，没啥大问题。</p>
-<p>但是头疼的来了，这里也记录一下，以作参考。</p>
-<h3 id="过程">过程</h3>
-<p>首先，烧录U盘 - 打开引导Web地址 - 选择版本 - 选择型号 - 编译引导，这里都没问题。</p>
-<p>我选择了 <code>DS918+</code> 和 <code>7.2</code> 的版本。</p>
-<p>点了“启动”之后，提示我在浏览器中访问 ``http:xx:5000` 链接 DSM，没有报错，根据指南，我等待一会之后访问这个地址以安装群晖系统。</p>
-<h3 id="问题">问题</h3>
-<p>这个时候出现了问题。系统死机了，风扇还在转，但网口灯不亮，ping 不通，这一下子让我懵了。</p>
-<p>经过一番网络搜索和参考官方问题合集，我尝试了以下各种方法，但都没有成功：</p>
-<ul>
-<li>切换 <code>LKM</code> 版本&quot;到 <code>dev</code></li>
-<li>切换 “直接启动”</li>
-<li>更换型号</li>
-<li>更换引导并尝试以上方法</li>
-</ul>
-<p>（好像还研究了其他来着，忘记了）</p>
-<h3 id="解决">解决</h3>
-<p>第二天，当我一筹莫展的时候，便想着一个一个都尝试一下，随后把 <code>LKM</code> 版本&quot;到 <code>test</code> ，成功安装。</p>
-<p>当时有点无语，毕竟我尝试的第一个方法就是切换 <code>LKM</code> 分支。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-01.pic.png" alt="new-nas-install-01.pic"></p>
-<h3 id="系统安装">系统安装</h3>
-<p>随后便是安装系统，可以选择保留配置或重置配置，但都会保留文件。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-02.png" alt="new-nas-install-02"></p>
-<p>在这个时候，我只插入了一个硬盘。系统成功安装后，我再插入另一个硬盘，它会提示「系统分区不可用」之类的，然后修复即可，数据都会保留。但其实可以一开始就放进去 2 个硬盘，我是因为害怕被格式化，经过这一次折腾，我觉得它应该是不会轻易格式化的。</p>
-<h2 id="套件-docker">套件/docker</h2>
-<p>我装了以下套件和docker。</p>
-<p>套件：</p>
-<ul>
-<li>Hyper Backup：备份</li>
-<li>cloud Sync：同步/备份</li>
-<li>Container Manager：运行docker</li>
-<li>存储空间分析器：分析存储空间并做出报告</li>
-<li>USB copy：备份</li>
-<li>alist 网盘：挂载网盘</li>
-<li>迅雷：下载工具</li>
-<li>Transmission：下载工具</li>
-<li>Synology Drive：文件同步</li>
-<li>NASTool：媒体工具</li>
-<li>ZeroTier：异地组网</li>
-<li>Tailscale：异地组网</li>
-</ul>
-<p>docker：</p>
-<ul>
-<li>nyanmisaka/jellyfin：视频播放</li>
-<li>adolfintel/speedtest：网络测试</li>
-<li>linuxserver/qbittorrent：下载工具</li>
-</ul>
-<h3 id="jellyfin">jellyfin</h3>
-<p>成功开启硬解，CPU 在 20-35%，除了在一开始加载和切换转码时需要加载，其他时候均流畅播放。</p>
-<p>以某个电影资源为例，视频信息如下：</p>
-<ul>
-<li>大小：48 GB</li>
-<li>编码：HEVC</li>
-<li>分辨率：3840 x 2160</li>
-<li>帧率：24</li>
-<li>比特率：72 Mbps</li>
-<li>位深度：10 bit</li>
-<li>动态范围：HDR</li>
-<li>动态范围类型：HDR10</li>
-</ul>
-<p>这个时候自动转码成 <code>4k + 120 Mbps</code>，帧率是 42，手动切换转码成<code>1080P + 10 Mbps</code>，转码帧率是 77。</p>
-<blockquote>
-<p>tips：NAStool 建立完硬链接之后，可以在 jellyfin 媒体库中添加硬链接的目标文件夹，那里有刮削好的数据，可以直接用。</p>
-<p>需要注意的是，如果采用这种方案，媒体库的媒体资料存储方式中勾选上“Nfo”。</p>
-</blockquote>
-<h2 id="功耗测试">功耗测试</h2>
-<p>测试仪器：电小酷 CP1-AM。</p>
-<h3 id="刚安装好系统">刚安装好系统</h3>
-<p>这里还没安装过多的套件，且没有运行 docker 容器。</p>
-<ul>
-<li>开机瞬间：50 w</li>
-<li>开机ing：40 w</li>
-<li>普通使用：28 - 35 w</li>
-<li>跑smart检测：31 w</li>
-<li>迅雷下载电视剧 + smart检测：35 - 36 w</li>
-<li>迅雷下载电视剧 + smart检测：36 w</li>
-<li>迅雷下载电视剧 + smart检测 + drive建立索引（此时 cpu 60%）：37 - 42 w</li>
-</ul>
-<p>估计待机功耗：28w</p>
-<h3 id="插上缓存盘且运行了更多的套件和-docker-容器之后">插上缓存盘且运行了更多的套件和 docker 容器之后</h3>
-<ul>
-<li>jellyfin 转码：47 - 51 w</li>
-<li>待机：30 w</li>
-</ul>
-<p>这天用下来，低强度使用，大多居中在0.7 - 0.8 度之间，其中有一天用 jellyfin 看了一个小时电影，刚超过 0.8 度一点点。虽然说一天不到一度不算很多，但是城中村的电费单价 1.5 元可不是吹的。</p>
-<p>由于上班时很少使用 NAS，我打算设置自动关机、来电自启和使用智能插座，这样应该至少能节省一半的电量。</p>
-<h2 id="温度">温度</h2>
-<p>不知道为什么我的 2.5 英寸固态硬盘看不到温度显示，但好在它不是机械硬盘，所以暂时不管它。</p>
-<p>CPU 温度我是通过 Linux 的 sensors 查看，这与我在 app 上看到的“散热状态”显示的温度有所不同。以便参考，我两个都记录下，总体来说，前者比后者低 16 - 18 ℃ 这样。</p>
-<p>当天天气：28-36 ℃，仅供参考。</p>
-<h3 id="场景一">场景一</h3>
-<p>待机，CPU 占用率低于 3 %。</p>
-<ul>
-<li>室温：29.5 ℃</li>
-<li>机械硬盘：39 ℃</li>
-<li>CPU（sensors）：37 ℃</li>
-<li>CPU（群晖管家）：56 ℃</li>
-</ul>
-<h3 id="场景二">场景二</h3>
-<p>白天，待机，有轻微 CPU 活动，CPU 占用率 4 - 13 %，功率 30 w。</p>
-<ul>
-<li>室温：31.3 ℃</li>
-<li>机械硬盘：41 ℃</li>
-<li>CPU（sensors）：40 ℃</li>
-<li>CPU（群晖管家）：61 ℃</li>
-</ul>
-<h3 id="场景三">场景三</h3>
-<p>白天中强度使用 15 分钟，使用 jellyfin 转码观看视频，CPU 占用率 47 - 50 %，集中在 42 - 45 %，功率 43 - 52 w，集中在 48 - 51 w。</p>
-<ul>
-<li>室温：31.3 ℃</li>
-<li>机械硬盘：43 ℃</li>
-<li>CPU（sensors）：52 ℃</li>
-<li>CPU（群晖管家）：55 - 58 ℃</li>
-</ul>
-<h2 id="后记">后记</h2>
-<p>经过一番折腾，我的裸奔硬盘终于从“露营”住进了“小别墅”，算是告别了一些危险因素。花费了我很多时间，但我乐在其中。虽然安装不上系统的时候确实很苦恼，当时都想着电源要怎么卖好了。</p>
-<p>也许人生亦是如此，得多尝试多犯错才会成功，但在现实社会里，也许是因为没有试错成本，也许是因为看透了社会，我是个害怕犯错、很难接受犯错成本的一个人，这和我面对数码产品/电子设备/代码的心态完全不同，我对这些非常喜欢折腾和尝试。初二的时候亲戚不要的一台电脑给了我，那时候的我压根不会装系统不懂硬件不懂装机，我连电脑都没有，靠着听来的知识和百度来的知识，硬是熬到了凌晨把这台电脑弄开机了，具体是因为没系统还是没法开机，我不太记得了，我只记得那个时候的我非常信任当时的我，相信总会弄好的。有点强行升华了。</p>
-<p>其实我对 NAS 的需求并不高，我只是想要一个能够持续运行的设备来保存我的资料、实现备份功能和局域网内设备能访问我很久很久以前的资料就行，能不能够提供附加功能（套件、docker）其实无所谓，这个时候，NAS 就非常适合我。</p>
-<p>硬盘有价，数据无价。</p>
-<p>这里建议大家都做好数据备份，也不要玩 all in one，在我组装好不久后便在某论坛上看到一个 all in boom 了。</p>
-<p>ZeroTier、ZeroTier Zoom、Tailscale 我也都测试了，下次专门发（水）一篇吧。</p>
-<h2 id="参考">参考</h2>
-<ol>
-<li><a href="https://github.com/RROrg/rr">Github - RR 引导 </a></li>
-<li><a href="https://rrorg.cn/archives/Use%20guide">RR 引导官方使用指南</a></li>
-<li><a href="https://rrorg.cn/archives/issues">RR引导官方问题合集</a></li>
-<li><a href="https://mi-d.cn/8116">群晖引导成功之后群晖助手/Synology Assistant搜索不到机器ip解决方法</a></li>
-<li><a href="https://www.bilibili.com/video/BV1mH4y1T7VX">bilibili - 2024年最新黑群晖安装教程-一键安装DSM7.2超级简单</a></li>
-<li><a href="https://www.bilibili.com/video/BV1ra411i7WY">bilibili - 更好用的Jellyfin——解决封面和字幕方框、绿屏、转码慢</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>NAS</category>
-      </categories>
-      <tags>
-        <tag>NAS</tag>
-        <tag>黑群晖</tag>
-        <tag>装机</tag>
       </tags>
   </entry>
   <entry>
@@ -2017,10 +1790,75 @@ Alt + F4 直接把窗口关了，多数软件都使用</p>
         <category>软件&amp;工具&amp;技巧</category>
       </categories>
       <tags>
+        <tag>Mac</tag>
         <tag>Ubuntu</tag>
         <tag>Linux</tag>
-        <tag>Mac</tag>
         <tag>SQl_server</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我的第一篇hexo框架blog</title>
+    <url>/2020/myfisrsthexoblog.html</url>
+    <content><![CDATA[<p>@<a href="%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95">TOC</a></p>
+<h1>我的博客编写</h1>
+<span id="more"></span>
+<blockquote>
+<p>用“<!-- more -->”可以控制博客文章在首页的长度，后面内容不显示</p>
+</blockquote>
+<h1>一级标题</h1>
+<h2 id="二级标题">二级标题</h2>
+<h3 id="三级标题">三级标题</h3>
+<h4 id="四级标题">四级标题</h4>
+<h5 id="五级标题">五级标题</h5>
+<h6 id="六级标题">六级标题</h6>
+<p>注意标题都有索引，而直接换行没有，这就是一个换行</p>
+<h2 id="区块引入">区块引入</h2>
+<blockquote>
+<p>这是一段引入段落，Typora快捷方式为Ctrl+Shitf+Q</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;这是一段引入代码，Typora快捷方式为Ctrl+Shitf+K&quot;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>$$<br>
+这里是一个引入公式，Typora快捷方式为Ctrl+Shitf+M<br>
+x=-2a/s<br>
+$$</p>
+<h2 id="超链接">超链接</h2>
+<p><a href="https://www.baidu.com">百度</a></p>
+<h2 id="图片">图片</h2>
+<p><img src="http://pic2.52pk.com/files/allimg/160510/143922CM-1.jpg" alt="源氏"></p>
+<h2 id="无序列表">无序列表</h2>
+<ul>
+<li>
+<p>无序列表</p>
+</li>
+<li>
+<p>用“ - ”</p>
+</li>
+</ul>
+<ul>
+<li>或者“ * ”</li>
+</ul>
+<ul>
+<li>或者快捷键C+S+]</li>
+</ul>
+<p>##有序列表</p>
+<ol>
+<li>有序列表</li>
+<li>把无序的“ - ”改成“ 1. ”</li>
+</ol>
+<p>##分割线用三个或三个以上的“ — ”或“ *** ”</p>
+<hr>
+<hr>
+<p>最好用五个</p>
+<hr>
+<p>参考网上资料8</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=28133171&auto=1&height=66"></iframe>]]></content>
+      <categories>
+        <category>分类测试</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+        <tag>标签测试</tag>
       </tags>
   </entry>
   <entry>
@@ -2135,68 +1973,230 @@ Alt + F4 直接把窗口关了，多数软件都使用</p>
       </tags>
   </entry>
   <entry>
-    <title>我的第一篇hexo框架blog</title>
-    <url>/2020/myfisrsthexoblog.html</url>
-    <content><![CDATA[<p>@<a href="%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95">TOC</a></p>
-<h1>我的博客编写</h1>
+    <title>从小主机到第一台自组装NAS：升级与优化记录</title>
+    <url>/2024/recording-the-first-DIY-NAS.html</url>
+    <content><![CDATA[<p>在使用了一年的小主机 NAS 后，我决定自己组装并安装新 NAS。本文详细记录了硬件选择、系统安装中的波折、套件与Docker应用、功耗测试及温度监控等过程，分享了从裸奔硬盘到小别墅的升级体验。适合想要了解 NAS 组装和优化的读者。（本摘要由 AI 生成）</p>
 <span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>在使用了一年的小主机NAS之后，我终于更换了一台自己组装自己安装系统的 NAS，恭喜我自己，这里少不了我朋友提供的硬件咨询，感谢他。</p>
+<p>为什么要换一台 NAS 呢？这里不得不提到我之前使用的小主机 NAS。它小巧轻便，功耗低，配备了 j4125 处理器和 8GB 内存，性能完全够用，还支持内置两个 2.5 英寸硬盘。</p>
+<p>问题就出现在这，内置不支持 3.5 寸硬盘，这就导致我3.5寸硬盘要裸奔，刚好 cpu 风扇散热又直接吹倒硬盘上，面临以下问题：</p>
+<ul>
+<li>硬盘没有物理保护，不放心</li>
+<li>容易过热</li>
+<li>拓展型不高</li>
+</ul>
+<p>索性，就直接换个 NAS 吧。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/nas-ncu-and-disk.jpg" alt="nas-ncu-and-disk"></p>
+<h2 id="硬件">硬件</h2>
+<p>由于我对性能需求不大，所以没有选择太好的硬件，够用就行。所以我选择了g4560t cpu，很多都是二手 的。总体配置如下：</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th>品牌型号</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>g4560t（二手）</td>
+<td>125</td>
+</tr>
+<tr>
+<td>主板</td>
+<td>技嘉h110m-des2（二手）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>散热器</td>
+<td>板载（二手）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>金士顿 DDR4 2133（二手）</td>
+<td>27</td>
+</tr>
+<tr>
+<td>电源</td>
+<td>长城额定230W 小金刚GW-330</td>
+<td>109</td>
+</tr>
+<tr>
+<td>散热风扇</td>
+<td>利民工包C12C * 2</td>
+<td>30</td>
+</tr>
+<tr>
+<td>机箱</td>
+<td>爱国者商越 matx</td>
+<td>75</td>
+</tr>
+<tr>
+<td>缓存盘</td>
+<td>Intel 傲腾M10 16G 2280</td>
+<td>16</td>
+</tr>
+<tr>
+<td>PCIE转换卡</td>
+<td>NVME m.2转PCIE 拓展卡 x16</td>
+<td>12</td>
+</tr>
+<tr>
+<td>引导U盘</td>
+<td>闪迪酷豆8G</td>
+<td>24</td>
+</tr>
+<tr>
+<td>总计</td>
+<td></td>
+<td>418</td>
+</tr>
+</tbody>
+</table>
+<p>机箱选择是个大问题，其实一开始的机箱不是这个，买了个40多的，安装之后发现，3.5寸一些硬盘只能固定一侧，这让我很不放心，便退了，运费25元（扣除了运费险），血亏！</p>
+<p>这里也推荐一下这个机箱，整体不是很大，最大同时支持2个3.5寸机械硬盘和1个2.5寸硬盘，有前置风扇位，可以直吹硬盘。预算不足没钱上 NAS 专用机箱的，可以考虑这个。毕竟不算电源的话，NAS 专用机箱比我整套还贵了。</p>
+<h2 id="系统安装的波折">系统安装的波折</h2>
+<p>主机安装一步一步来，没啥大问题。</p>
+<p>但是头疼的来了，这里也记录一下，以作参考。</p>
+<h3 id="过程">过程</h3>
+<p>首先，烧录U盘 - 打开引导Web地址 - 选择版本 - 选择型号 - 编译引导，这里都没问题。</p>
+<p>我选择了 <code>DS918+</code> 和 <code>7.2</code> 的版本。</p>
+<p>点了“启动”之后，提示我在浏览器中访问 ``http:xx:5000` 链接 DSM，没有报错，根据指南，我等待一会之后访问这个地址以安装群晖系统。</p>
+<h3 id="问题">问题</h3>
+<p>这个时候出现了问题。系统死机了，风扇还在转，但网口灯不亮，ping 不通，这一下子让我懵了。</p>
+<p>经过一番网络搜索和参考官方问题合集，我尝试了以下各种方法，但都没有成功：</p>
+<ul>
+<li>切换 <code>LKM</code> 版本&quot;到 <code>dev</code></li>
+<li>切换 “直接启动”</li>
+<li>更换型号</li>
+<li>更换引导并尝试以上方法</li>
+</ul>
+<p>（好像还研究了其他来着，忘记了）</p>
+<h3 id="解决">解决</h3>
+<p>第二天，当我一筹莫展的时候，便想着一个一个都尝试一下，随后把 <code>LKM</code> 版本&quot;到 <code>test</code> ，成功安装。</p>
+<p>当时有点无语，毕竟我尝试的第一个方法就是切换 <code>LKM</code> 分支。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-01.pic.png" alt="new-nas-install-01.pic"></p>
+<h3 id="系统安装">系统安装</h3>
+<p>随后便是安装系统，可以选择保留配置或重置配置，但都会保留文件。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2024/07/new-nas-install-02.png" alt="new-nas-install-02"></p>
+<p>在这个时候，我只插入了一个硬盘。系统成功安装后，我再插入另一个硬盘，它会提示「系统分区不可用」之类的，然后修复即可，数据都会保留。但其实可以一开始就放进去 2 个硬盘，我是因为害怕被格式化，经过这一次折腾，我觉得它应该是不会轻易格式化的。</p>
+<h2 id="套件-docker">套件/docker</h2>
+<p>我装了以下套件和docker。</p>
+<p>套件：</p>
+<ul>
+<li>Hyper Backup：备份</li>
+<li>cloud Sync：同步/备份</li>
+<li>Container Manager：运行docker</li>
+<li>存储空间分析器：分析存储空间并做出报告</li>
+<li>USB copy：备份</li>
+<li>alist 网盘：挂载网盘</li>
+<li>迅雷：下载工具</li>
+<li>Transmission：下载工具</li>
+<li>Synology Drive：文件同步</li>
+<li>NASTool：媒体工具</li>
+<li>ZeroTier：异地组网</li>
+<li>Tailscale：异地组网</li>
+</ul>
+<p>docker：</p>
+<ul>
+<li>nyanmisaka/jellyfin：视频播放</li>
+<li>adolfintel/speedtest：网络测试</li>
+<li>linuxserver/qbittorrent：下载工具</li>
+</ul>
+<h3 id="jellyfin">jellyfin</h3>
+<p>成功开启硬解，CPU 在 20-35%，除了在一开始加载和切换转码时需要加载，其他时候均流畅播放。</p>
+<p>以某个电影资源为例，视频信息如下：</p>
+<ul>
+<li>大小：48 GB</li>
+<li>编码：HEVC</li>
+<li>分辨率：3840 x 2160</li>
+<li>帧率：24</li>
+<li>比特率：72 Mbps</li>
+<li>位深度：10 bit</li>
+<li>动态范围：HDR</li>
+<li>动态范围类型：HDR10</li>
+</ul>
+<p>这个时候自动转码成 <code>4k + 120 Mbps</code>，帧率是 42，手动切换转码成<code>1080P + 10 Mbps</code>，转码帧率是 77。</p>
 <blockquote>
-<p>用“<!-- more -->”可以控制博客文章在首页的长度，后面内容不显示</p>
+<p>tips：NAStool 建立完硬链接之后，可以在 jellyfin 媒体库中添加硬链接的目标文件夹，那里有刮削好的数据，可以直接用。</p>
+<p>需要注意的是，如果采用这种方案，媒体库的媒体资料存储方式中勾选上“Nfo”。</p>
 </blockquote>
-<h1>一级标题</h1>
-<h2 id="二级标题">二级标题</h2>
-<h3 id="三级标题">三级标题</h3>
-<h4 id="四级标题">四级标题</h4>
-<h5 id="五级标题">五级标题</h5>
-<h6 id="六级标题">六级标题</h6>
-<p>注意标题都有索引，而直接换行没有，这就是一个换行</p>
-<h2 id="区块引入">区块引入</h2>
-<blockquote>
-<p>这是一段引入段落，Typora快捷方式为Ctrl+Shitf+Q</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;这是一段引入代码，Typora快捷方式为Ctrl+Shitf+K&quot;</span>);</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);<span class="built_in">printf</span>(<span class="string">&quot;测试换行&quot;</span>);</span><br></pre></td></tr></table></figure>
-<p>$$<br>
-这里是一个引入公式，Typora快捷方式为Ctrl+Shitf+M<br>
-x=-2a/s<br>
-$$</p>
-<h2 id="超链接">超链接</h2>
-<p><a href="https://www.baidu.com">百度</a></p>
-<h2 id="图片">图片</h2>
-<p><img src="http://pic2.52pk.com/files/allimg/160510/143922CM-1.jpg" alt="源氏"></p>
-<h2 id="无序列表">无序列表</h2>
+<h2 id="功耗测试">功耗测试</h2>
+<p>测试仪器：电小酷 CP1-AM。</p>
+<h3 id="刚安装好系统">刚安装好系统</h3>
+<p>这里还没安装过多的套件，且没有运行 docker 容器。</p>
 <ul>
-<li>
-<p>无序列表</p>
-</li>
-<li>
-<p>用“ - ”</p>
-</li>
+<li>开机瞬间：50 w</li>
+<li>开机ing：40 w</li>
+<li>普通使用：28 - 35 w</li>
+<li>跑smart检测：31 w</li>
+<li>迅雷下载电视剧 + smart检测：35 - 36 w</li>
+<li>迅雷下载电视剧 + smart检测：36 w</li>
+<li>迅雷下载电视剧 + smart检测 + drive建立索引（此时 cpu 60%）：37 - 42 w</li>
 </ul>
+<p>估计待机功耗：28w</p>
+<h3 id="插上缓存盘且运行了更多的套件和-docker-容器之后">插上缓存盘且运行了更多的套件和 docker 容器之后</h3>
 <ul>
-<li>或者“ * ”</li>
+<li>jellyfin 转码：47 - 51 w</li>
+<li>待机：30 w</li>
 </ul>
+<p>这天用下来，低强度使用，大多居中在0.7 - 0.8 度之间，其中有一天用 jellyfin 看了一个小时电影，刚超过 0.8 度一点点。虽然说一天不到一度不算很多，但是城中村的电费单价 1.5 元可不是吹的。</p>
+<p>由于上班时很少使用 NAS，我打算设置自动关机、来电自启和使用智能插座，这样应该至少能节省一半的电量。</p>
+<h2 id="温度">温度</h2>
+<p>不知道为什么我的 2.5 英寸固态硬盘看不到温度显示，但好在它不是机械硬盘，所以暂时不管它。</p>
+<p>CPU 温度我是通过 Linux 的 sensors 查看，这与我在 app 上看到的“散热状态”显示的温度有所不同。以便参考，我两个都记录下，总体来说，前者比后者低 16 - 18 ℃ 这样。</p>
+<p>当天天气：28-36 ℃，仅供参考。</p>
+<h3 id="场景一">场景一</h3>
+<p>待机，CPU 占用率低于 3 %。</p>
 <ul>
-<li>或者快捷键C+S+]</li>
+<li>室温：29.5 ℃</li>
+<li>机械硬盘：39 ℃</li>
+<li>CPU（sensors）：37 ℃</li>
+<li>CPU（群晖管家）：56 ℃</li>
 </ul>
-<p>##有序列表</p>
+<h3 id="场景二">场景二</h3>
+<p>白天，待机，有轻微 CPU 活动，CPU 占用率 4 - 13 %，功率 30 w。</p>
+<ul>
+<li>室温：31.3 ℃</li>
+<li>机械硬盘：41 ℃</li>
+<li>CPU（sensors）：40 ℃</li>
+<li>CPU（群晖管家）：61 ℃</li>
+</ul>
+<h3 id="场景三">场景三</h3>
+<p>白天中强度使用 15 分钟，使用 jellyfin 转码观看视频，CPU 占用率 47 - 50 %，集中在 42 - 45 %，功率 43 - 52 w，集中在 48 - 51 w。</p>
+<ul>
+<li>室温：31.3 ℃</li>
+<li>机械硬盘：43 ℃</li>
+<li>CPU（sensors）：52 ℃</li>
+<li>CPU（群晖管家）：55 - 58 ℃</li>
+</ul>
+<h2 id="后记">后记</h2>
+<p>经过一番折腾，我的裸奔硬盘终于从“露营”住进了“小别墅”，算是告别了一些危险因素。花费了我很多时间，但我乐在其中。虽然安装不上系统的时候确实很苦恼，当时都想着电源要怎么卖好了。</p>
+<p>也许人生亦是如此，得多尝试多犯错才会成功，但在现实社会里，也许是因为没有试错成本，也许是因为看透了社会，我是个害怕犯错、很难接受犯错成本的一个人，这和我面对数码产品/电子设备/代码的心态完全不同，我对这些非常喜欢折腾和尝试。初二的时候亲戚不要的一台电脑给了我，那时候的我压根不会装系统不懂硬件不懂装机，我连电脑都没有，靠着听来的知识和百度来的知识，硬是熬到了凌晨把这台电脑弄开机了，具体是因为没系统还是没法开机，我不太记得了，我只记得那个时候的我非常信任当时的我，相信总会弄好的。有点强行升华了。</p>
+<p>其实我对 NAS 的需求并不高，我只是想要一个能够持续运行的设备来保存我的资料、实现备份功能和局域网内设备能访问我很久很久以前的资料就行，能不能够提供附加功能（套件、docker）其实无所谓，这个时候，NAS 就非常适合我。</p>
+<p>硬盘有价，数据无价。</p>
+<p>这里建议大家都做好数据备份，也不要玩 all in one，在我组装好不久后便在某论坛上看到一个 all in boom 了。</p>
+<p>ZeroTier、ZeroTier Zoom、Tailscale 我也都测试了，下次专门发（水）一篇吧。</p>
+<h2 id="参考">参考</h2>
 <ol>
-<li>有序列表</li>
-<li>把无序的“ - ”改成“ 1. ”</li>
+<li><a href="https://github.com/RROrg/rr">Github - RR 引导 </a></li>
+<li><a href="https://rrorg.cn/archives/Use%20guide">RR 引导官方使用指南</a></li>
+<li><a href="https://rrorg.cn/archives/issues">RR引导官方问题合集</a></li>
+<li><a href="https://mi-d.cn/8116">群晖引导成功之后群晖助手/Synology Assistant搜索不到机器ip解决方法</a></li>
+<li><a href="https://www.bilibili.com/video/BV1mH4y1T7VX">bilibili - 2024年最新黑群晖安装教程-一键安装DSM7.2超级简单</a></li>
+<li><a href="https://www.bilibili.com/video/BV1ra411i7WY">bilibili - 更好用的Jellyfin——解决封面和字幕方框、绿屏、转码慢</a></li>
 </ol>
-<p>##分割线用三个或三个以上的“ — ”或“ *** ”</p>
-<hr>
-<hr>
-<p>最好用五个</p>
-<hr>
-<p>参考网上资料8</p>
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=28133171&auto=1&height=66"></iframe>]]></content>
+]]></content>
       <categories>
-        <category>分类测试</category>
+        <category>NAS</category>
       </categories>
       <tags>
-        <tag>随笔</tag>
-        <tag>标签测试</tag>
+        <tag>NAS</tag>
+        <tag>黑群晖</tag>
+        <tag>装机</tag>
       </tags>
   </entry>
   <entry>
@@ -2246,61 +2246,6 @@ $$</p>
         <tag>Vue</tag>
         <tag>数字输入</tag>
         <tag>自定义组件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法｜最大公因数和最小公倍数多个详细版-JavaScript</title>
-    <url>/2022/gcd-lcm-one-and-more-js.html</url>
-    <content><![CDATA[<p>使用 Javascript 描述了多种求两个数或多个数的 GCD 和 LCM 的方法。</p>
-<span id="more"></span>
-<h1>最大公约数（Greatest Common Divisor）</h1>
-<p><strong>定义</strong><br>
-也叫最大公因数。简单：因数最大严谨：指一个或多个数中，a1 ～ an ，都能被 k 整除，k 是公约数，k 最大时即为最大公约数。</p>
-<h2 id="两个数的最大公约数">两个数的最大公约数</h2>
-<h3 id="倒数遍历求解">倒数遍历求解</h3>
-<p>找到两个数中较小的那个数，称之为a，从a开始遍历到1，找到一个都能被a和b整数的数，符合定义。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">  a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">  b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">  <span class="keyword">if</span> (a - b &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    [a, b] = [b, a]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = a; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( a % i === <span class="number">0</span> &amp;&amp; b % i === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中，当两数相差较大时，让a成为较小值是非常必要的。</p>
-<h3 id="辗转相除法（欧几里德算法）">辗转相除法（欧几里德算法）</h3>
-<p>前提：<code>gcd(a, b) === gcd(b, a mod b)</code> (a &gt; b &amp;&amp; a mod b &gt; 0)<br>
-证明：<br>
-a可以表示成a = kb + r  (a，b，k，r皆为正整数，且 r &gt; 0)<br>
-假设d是a,b的一个公约数，即a和b都可以被d整除。而r = a - kb，两边同时除以d，r/d=a/d-kb/d，由等式右边可知r/d为整数，因此d也是r的因数。<br>
-d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约数。因(a,b)和(b,a mod b)的公约数相等，则其最大公约数也相等，得证。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a % b === <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">gcd</span>(b, a % b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>简洁版：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> a % b ? <span class="title function_">gcd</span>(b, a % b) : b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="更损相减法">更损相减法</h3>
-<p>第一步：若都为偶数，重复除2直到最少又一个奇数，但要记下除了多少。第二步：重复用大数减小数，直到减数等于差。最大公约数为 第一步被除了多少 * 第二步的差。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="comment">// 若两个相等，不作判断后面死循环</span></span><br><span class="line">	<span class="keyword">if</span> (a === b) &#123;</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 除2</span></span><br><span class="line">	<span class="keyword">let</span> sum = <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> (a % <span class="number">2</span> === <span class="number">0</span> &amp;&amp; b % <span class="number">2</span> === <span class="number">0</span>) &#123;</span><br><span class="line">		a /= <span class="number">2</span></span><br><span class="line">		b /= <span class="number">2</span></span><br><span class="line">		sum *= <span class="number">2</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 开始相减</span></span><br><span class="line">	<span class="keyword">let</span> poor = a - b</span><br><span class="line">	<span class="keyword">while</span> (poor !== b) &#123;</span><br><span class="line">		<span class="keyword">if</span> (poor &lt; b) &#123;</span><br><span class="line">			a = b</span><br><span class="line">			b = poor</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			a = poor</span><br><span class="line">		&#125;</span><br><span class="line">		poor = a - b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> poor * sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="多个数的最大公约数">多个数的最大公约数</h2>
-<p>若参数个数为0，返回 undefined ，若参数个数为1，返回该参数。否则先求解前2个参数的最大公约数，然后用该最大公约数和第三个数求最大公约数，以此类推。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcdMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">gcd</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1>最小公倍数（Least Common Multiple）</h1>
-<p><strong>定义</strong><br>
-简单：倍数最小严谨：指一个或多个数中，a1 ～ an ，k 都是他们任何一个的倍数，k 是公倍数，k 最小时即为最小公倍数。</p>
-<h2 id="两个数的最小公倍数">两个数的最小公倍数</h2>
-<p>乘积 = 最小公倍数 * 最大公因数所以 最小公倍数 = 乘积 / 最大公因数</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcm</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> (a * b) / <span class="title function_">gcd</span>(a,b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="多个数的最小公倍数">多个数的最小公倍数</h2>
-<p>原理跟多个数的最大公因数相同。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcmMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">lcm</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考：</p>
-<ol>
-<li>【js计算多个数的最大公约数和最小公倍数】：<a href="https://www.cnblogs.com/Ingots/p/11330355.html">https://www.cnblogs.com/Ingots/p/11330355.html</a></li>
-<li>【前端JS算法之最大公因数】：<a href="https://blog.csdn.net/weixin_44388087/article/details/110388252">https://blog.csdn.net/weixin_44388087/article/details/110388252</a></li>
-<li>【百度百科：更相减损术】：<a href="https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183">https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183</a></li>
-<li>【百度百科：欧几里得算法】：<a href="https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675">https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675</a></li>
-<li>【百度百科：最小公倍数】：<a href="https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375">https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375</a></li>
-</ol>
-<p><strong>首发地址：<a href="https://wu-kave.github.io/2022/gcd-lcm-one-and-more-js.html">https://WU-Kave.github.io/2022/gcd-lcm-one-and-more-js.html</a></strong></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>gcd</tag>
-        <tag>lcm</tag>
       </tags>
   </entry>
   <entry>
@@ -2376,6 +2321,61 @@ d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约�
       </tags>
   </entry>
   <entry>
+    <title>算法｜最大公因数和最小公倍数多个详细版-JavaScript</title>
+    <url>/2022/gcd-lcm-one-and-more-js.html</url>
+    <content><![CDATA[<p>使用 Javascript 描述了多种求两个数或多个数的 GCD 和 LCM 的方法。</p>
+<span id="more"></span>
+<h1>最大公约数（Greatest Common Divisor）</h1>
+<p><strong>定义</strong><br>
+也叫最大公因数。简单：因数最大严谨：指一个或多个数中，a1 ～ an ，都能被 k 整除，k 是公约数，k 最大时即为最大公约数。</p>
+<h2 id="两个数的最大公约数">两个数的最大公约数</h2>
+<h3 id="倒数遍历求解">倒数遍历求解</h3>
+<p>找到两个数中较小的那个数，称之为a，从a开始遍历到1，找到一个都能被a和b整数的数，符合定义。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">  a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">  b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">  <span class="keyword">if</span> (a - b &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    [a, b] = [b, a]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = a; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">if</span> ( a % i === <span class="number">0</span> &amp;&amp; b % i === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> i</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，当两数相差较大时，让a成为较小值是非常必要的。</p>
+<h3 id="辗转相除法（欧几里德算法）">辗转相除法（欧几里德算法）</h3>
+<p>前提：<code>gcd(a, b) === gcd(b, a mod b)</code> (a &gt; b &amp;&amp; a mod b &gt; 0)<br>
+证明：<br>
+a可以表示成a = kb + r  (a，b，k，r皆为正整数，且 r &gt; 0)<br>
+假设d是a,b的一个公约数，即a和b都可以被d整除。而r = a - kb，两边同时除以d，r/d=a/d-kb/d，由等式右边可知r/d为整数，因此d也是r的因数。<br>
+d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约数。因(a,b)和(b,a mod b)的公约数相等，则其最大公约数也相等，得证。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a % b === <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_">gcd</span>(b, a % b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简洁版：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> a % b ? <span class="title function_">gcd</span>(b, a % b) : b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="更损相减法">更损相减法</h3>
+<p>第一步：若都为偶数，重复除2直到最少又一个奇数，但要记下除了多少。第二步：重复用大数减小数，直到减数等于差。最大公约数为 第一步被除了多少 * 第二步的差。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcd</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	a = a &amp;&amp; <span class="built_in">parseInt</span>(a)</span><br><span class="line">	b = b &amp;&amp; <span class="built_in">parseInt</span>(b)</span><br><span class="line">	<span class="comment">// 若两个相等，不作判断后面死循环</span></span><br><span class="line">	<span class="keyword">if</span> (a === b) &#123;</span><br><span class="line">		<span class="keyword">return</span> a</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a &lt; b) &#123;</span><br><span class="line">		[a, b] = [b, a]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 除2</span></span><br><span class="line">	<span class="keyword">let</span> sum = <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> (a % <span class="number">2</span> === <span class="number">0</span> &amp;&amp; b % <span class="number">2</span> === <span class="number">0</span>) &#123;</span><br><span class="line">		a /= <span class="number">2</span></span><br><span class="line">		b /= <span class="number">2</span></span><br><span class="line">		sum *= <span class="number">2</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 开始相减</span></span><br><span class="line">	<span class="keyword">let</span> poor = a - b</span><br><span class="line">	<span class="keyword">while</span> (poor !== b) &#123;</span><br><span class="line">		<span class="keyword">if</span> (poor &lt; b) &#123;</span><br><span class="line">			a = b</span><br><span class="line">			b = poor</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			a = poor</span><br><span class="line">		&#125;</span><br><span class="line">		poor = a - b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> poor * sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多个数的最大公约数">多个数的最大公约数</h2>
+<p>若参数个数为0，返回 undefined ，若参数个数为1，返回该参数。否则先求解前2个参数的最大公约数，然后用该最大公约数和第三个数求最大公约数，以此类推。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">gcdMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">gcd</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>最小公倍数（Least Common Multiple）</h1>
+<p><strong>定义</strong><br>
+简单：倍数最小严谨：指一个或多个数中，a1 ～ an ，k 都是他们任何一个的倍数，k 是公倍数，k 最小时即为最小公倍数。</p>
+<h2 id="两个数的最小公倍数">两个数的最小公倍数</h2>
+<p>乘积 = 最小公倍数 * 最大公因数所以 最小公倍数 = 乘积 / 最大公因数</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcm</span>(<span class="params">a,b</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> (a * b) / <span class="title function_">gcd</span>(a,b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多个数的最小公倍数">多个数的最小公倍数</h2>
+<p>原理跟多个数的最大公因数相同。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">lcmMoreNumber</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">let</span> arr = <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">	<span class="keyword">if</span> (arr.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span> </span><br><span class="line">	<span class="keyword">while</span> (arr.<span class="property">length</span> &gt; <span class="number">1</span>) arr.<span class="title function_">splice</span>(<span class="number">0</span>,<span class="number">2</span>,<span class="title function_">lcm</span>(arr[<span class="number">0</span>], arr[<span class="number">1</span>]))</span><br><span class="line">	<span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<ol>
+<li>【js计算多个数的最大公约数和最小公倍数】：<a href="https://www.cnblogs.com/Ingots/p/11330355.html">https://www.cnblogs.com/Ingots/p/11330355.html</a></li>
+<li>【前端JS算法之最大公因数】：<a href="https://blog.csdn.net/weixin_44388087/article/details/110388252">https://blog.csdn.net/weixin_44388087/article/details/110388252</a></li>
+<li>【百度百科：更相减损术】：<a href="https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183">https://baike.baidu.com/item/%E6%9B%B4%E7%9B%B8%E5%87%8F%E6%8D%9F%E6%9C%AF/449183</a></li>
+<li>【百度百科：欧几里得算法】：<a href="https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675">https://baike.baidu.com/item/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E7%AE%97%E6%B3%95/1647675</a></li>
+<li>【百度百科：最小公倍数】：<a href="https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375">https://baike.baidu.com/item/%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0/6192375</a></li>
+</ol>
+<p><strong>首发地址：<a href="https://wu-kave.github.io/2022/gcd-lcm-one-and-more-js.html">https://WU-Kave.github.io/2022/gcd-lcm-one-and-more-js.html</a></strong></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>gcd</tag>
+        <tag>lcm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>结构体指针函数--头节点不头大</title>
     <url>/2020/StructKeyFunctionOfHead.html</url>
     <content><![CDATA[<p>近日学习数据结构的时候发现一些以前没有察觉到的点，就是结构体的指针，当修改到头节点的时候，为什么要用二级指针呢？</p>
@@ -2401,100 +2401,6 @@ d是a和b的公因数，也是b和r的公因数，即d也是b,a mod b的公约�
 <p><code>change3(head)</code>  取主函数中head变量存储的值，即head指向的节点的地址(a的地址)</p>
 <p><code>*head=d</code>  <code>*head</code>进入head指向的节点，即进入a，将d赋给<code>*head</code>等价于将d赋给a，此时原来存储a的空间存储的数据与存储d的空间存储的数据一样(有、绕，就是现在没有a，有两个d，因为a变成d)，此时主函数的head、change3函数的head都不变，而是将他们指向的变量重新赋值。<em>此语句会改变数据使得数据丢失，最好不要用</em></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>解决 uniapp 开发中的相机相册权限申请同步告知目的问题（兼容 Android 13）| 华为应用商店上架解决方案</title>
-    <url>/2025/solve-the-problem-of-synchronized-notification-purpose-of-camera-album-permission-request-in-uniapp-development.html</url>
-    <content><![CDATA[<p>本文将分享如何在 uniapp 开发中申请相机和相册权限时，解决应用商店要求同步告知权限申请目的的问题，并兼容 Android 13。</p>
-<span id="more"></span>
-<h2 id="背景">背景</h2>
-<p>在某一次版本迭代中，上架华为应用商店审核不通过，原因是申请相机、相册权限时「未同步告知权限申请的使用目的」。</p>
-<p>审核方给出的修改建议如下：</p>
-<blockquote>
-<p>修改建议：APP在申请敏感权限时，应同步说明权限申请的使用目的，包括但不限于申请权限的名称、服务的具体功能、用途；告知方式不限于弹窗、蒙层、浮窗、或者自定义操作系统权限弹框等。请排查应用内所有权限申请行为，确保均符合要求。</p>
-<p>特别提示：需在申请权限的同时/过程中同步告知目的。</p>
-<p>在申请权限的同时给用户同步告知目的，建议申请目的与“权限弹窗”需同屏展示。</p>
-</blockquote>
-<h2 id="分析">分析</h2>
-<p>简而言之，申请权限之前，需要同步显示“提示”，告知用户权限的使用目的，不能提前告知，也不能在申请权限之后再告知。</p>
-<ul>
-<li>因为不能每次都显示申请目的，如何判断当前是否已经拥有权限？</li>
-<li>在用户未对权限弹窗进行操作时，如何确保告知目的不会消失，并且与权限弹窗同屏显示？</li>
-</ul>
-<p>难点：</p>
-<ol>
-<li>判断权限是否已授权</li>
-<li>权限申请流程</li>
-<li>实现持久性弹窗</li>
-</ol>
-<h2 id="解决">解决</h2>
-<p>由于主要针对安卓应用商店，这里只考虑安卓的情况，iOS部分较为简单。</p>
-<p>回到难点上，</p>
-<h3 id="如何判断当前有无权限">如何判断当前有无权限</h3>
-<p>在 uniapp 中可以使用 <code>plus.navigator.checkPermission(permission)</code> API 检查运行环境的权限，入参 <code>permission</code> 是权限的名称。其中，相机、相册的权限名称分别为：</p>
-<ul>
-<li><code>android.permission.CAMERA</code></li>
-<li><code>android.permission.READ_EXTERNAL_STORAGE</code></li>
-</ul>
-<p>该 API 返回一个字符串，表示权限的授权状态。<code>authorized</code> 代表已被用户授权使用此权限。其他返回值请查阅 <a href="https://www.html5plus.org/doc/zh_cn/navigator.html#plus.navigator.checkPermission">此处</a>。</p>
-<p>因此，我们只需要判断返回的权限状态是否为 <code>authorized</code>，如果是，则表示已有权限，无需继续申请；否则，需要申请对应权限。</p>
-<h3 id="申请权限">申请权限</h3>
-<p>使用 <code>plus.android.requestPermissions(Array[String] permissions, AndroidSuccessCallback successCb, AndroidErrorCallback errorCB)</code> API 可以向系统请求权限。其中，<code>permissions</code> 是申请的权限列表，<code>successCb</code> 是申请权限成功后的回调函数，<code>errorCB</code> 是失败回调函数（通常用于处理参数错误的情况）。</p>
-<ul>
-<li>成功回调函数 <code>successCb</code> 包含三个参数：
-<ul>
-<li><code>granted</code> - 已获取的权限列表（字符串数组）；</li>
-<li><code>deniedPresent</code> - 被临时拒绝的权限列表（字符串数组）；</li>
-<li><code>deniedAlways</code> - 被永久拒绝的权限列表（字符串数组）。</li>
-</ul>
-</li>
-</ul>
-<p>官方使用示例：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 申请定位权限</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">requestLocation</span>(<span class="params"></span>)&#123;</span><br><span class="line">	plus.<span class="property">android</span>.<span class="title function_">requestPermissions</span>([<span class="string">&#x27;android.permission.ACCESS_FINE_LOCATION&#x27;</span>], <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(e.<span class="property">deniedAlways</span>.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;	<span class="comment">//权限被永久拒绝</span></span><br><span class="line">			<span class="comment">// 弹出提示框解释为何需要定位权限，引导用户打开设置页面开启</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Always Denied!!! &#x27;</span>+e.<span class="property">deniedAlways</span>.<span class="title function_">toString</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(e.<span class="property">deniedPresent</span>.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;	<span class="comment">//权限被临时拒绝</span></span><br><span class="line">			<span class="comment">// 弹出提示框解释为何需要定位权限，可再次调用plus.android.requestPermissions申请权限</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Present Denied!!! &#x27;</span>+e.<span class="property">deniedPresent</span>.<span class="title function_">toString</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(e.<span class="property">granted</span>.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;	<span class="comment">//权限被允许</span></span><br><span class="line">		    <span class="comment">//调用依赖获取定位权限的代码</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Granted!!! &#x27;</span>+e.<span class="property">granted</span>.<span class="title function_">toString</span>());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;, <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">	    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Request Permissions error:&#x27;</span>+<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(e));</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>官方示例中已经提到，如果权限被永久拒绝，需要提示用户手动打开系统设置进行授权。以下是实现代码：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 引导用户授权</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">guideUserToAuthorize</span>(<span class="params">modelContent = <span class="string">&#x27;请打开对应权限（点击确定后在权限中授权对应权限）&#x27;</span></span>) &#123;</span><br><span class="line">	uni.<span class="title function_">showModal</span>(&#123;</span><br><span class="line">		<span class="attr">title</span>: <span class="string">&#x27;提示&#x27;</span>,</span><br><span class="line">		<span class="attr">content</span>: modelContent,</span><br><span class="line">		<span class="attr">success</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (res.<span class="property">confirm</span>) &#123;</span><br><span class="line">				<span class="title function_">openAppDetailedSettingsPage</span>();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 打开应用详细设置页面</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">openAppDetailedSettingsPage</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">var</span> <span class="title class_">Intent</span> = plus.<span class="property">android</span>.importClass(<span class="string">&quot;android.content.Intent&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> <span class="title class_">Settings</span> = plus.<span class="property">android</span>.importClass(<span class="string">&quot;android.provider.Settings&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> <span class="title class_">Uri</span> = plus.<span class="property">android</span>.importClass(<span class="string">&quot;android.net.Uri&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> mainActivity = plus.<span class="property">android</span>.<span class="title function_">runtimeMainActivity</span>();</span><br><span class="line">	<span class="keyword">var</span> intent = <span class="keyword">new</span> <span class="title class_">Intent</span>();</span><br><span class="line">	intent.<span class="title function_">setAction</span>(<span class="title class_">Settings</span>.<span class="property">ACTION_APPLICATION_DETAILS_SETTINGS</span>);</span><br><span class="line">	<span class="keyword">var</span> uri = <span class="title class_">Uri</span>.<span class="title function_">fromParts</span>(<span class="string">&quot;package&quot;</span>, mainActivity.<span class="title function_">getPackageName</span>(), <span class="literal">null</span>);</span><br><span class="line">	intent.<span class="title function_">setData</span>(uri);</span><br><span class="line">	mainActivity.<span class="title function_">startActivity</span>(intent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于相机和相册权限的申请，无论是永久拒绝还是临时拒绝，都需要引导用户打开设置页面进行授权。只有在权限被允许时，才能继续执行相关的业务操作。</p>
-<h3 id="持久性弹窗">持久性弹窗</h3>
-<p>在 uniapp 中，可以使用 <code>uni-popup</code> 组件来实现持久性弹窗。 该组件可以手动打开或关闭，并且可以自定义样式。</p>
-<p>何时打开何时关闭？</p>
-<p>如果检查权限时发现权限未被授予，则在申请权限之前打开弹窗；在用户操作后触发成功回调函数时，关闭弹窗。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uni-popup</span> <span class="attr">ref</span>=<span class="string">&quot;cameraPopup&quot;</span> <span class="attr">type</span>=<span class="string">&quot;top&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;popup-content&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;title&quot;</span>&gt;</span>相机权限说明<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span>你的目的<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">uni-popup</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight scss"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 权限说明弹窗</span></span><br><span class="line">	<span class="selector-class">.popup-content</span> &#123;</span><br><span class="line">		<span class="attribute">position</span>: relative;</span><br><span class="line">		<span class="attribute">z-index</span>: <span class="number">2000</span>;</span><br><span class="line">		<span class="attribute">background-color</span>: <span class="number">#eee</span>;</span><br><span class="line">		<span class="attribute">width</span>: <span class="number">90%</span>;</span><br><span class="line">		<span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">		<span class="attribute">margin-top</span>: <span class="number">10vh</span>;</span><br><span class="line">		<span class="attribute">padding</span>: <span class="number">32</span>rpx;</span><br><span class="line">		<span class="attribute">border-radius</span>: <span class="number">32</span>rpx;</span><br><span class="line">		<span class="attribute">color</span>: <span class="number">#000</span>;</span><br><span class="line">		<span class="comment">// 阴影</span></span><br><span class="line">		<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">10</span>rpx <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">		<span class="selector-class">.title</span> &#123;</span><br><span class="line">			<span class="attribute">font-size</span>: <span class="number">32</span>rpx;</span><br><span class="line">			<span class="attribute">font-weight</span>: bold;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="selector-class">.content</span> &#123;</span><br><span class="line">			<span class="attribute">margin-top</span>: <span class="number">16</span>rpx;</span><br><span class="line">			<span class="attribute">line-height</span>: <span class="number">1.5</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<p>涉及到业务代码，这里只给出部分关键代码。</p>
-<p>参考代码1（未兼容Android13）：</p>
-<blockquote>
-<p>由于相机、相册一般是一起使用，这份代码同时申请了相机、相册的权限。</p>
-<p>函数 <code>guideUserToAuthorize</code> 参考上面给出的代码。</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;cameraPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相机权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相机目的（根据实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;galleryPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相册权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相册目的（实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; guideUserToAuthorize &#125; from &#x27;@/utils&#x27;;</span><br><span class="line">    </span><br><span class="line">	export default &#123;</span><br><span class="line">		components: &#123;&#125;,</span><br><span class="line">		props: &#123;</span><br><span class="line">		&#125;,</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line">			&#125;;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123;</span><br><span class="line">			$_chooseImage() &#123;</span><br><span class="line">				let platform = uni.getSystemInfoSync().platform; //首先判断app是安卓还是ios</span><br><span class="line">				if (platform == &quot;ios&quot;) &#123; //这里是ios的方法</span><br><span class="line">                    // 执行业务代码</span><br><span class="line">				&#125; else if (platform == &quot;android&quot;) &#123;</span><br><span class="line">					if (plus.navigator.checkPermission(&#x27;android.permission.CAMERA&#x27;) === &#x27;authorized&#x27; &amp;&amp; plus.navigator.checkPermission(&#x27;android.permission.READ_EXTERNAL_STORAGE&#x27;) === &#x27;authorized&#x27;) &#123;</span><br><span class="line">						// 已经获得相机和相册权限</span><br><span class="line">                          // 执行业务代码</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						// 其中一个权限未取得或被拒绝</span><br><span class="line">						this.getAndroidCameraPermission()</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			// 获得安卓相机权限</span><br><span class="line">			getAndroidCameraPermission() &#123;</span><br><span class="line">				this.$refs.cameraPopup.open();</span><br><span class="line">				plus.android.requestPermissions([&#x27;android.permission.CAMERA&#x27;], (e) =&gt; &#123;</span><br><span class="line">					this.$refs.cameraPopup.close();</span><br><span class="line">					if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝</span><br><span class="line">						// 弹出提示框解释为何需要权限，引导用户打开设置页面开启  </span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">						// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						this.$refs.galleryPopup.open();</span><br><span class="line">						plus.android.requestPermissions([&#x27;android.permission.READ_EXTERNAL_STORAGE&#x27;], (e) =&gt; &#123;</span><br><span class="line">                              this.$refs.galleryPopup.close();</span><br><span class="line">							if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，引导用户打开设置页面开启</span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)  </span><br><span class="line">							&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)</span><br><span class="line">							&#125; else &#123;</span><br><span class="line">                                   // 执行业务代码</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang=&quot;scss&quot;&gt;</span><br><span class="line">	// 权限说明弹窗</span><br><span class="line">	.popup-content &#123;</span><br><span class="line">		position: relative;</span><br><span class="line">		z-index: 2000;</span><br><span class="line">		background-color: #eee;</span><br><span class="line">		width: 90%;</span><br><span class="line">		margin: 0 auto;</span><br><span class="line">		margin-top: 10vh;</span><br><span class="line">		padding: 32rpx;</span><br><span class="line">		border-radius: 32rpx;</span><br><span class="line">		color: #000;</span><br><span class="line">		// 阴影</span><br><span class="line">		box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.3);</span><br><span class="line">		.title &#123;</span><br><span class="line">			font-size: 32rpx;</span><br><span class="line">			font-weight: bold;</span><br><span class="line">		&#125;</span><br><span class="line">		.content &#123;</span><br><span class="line">			margin-top: 16rpx;</span><br><span class="line">			line-height: 1.5;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Android-13">Android 13</h3>
-<p>问题来了，Android 13 的相册权限变更为 <code>READ_MEDIA_IMAGES</code>，如果继续使用之前的代码，将无法正确判断相册权限。因此，在判断和申请相册权限时，还需要判断当前系统版本。</p>
-<p><code>plus.os.version</code> 可以获取系统版本信息。</p>
-<p>参考代码2（兼容Android13）：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;cameraPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相机权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相机目的（根据实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;galleryPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相册权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相册目的（实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; guideUserToAuthorize &#125; from &#x27;@/utils&#x27;;</span><br><span class="line"></span><br><span class="line">	export default &#123;</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line">			&#125;;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123;</span><br><span class="line">			$_chooseImage() &#123;</span><br><span class="line">				let platform = uni.getSystemInfoSync().platform; //首先判断app是安卓还是ios</span><br><span class="line">				if (platform == &quot;ios&quot;) &#123; //这里是ios的方法</span><br><span class="line">					// 执行业务代码</span><br><span class="line">				&#125; else if (platform == &quot;android&quot;) &#123;</span><br><span class="line">					const sdkVersion = parseInt(plus.os.version.split(&#x27;.&#x27;)[0], 10);</span><br><span class="line">					const cameraPermissionState = plus.navigator.checkPermission(&#x27;android.permission.CAMERA&#x27;)</span><br><span class="line">					const readExternalStoragePermissionState = plus.navigator.checkPermission(&#x27;android.permission.READ_EXTERNAL_STORAGE&#x27;)</span><br><span class="line">					const readMediaImagesPermissionState = plus.navigator.checkPermission(&#x27;android.permission.READ_MEDIA_IMAGES&#x27;)</span><br><span class="line">					// Android 13 的照片权限是 READ_MEDIA_IMAGES</span><br><span class="line">					if ((sdkVersion &lt; 13 &amp;&amp; cameraPermissionState === &#x27;authorized&#x27; &amp;&amp; readExternalStoragePermissionState === &#x27;authorized&#x27;)</span><br><span class="line">						|| (sdkVersion &gt;= 13 &amp;&amp; cameraPermissionState === &#x27;authorized&#x27; &amp;&amp; readMediaImagesPermissionState === &#x27;authorized&#x27;)</span><br><span class="line">					) &#123;</span><br><span class="line">						// 已经获得相机和相册权限</span><br><span class="line">                        // 执行业务代码</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						// 其中一个权限未取得或被拒绝</span><br><span class="line">						this.getAndroidCameraPermission()</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			// 获得安卓相机权限</span><br><span class="line">			getAndroidCameraPermission() &#123;</span><br><span class="line">				this.$refs.cameraPopup.open();</span><br><span class="line">				plus.android.requestPermissions([&#x27;android.permission.CAMERA&#x27;], (e) =&gt; &#123;</span><br><span class="line">					this.$refs.cameraPopup.close();</span><br><span class="line">					if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝</span><br><span class="line">						// 弹出提示框解释为何需要权限，引导用户打开设置页面开启  </span><br><span class="line">						// this.guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">						// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">						// this.guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						this.$refs.galleryPopup.open();</span><br><span class="line">						const sdkVersion = parseInt(plus.os.version.split(&#x27;.&#x27;)[0], 10);</span><br><span class="line">						let permissionName = &#x27;READ_EXTERNAL_STORAGE&#x27;</span><br><span class="line">						// Android 13 的照片权限是 READ_MEDIA_IMAGES</span><br><span class="line">						if (sdkVersion &gt;= 13) &#123;</span><br><span class="line">							permissionName = &#x27;READ_MEDIA_IMAGES&#x27;</span><br><span class="line">						&#125;</span><br><span class="line">						plus.android.requestPermissions([`android.permission.$&#123;permissionName&#125;`], (e) =&gt; &#123;</span><br><span class="line">							this.$refs.galleryPopup.close();</span><br><span class="line">							if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，引导用户打开设置页面开启</span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)</span><br><span class="line">							&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)</span><br><span class="line">							&#125; else &#123;</span><br><span class="line">								// 执行业务代码</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;,</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang=&quot;scss&quot;&gt;</span><br><span class="line">	// 权限说明弹窗</span><br><span class="line">	.popup-content &#123;</span><br><span class="line">		position: relative;</span><br><span class="line">		z-index: 2000;</span><br><span class="line">		background-color: #eee;</span><br><span class="line">		width: 90%;</span><br><span class="line">		margin: 0 auto;</span><br><span class="line">		margin-top: 10vh;</span><br><span class="line">		padding: 32rpx;</span><br><span class="line">		border-radius: 32rpx;</span><br><span class="line">		color: #000;</span><br><span class="line">		// 阴影</span><br><span class="line">		box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.3);</span><br><span class="line">		.title &#123;</span><br><span class="line">			font-size: 32rpx;</span><br><span class="line">			font-weight: bold;</span><br><span class="line">		&#125;</span><br><span class="line">		.content &#123;</span><br><span class="line">			margin-top: 16rpx;</span><br><span class="line">			line-height: 1.5;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="总结">总结</h2>
-<p>通过使用 <code>checkPermission</code> API 判断权限状态后，再决定是否调用 <code>requestPermissions</code> API 申请权限。同时，使用<code>uni-popup</code> 弹窗同步告知目的，申请权限前显示弹窗，用户操作后关闭。</p>
-<h2 id="参考">参考</h2>
-<ul>
-<li><a href="https://www.html5plus.org/doc/zh_cn/navigator.html#plus.navigator.checkPermission">查询权限 API checkPermission 介绍</a></li>
-<li><a href="https://www.html5plus.org/doc/zh_cn/android.html#plus.android.requestPermissions">请求权限 API requestPermissions 介绍</a></li>
-<li><a href="https://www.html5plus.org/doc/zh_cn/device.html#plus.os">系统版本属性 plus.os.version 介绍 </a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>uniapp</category>
-      </categories>
-      <tags>
-        <tag>uniapp</tag>
-        <tag>Vue</tag>
-        <tag>app</tag>
-        <tag>权限</tag>
-        <tag>相机</tag>
-        <tag>相册</tag>
-        <tag>Android</tag>
-        <tag>IOS</tag>
-        <tag>Android13</tag>
-      </tags>
   </entry>
   <entry>
     <title>蓝桥杯｜2021第十二届蓝桥杯第二次模拟赛真题与解答[Java]</title>
@@ -2740,6 +2646,100 @@ b. 将 <code>像素值总和/已统计像素个数</code>复制给新数组，�
       </categories>
       <tags>
         <tag>蓝桥杯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决 uniapp 开发中的相机相册权限申请同步告知目的问题（兼容 Android 13）| 华为应用商店上架解决方案</title>
+    <url>/2025/solve-the-problem-of-synchronized-notification-purpose-of-camera-album-permission-request-in-uniapp-development.html</url>
+    <content><![CDATA[<p>本文将分享如何在 uniapp 开发中申请相机和相册权限时，解决应用商店要求同步告知权限申请目的的问题，并兼容 Android 13。</p>
+<span id="more"></span>
+<h2 id="背景">背景</h2>
+<p>在某一次版本迭代中，上架华为应用商店审核不通过，原因是申请相机、相册权限时「未同步告知权限申请的使用目的」。</p>
+<p>审核方给出的修改建议如下：</p>
+<blockquote>
+<p>修改建议：APP在申请敏感权限时，应同步说明权限申请的使用目的，包括但不限于申请权限的名称、服务的具体功能、用途；告知方式不限于弹窗、蒙层、浮窗、或者自定义操作系统权限弹框等。请排查应用内所有权限申请行为，确保均符合要求。</p>
+<p>特别提示：需在申请权限的同时/过程中同步告知目的。</p>
+<p>在申请权限的同时给用户同步告知目的，建议申请目的与“权限弹窗”需同屏展示。</p>
+</blockquote>
+<h2 id="分析">分析</h2>
+<p>简而言之，申请权限之前，需要同步显示“提示”，告知用户权限的使用目的，不能提前告知，也不能在申请权限之后再告知。</p>
+<ul>
+<li>因为不能每次都显示申请目的，如何判断当前是否已经拥有权限？</li>
+<li>在用户未对权限弹窗进行操作时，如何确保告知目的不会消失，并且与权限弹窗同屏显示？</li>
+</ul>
+<p>难点：</p>
+<ol>
+<li>判断权限是否已授权</li>
+<li>权限申请流程</li>
+<li>实现持久性弹窗</li>
+</ol>
+<h2 id="解决">解决</h2>
+<p>由于主要针对安卓应用商店，这里只考虑安卓的情况，iOS部分较为简单。</p>
+<p>回到难点上，</p>
+<h3 id="如何判断当前有无权限">如何判断当前有无权限</h3>
+<p>在 uniapp 中可以使用 <code>plus.navigator.checkPermission(permission)</code> API 检查运行环境的权限，入参 <code>permission</code> 是权限的名称。其中，相机、相册的权限名称分别为：</p>
+<ul>
+<li><code>android.permission.CAMERA</code></li>
+<li><code>android.permission.READ_EXTERNAL_STORAGE</code></li>
+</ul>
+<p>该 API 返回一个字符串，表示权限的授权状态。<code>authorized</code> 代表已被用户授权使用此权限。其他返回值请查阅 <a href="https://www.html5plus.org/doc/zh_cn/navigator.html#plus.navigator.checkPermission">此处</a>。</p>
+<p>因此，我们只需要判断返回的权限状态是否为 <code>authorized</code>，如果是，则表示已有权限，无需继续申请；否则，需要申请对应权限。</p>
+<h3 id="申请权限">申请权限</h3>
+<p>使用 <code>plus.android.requestPermissions(Array[String] permissions, AndroidSuccessCallback successCb, AndroidErrorCallback errorCB)</code> API 可以向系统请求权限。其中，<code>permissions</code> 是申请的权限列表，<code>successCb</code> 是申请权限成功后的回调函数，<code>errorCB</code> 是失败回调函数（通常用于处理参数错误的情况）。</p>
+<ul>
+<li>成功回调函数 <code>successCb</code> 包含三个参数：
+<ul>
+<li><code>granted</code> - 已获取的权限列表（字符串数组）；</li>
+<li><code>deniedPresent</code> - 被临时拒绝的权限列表（字符串数组）；</li>
+<li><code>deniedAlways</code> - 被永久拒绝的权限列表（字符串数组）。</li>
+</ul>
+</li>
+</ul>
+<p>官方使用示例：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 申请定位权限</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">requestLocation</span>(<span class="params"></span>)&#123;</span><br><span class="line">	plus.<span class="property">android</span>.<span class="title function_">requestPermissions</span>([<span class="string">&#x27;android.permission.ACCESS_FINE_LOCATION&#x27;</span>], <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">		<span class="keyword">if</span>(e.<span class="property">deniedAlways</span>.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;	<span class="comment">//权限被永久拒绝</span></span><br><span class="line">			<span class="comment">// 弹出提示框解释为何需要定位权限，引导用户打开设置页面开启</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Always Denied!!! &#x27;</span>+e.<span class="property">deniedAlways</span>.<span class="title function_">toString</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(e.<span class="property">deniedPresent</span>.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;	<span class="comment">//权限被临时拒绝</span></span><br><span class="line">			<span class="comment">// 弹出提示框解释为何需要定位权限，可再次调用plus.android.requestPermissions申请权限</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Present Denied!!! &#x27;</span>+e.<span class="property">deniedPresent</span>.<span class="title function_">toString</span>());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(e.<span class="property">granted</span>.<span class="property">length</span>&gt;<span class="number">0</span>)&#123;	<span class="comment">//权限被允许</span></span><br><span class="line">		    <span class="comment">//调用依赖获取定位权限的代码</span></span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Granted!!! &#x27;</span>+e.<span class="property">granted</span>.<span class="title function_">toString</span>());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;, <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">	    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Request Permissions error:&#x27;</span>+<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(e));</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>官方示例中已经提到，如果权限被永久拒绝，需要提示用户手动打开系统设置进行授权。以下是实现代码：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 引导用户授权</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">guideUserToAuthorize</span>(<span class="params">modelContent = <span class="string">&#x27;请打开对应权限（点击确定后在权限中授权对应权限）&#x27;</span></span>) &#123;</span><br><span class="line">	uni.<span class="title function_">showModal</span>(&#123;</span><br><span class="line">		<span class="attr">title</span>: <span class="string">&#x27;提示&#x27;</span>,</span><br><span class="line">		<span class="attr">content</span>: modelContent,</span><br><span class="line">		<span class="attr">success</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (res.<span class="property">confirm</span>) &#123;</span><br><span class="line">				<span class="title function_">openAppDetailedSettingsPage</span>();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 打开应用详细设置页面</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">openAppDetailedSettingsPage</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">var</span> <span class="title class_">Intent</span> = plus.<span class="property">android</span>.importClass(<span class="string">&quot;android.content.Intent&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> <span class="title class_">Settings</span> = plus.<span class="property">android</span>.importClass(<span class="string">&quot;android.provider.Settings&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> <span class="title class_">Uri</span> = plus.<span class="property">android</span>.importClass(<span class="string">&quot;android.net.Uri&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> mainActivity = plus.<span class="property">android</span>.<span class="title function_">runtimeMainActivity</span>();</span><br><span class="line">	<span class="keyword">var</span> intent = <span class="keyword">new</span> <span class="title class_">Intent</span>();</span><br><span class="line">	intent.<span class="title function_">setAction</span>(<span class="title class_">Settings</span>.<span class="property">ACTION_APPLICATION_DETAILS_SETTINGS</span>);</span><br><span class="line">	<span class="keyword">var</span> uri = <span class="title class_">Uri</span>.<span class="title function_">fromParts</span>(<span class="string">&quot;package&quot;</span>, mainActivity.<span class="title function_">getPackageName</span>(), <span class="literal">null</span>);</span><br><span class="line">	intent.<span class="title function_">setData</span>(uri);</span><br><span class="line">	mainActivity.<span class="title function_">startActivity</span>(intent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于相机和相册权限的申请，无论是永久拒绝还是临时拒绝，都需要引导用户打开设置页面进行授权。只有在权限被允许时，才能继续执行相关的业务操作。</p>
+<h3 id="持久性弹窗">持久性弹窗</h3>
+<p>在 uniapp 中，可以使用 <code>uni-popup</code> 组件来实现持久性弹窗。 该组件可以手动打开或关闭，并且可以自定义样式。</p>
+<p>何时打开何时关闭？</p>
+<p>如果检查权限时发现权限未被授予，则在申请权限之前打开弹窗；在用户操作后触发成功回调函数时，关闭弹窗。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uni-popup</span> <span class="attr">ref</span>=<span class="string">&quot;cameraPopup&quot;</span> <span class="attr">type</span>=<span class="string">&quot;top&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;popup-content&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;title&quot;</span>&gt;</span>相机权限说明<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span>你的目的<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">uni-popup</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight scss"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 权限说明弹窗</span></span><br><span class="line">	<span class="selector-class">.popup-content</span> &#123;</span><br><span class="line">		<span class="attribute">position</span>: relative;</span><br><span class="line">		<span class="attribute">z-index</span>: <span class="number">2000</span>;</span><br><span class="line">		<span class="attribute">background-color</span>: <span class="number">#eee</span>;</span><br><span class="line">		<span class="attribute">width</span>: <span class="number">90%</span>;</span><br><span class="line">		<span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">		<span class="attribute">margin-top</span>: <span class="number">10vh</span>;</span><br><span class="line">		<span class="attribute">padding</span>: <span class="number">32</span>rpx;</span><br><span class="line">		<span class="attribute">border-radius</span>: <span class="number">32</span>rpx;</span><br><span class="line">		<span class="attribute">color</span>: <span class="number">#000</span>;</span><br><span class="line">		<span class="comment">// 阴影</span></span><br><span class="line">		<span class="attribute">box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">10</span>rpx <span class="built_in">rgba</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line">		<span class="selector-class">.title</span> &#123;</span><br><span class="line">			<span class="attribute">font-size</span>: <span class="number">32</span>rpx;</span><br><span class="line">			<span class="attribute">font-weight</span>: bold;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="selector-class">.content</span> &#123;</span><br><span class="line">			<span class="attribute">margin-top</span>: <span class="number">16</span>rpx;</span><br><span class="line">			<span class="attribute">line-height</span>: <span class="number">1.5</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>涉及到业务代码，这里只给出部分关键代码。</p>
+<p>参考代码1（未兼容Android13）：</p>
+<blockquote>
+<p>由于相机、相册一般是一起使用，这份代码同时申请了相机、相册的权限。</p>
+<p>函数 <code>guideUserToAuthorize</code> 参考上面给出的代码。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;cameraPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相机权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相机目的（根据实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;galleryPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相册权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相册目的（实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; guideUserToAuthorize &#125; from &#x27;@/utils&#x27;;</span><br><span class="line">    </span><br><span class="line">	export default &#123;</span><br><span class="line">		components: &#123;&#125;,</span><br><span class="line">		props: &#123;</span><br><span class="line">		&#125;,</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line">			&#125;;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123;</span><br><span class="line">			$_chooseImage() &#123;</span><br><span class="line">				let platform = uni.getSystemInfoSync().platform; //首先判断app是安卓还是ios</span><br><span class="line">				if (platform == &quot;ios&quot;) &#123; //这里是ios的方法</span><br><span class="line">                    // 执行业务代码</span><br><span class="line">				&#125; else if (platform == &quot;android&quot;) &#123;</span><br><span class="line">					if (plus.navigator.checkPermission(&#x27;android.permission.CAMERA&#x27;) === &#x27;authorized&#x27; &amp;&amp; plus.navigator.checkPermission(&#x27;android.permission.READ_EXTERNAL_STORAGE&#x27;) === &#x27;authorized&#x27;) &#123;</span><br><span class="line">						// 已经获得相机和相册权限</span><br><span class="line">                          // 执行业务代码</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						// 其中一个权限未取得或被拒绝</span><br><span class="line">						this.getAndroidCameraPermission()</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			// 获得安卓相机权限</span><br><span class="line">			getAndroidCameraPermission() &#123;</span><br><span class="line">				this.$refs.cameraPopup.open();</span><br><span class="line">				plus.android.requestPermissions([&#x27;android.permission.CAMERA&#x27;], (e) =&gt; &#123;</span><br><span class="line">					this.$refs.cameraPopup.close();</span><br><span class="line">					if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝</span><br><span class="line">						// 弹出提示框解释为何需要权限，引导用户打开设置页面开启  </span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">						// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						this.$refs.galleryPopup.open();</span><br><span class="line">						plus.android.requestPermissions([&#x27;android.permission.READ_EXTERNAL_STORAGE&#x27;], (e) =&gt; &#123;</span><br><span class="line">                              this.$refs.galleryPopup.close();</span><br><span class="line">							if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，引导用户打开设置页面开启</span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)  </span><br><span class="line">							&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)</span><br><span class="line">							&#125; else &#123;</span><br><span class="line">                                   // 执行业务代码</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang=&quot;scss&quot;&gt;</span><br><span class="line">	// 权限说明弹窗</span><br><span class="line">	.popup-content &#123;</span><br><span class="line">		position: relative;</span><br><span class="line">		z-index: 2000;</span><br><span class="line">		background-color: #eee;</span><br><span class="line">		width: 90%;</span><br><span class="line">		margin: 0 auto;</span><br><span class="line">		margin-top: 10vh;</span><br><span class="line">		padding: 32rpx;</span><br><span class="line">		border-radius: 32rpx;</span><br><span class="line">		color: #000;</span><br><span class="line">		// 阴影</span><br><span class="line">		box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.3);</span><br><span class="line">		.title &#123;</span><br><span class="line">			font-size: 32rpx;</span><br><span class="line">			font-weight: bold;</span><br><span class="line">		&#125;</span><br><span class="line">		.content &#123;</span><br><span class="line">			margin-top: 16rpx;</span><br><span class="line">			line-height: 1.5;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Android-13">Android 13</h3>
+<p>问题来了，Android 13 的相册权限变更为 <code>READ_MEDIA_IMAGES</code>，如果继续使用之前的代码，将无法正确判断相册权限。因此，在判断和申请相册权限时，还需要判断当前系统版本。</p>
+<p><code>plus.os.version</code> 可以获取系统版本信息。</p>
+<p>参考代码2（兼容Android13）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	&lt;view&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;cameraPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相机权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相机目的（根据实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">		&lt;uni-popup ref=&quot;galleryPopup&quot; type=&quot;top&quot;&gt;</span><br><span class="line">			&lt;view class=&quot;popup-content&quot;&gt;</span><br><span class="line">				&lt;view class=&quot;title&quot;&gt;相册权限说明&lt;/view&gt;</span><br><span class="line">				&lt;view class=&quot;content&quot;&gt;相册目的（实际业务替换）&lt;/view&gt;</span><br><span class="line">			&lt;/view&gt;</span><br><span class="line">		&lt;/uni-popup&gt;</span><br><span class="line">	&lt;/view&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; guideUserToAuthorize &#125; from &#x27;@/utils&#x27;;</span><br><span class="line"></span><br><span class="line">	export default &#123;</span><br><span class="line">		data() &#123;</span><br><span class="line">			return &#123;</span><br><span class="line">			&#125;;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123;</span><br><span class="line">			$_chooseImage() &#123;</span><br><span class="line">				let platform = uni.getSystemInfoSync().platform; //首先判断app是安卓还是ios</span><br><span class="line">				if (platform == &quot;ios&quot;) &#123; //这里是ios的方法</span><br><span class="line">					// 执行业务代码</span><br><span class="line">				&#125; else if (platform == &quot;android&quot;) &#123;</span><br><span class="line">					const sdkVersion = parseInt(plus.os.version.split(&#x27;.&#x27;)[0], 10);</span><br><span class="line">					const cameraPermissionState = plus.navigator.checkPermission(&#x27;android.permission.CAMERA&#x27;)</span><br><span class="line">					const readExternalStoragePermissionState = plus.navigator.checkPermission(&#x27;android.permission.READ_EXTERNAL_STORAGE&#x27;)</span><br><span class="line">					const readMediaImagesPermissionState = plus.navigator.checkPermission(&#x27;android.permission.READ_MEDIA_IMAGES&#x27;)</span><br><span class="line">					// Android 13 的照片权限是 READ_MEDIA_IMAGES</span><br><span class="line">					if ((sdkVersion &lt; 13 &amp;&amp; cameraPermissionState === &#x27;authorized&#x27; &amp;&amp; readExternalStoragePermissionState === &#x27;authorized&#x27;)</span><br><span class="line">						|| (sdkVersion &gt;= 13 &amp;&amp; cameraPermissionState === &#x27;authorized&#x27; &amp;&amp; readMediaImagesPermissionState === &#x27;authorized&#x27;)</span><br><span class="line">					) &#123;</span><br><span class="line">						// 已经获得相机和相册权限</span><br><span class="line">                        // 执行业务代码</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						// 其中一个权限未取得或被拒绝</span><br><span class="line">						this.getAndroidCameraPermission()</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			// 获得安卓相机权限</span><br><span class="line">			getAndroidCameraPermission() &#123;</span><br><span class="line">				this.$refs.cameraPopup.open();</span><br><span class="line">				plus.android.requestPermissions([&#x27;android.permission.CAMERA&#x27;], (e) =&gt; &#123;</span><br><span class="line">					this.$refs.cameraPopup.close();</span><br><span class="line">					if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝</span><br><span class="line">						// 弹出提示框解释为何需要权限，引导用户打开设置页面开启  </span><br><span class="line">						// this.guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">						// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">						// this.guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">						guideUserToAuthorize(&#x27;请打开手机相机功能（点击确定后在权限中授权相机功能）&#x27;)</span><br><span class="line">					&#125; else &#123;</span><br><span class="line">						this.$refs.galleryPopup.open();</span><br><span class="line">						const sdkVersion = parseInt(plus.os.version.split(&#x27;.&#x27;)[0], 10);</span><br><span class="line">						let permissionName = &#x27;READ_EXTERNAL_STORAGE&#x27;</span><br><span class="line">						// Android 13 的照片权限是 READ_MEDIA_IMAGES</span><br><span class="line">						if (sdkVersion &gt;= 13) &#123;</span><br><span class="line">							permissionName = &#x27;READ_MEDIA_IMAGES&#x27;</span><br><span class="line">						&#125;</span><br><span class="line">						plus.android.requestPermissions([`android.permission.$&#123;permissionName&#125;`], (e) =&gt; &#123;</span><br><span class="line">							this.$refs.galleryPopup.close();</span><br><span class="line">							if (e.deniedAlways.length &gt; 0) &#123; //权限被永久拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，引导用户打开设置页面开启</span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)</span><br><span class="line">							&#125; else if (e.deniedPresent.length &gt; 0) &#123; //权限被临时拒绝  </span><br><span class="line">								// 弹出提示框解释为何需要权限，可再次调用plus.android.requestPermissions申请权限  </span><br><span class="line">								guideUserToAuthorize(&#x27;请打开相册存储功能（点击确定后在权限中授权相册存储功能）&#x27;)</span><br><span class="line">							&#125; else &#123;</span><br><span class="line">								// 执行业务代码</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;)</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;)</span><br><span class="line">			&#125;,</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style lang=&quot;scss&quot;&gt;</span><br><span class="line">	// 权限说明弹窗</span><br><span class="line">	.popup-content &#123;</span><br><span class="line">		position: relative;</span><br><span class="line">		z-index: 2000;</span><br><span class="line">		background-color: #eee;</span><br><span class="line">		width: 90%;</span><br><span class="line">		margin: 0 auto;</span><br><span class="line">		margin-top: 10vh;</span><br><span class="line">		padding: 32rpx;</span><br><span class="line">		border-radius: 32rpx;</span><br><span class="line">		color: #000;</span><br><span class="line">		// 阴影</span><br><span class="line">		box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.3);</span><br><span class="line">		.title &#123;</span><br><span class="line">			font-size: 32rpx;</span><br><span class="line">			font-weight: bold;</span><br><span class="line">		&#125;</span><br><span class="line">		.content &#123;</span><br><span class="line">			margin-top: 16rpx;</span><br><span class="line">			line-height: 1.5;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>通过使用 <code>checkPermission</code> API 判断权限状态后，再决定是否调用 <code>requestPermissions</code> API 申请权限。同时，使用<code>uni-popup</code> 弹窗同步告知目的，申请权限前显示弹窗，用户操作后关闭。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.html5plus.org/doc/zh_cn/navigator.html#plus.navigator.checkPermission">查询权限 API checkPermission 介绍</a></li>
+<li><a href="https://www.html5plus.org/doc/zh_cn/android.html#plus.android.requestPermissions">请求权限 API requestPermissions 介绍</a></li>
+<li><a href="https://www.html5plus.org/doc/zh_cn/device.html#plus.os">系统版本属性 plus.os.version 介绍 </a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>uniapp</category>
+      </categories>
+      <tags>
+        <tag>uniapp</tag>
+        <tag>Vue</tag>
+        <tag>app</tag>
+        <tag>权限</tag>
+        <tag>相机</tag>
+        <tag>相册</tag>
+        <tag>Android</tag>
+        <tag>IOS</tag>
+        <tag>Android13</tag>
       </tags>
   </entry>
 </search>
