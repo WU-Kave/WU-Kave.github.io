@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html</loc>
+    <lastmod>2025-07-06</lastmod>
+  </url>
+  <url>
     <loc>https://blog.xchive.top/2025/building-vue-number-input.html</loc>
     <lastmod>2025-03-05</lastmod>
   </url>
@@ -89,7 +93,7 @@
     <lastmod>2020-09-28</lastmod>
   </url>
   <url>
-    <loc>https://blog.xchive.top/2020/cmcje14sb000quoykg3vhe3ov.html</loc>
+    <loc>https://blog.xchive.top/2020/cmdesuxcw000oqlyk8vyg8bi0.html</loc>
     <lastmod>2020-09-25</lastmod>
   </url>
   <url>

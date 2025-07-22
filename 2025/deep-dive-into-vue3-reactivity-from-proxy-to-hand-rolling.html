@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/assets/favicon.png">
+  <link rel="mask-icon" href="/uploads/assets/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.xchive.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文将带你探讨 Proxy、ref&#x2F;reactive、响应式、双向绑定之间的差别，然后一个一个认识它们，最后带你手写一个简化版的 Vue3 响应式系统，完整实现 reactive、ref、effect、依赖追踪和更新触发。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入 Vue3 响应式原理：从 Proxy 到手写 ref&#x2F;reactive">
+<meta property="og:url" content="https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="本文将带你探讨 Proxy、ref&#x2F;reactive、响应式、双向绑定之间的差别，然后一个一个认识它们，最后带你手写一个简化版的 Vue3 响应式系统，完整实现 reactive、ref、effect、依赖追踪和更新触发。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-06T07:46:53.000Z">
+<meta property="article:modified_time" content="2025-07-06T07:46:53.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="ref">
+<meta property="article:tag" content="reactive">
+<meta property="article:tag" content="Proxy">
+<meta property="article:tag" content="响应式">
+<meta property="article:tag" content="手写">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html","path":"2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html","title":"深入 Vue3 响应式原理：从 Proxy 到手写 ref/reactive"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>深入 Vue3 响应式原理：从 Proxy 到手写 ref/reactive | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%85%B3%E7%B3%BB"><span class="nav-number">2.</span> <span class="nav-text">二、核心概念关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81vue2-%E5%93%8D%E5%BA%94%E5%BC%8F%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E7%BC%BA%E9%99%B7"><span class="nav-number">3.</span> <span class="nav-text">三、vue2 响应式的原理和缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Proxy-%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">四、Proxy 的出现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%94%E7%A4%BA"><span class="nav-number">4.2.</span> <span class="nav-text">演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reflect"><span class="nav-number">4.3.</span> <span class="nav-text">Reflect</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E7%8E%B0-ref-reactive"><span class="nav-number">5.</span> <span class="nav-text">五、实现 ref&#x2F;reactive</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-effect-%E5%92%8C%E4%BE%9D%E8%B5%96%E6%94%B6%E9%9B%86"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 effect 和依赖收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%AE%9E%E7%8E%B0-reactive"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 实现 reactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-ref"><span class="nav-number">5.3.</span> <span class="nav-text">实现 ref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%94%B6%E9%9B%86%E4%BE%9D%E8%B5%96%E3%80%81%E8%A7%A6%E5%8F%91%E6%9B%B4%E6%96%B0%EF%BC%8Ctrack-trigger"><span class="nav-number">5.4.</span> <span class="nav-text">如何收集依赖、触发更新，track&#x2F;trigger</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">六、总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-number">7.</span> <span class="nav-text">完整代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/assets/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/assets/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="深入 Vue3 响应式原理：从 Proxy 到手写 ref/reactive | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入 Vue3 响应式原理：从 Proxy 到手写 ref/reactive
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-06 15:46:53" itemprop="dateCreated datePublished" datetime="2025-07-06T15:46:53+08:00">2025-07-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">vue</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文将带你探讨 Proxy、<code>ref/reactive</code>、响应式、双向绑定之间的差别，然后一个一个认识它们，最后带你手写一个简化版的 Vue3 响应式系统，完整实现 <code>reactive</code>、<code>ref</code>、<code>effect</code>、依赖追踪和更新触发。</p>
+<span id="more"></span>
+<p>本文默认你已经使用过 Vue3 中的 <code>ref/reactive</code> API。</p>
+<h2 id="一、引言">一、引言</h2>
+<p>Vue 3 的响应式系统经过彻底重构，采用 ES6 的 <code>Proxy</code> 替代了 Vue 2 的 <code>Object.defineProperty</code>，这一变革带来了三大优势：</p>
+<ol>
+<li><strong>更强大的响应能力</strong>：支持动态属性增删、数组索引修改等场景</li>
+<li><strong>更高的性能</strong>：惰性监听和更精确的依赖追踪</li>
+<li><strong>更完善的数据结构支持</strong>：原生支持 Map、Set 等集合类型</li>
+</ol>
+<p>理解这套机制不仅能提升开发效率，更是掌握 Vue 核心设计思想的关键。</p>
+<h2 id="二、核心概念关系">二、核心概念关系</h2>
+<ul>
+<li>Proxy：ES6 中的代理，拦截对象的操作，用于实现响应式</li>
+<li>响应式：依赖收集（track）和更新触发（trigger），数据变化时更新相关数据</li>
+<li>ref/reactive：暴露给开发者的响应式 API</li>
+<li>双向绑定：v-model</li>
+</ul>
+<p>他们的关系是</p>
+<pre class="mermaid">graph TD
+    A[Proxy 代理层] --> B[响应式系统]
+    B --> C[reactive/ref API]
+    C --> D[双向绑定 v-model]</pre>
+<h2 id="三、vue2-响应式的原理和缺陷">三、vue2 响应式的原理和缺陷</h2>
+<p>（了解 Object.defineProperty 可跳过本章节。）</p>
+<p>在 vue2 中使用 <code>Object.defineProperty</code> 来实现响应式，可以拦截数据读取和赋值操作。</p>
+<p>注意：下面代码实现一个最简单的数据劫持，仅仅是数据劫持。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">defineReactive</span>(<span class="params">obj, key</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> value = obj[key]</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, key, &#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;读取：&#x27;</span>, key)</span><br><span class="line">      <span class="keyword">return</span> value</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;更新：&#x27;</span>, key, newVal)</span><br><span class="line">      value = newVal</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对象</span></span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;zs&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">  <span class="attr">isMale</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历劫持</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">keys</span>(obj).<span class="title function_">forEach</span>(<span class="function"><span class="params">key</span> =&gt;</span> <span class="title function_">defineReactive</span>(obj, key))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (obj.<span class="property">isMale</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;是男性&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">obj.<span class="property">name</span> = <span class="string">&#x27;ls&#x27;</span></span><br><span class="line"><span class="keyword">const</span> age = obj.<span class="property">age</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果：</span></span><br><span class="line"><span class="comment">// 读取： isMale</span></span><br><span class="line"><span class="comment">// 是男性</span></span><br><span class="line"><span class="comment">// 更新： name ls</span></span><br><span class="line"><span class="comment">// 读取： age</span></span><br></pre></td></tr></table></figure>
+<p>vue2 的这种实现方式会带来一些问题:</p>
+<ul>
+<li>不能监听对象属性的新增/删除</li>
+<li>数组 API 以及下标操作无法监听</li>
+<li>深层监听，造成性能问题</li>
+</ul>
+<h2 id="四、Proxy-的出现">四、Proxy 的出现</h2>
+<p>（了解 Proxy 可跳过本章节。）</p>
+<p>Vue3 中使用 Proxy 重构响应式原理，就可以解决上面的问题。</p>
+<h3 id="用法">用法</h3>
+<p><code>Proxy(target, handler)</code> 是一个构造函数，创建一个对象的代理，可以拦截对代理的基本操作。</p>
+<ul>
+<li><code>target</code>：要拦截的目标对象</li>
+<li><code>handler</code>：一个对象，定义了各种操作代理</li>
+</ul>
+<p>什么是代理呢？可以简单理解为再操作这个代理之前设置一个拦截，当被访问、更新时，都要经过这层拦截，那么开发者就可以在这层拦截中进行各种各样的操作。</p>
+<blockquote>
+<p><code>handler</code>  可以拦截的操作有：<code>get</code>、<code>set</code>、<code>has</code>、<code>deleteProperty</code>、<code>ownKeys</code>、<code>getOwnPropertyDescriptor</code>、<code>defineProperty</code>、<code>preventExtensions</code>、<code>getPrototypeOf</code>、<code>isExtensible</code>、<code>setPrototypeOf</code>、<code>apply</code>、<code>construct</code></p>
+</blockquote>
+<h3 id="演示">演示</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 目标对象</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;zs&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 代理目标对象的 get、set 操作</span></span><br><span class="line"><span class="keyword">const</span> p_obj = <span class="keyword">new</span> <span class="title class_">Proxy</span>(obj, &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, propKey</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;读取：&#x27;</span>, propKey)</span><br><span class="line">    <span class="comment">// return target[propKey]</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, propKey)</span><br><span class="line"></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">set</span>(<span class="params">target, propKey, newVal</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;更新：&#x27;</span>, propKey, newVal)</span><br><span class="line">    <span class="comment">// target[propKey] = newVal</span></span><br><span class="line">    <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, propKey, newVal)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 操作代理对象的name</span></span><br><span class="line">p_obj.<span class="property">name</span> = <span class="string">&#x27;ls&#x27;</span></span><br><span class="line"><span class="keyword">const</span> age = p_obj.<span class="property">age</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看目标对象的 name 属性</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;obj.name: &#x27;</span>, obj.<span class="property">name</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ！！！新增属性！！！</span></span><br><span class="line">obj.<span class="property">isMale</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (p_obj.<span class="property">isMale</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;是男性&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行结果</span></span><br><span class="line"><span class="comment">// 更新： name ls</span></span><br><span class="line"><span class="comment">// 读取： age</span></span><br><span class="line"><span class="comment">// obj.name:  ls</span></span><br><span class="line"><span class="comment">// 读取： isMale</span></span><br><span class="line"><span class="comment">// 是男性</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，新增的 <code>isMale</code> 属性也是具有响应式的。</p>
+<h3 id="Reflect">Reflect</h3>
+<p>通过上面的代码可以看到，我们不是直接操作 <code>target</code> 对象的，而是通过 <code>Reflect</code> API 去操作。</p>
+<p>ES6 新推出的 <code>Proxy</code> API 的同时，同时也推出了 <code>Reflect</code>，基本上 <code>Proxy</code> 有的代理行为，<code>Reflect</code> 都有对应的静态方法。</p>
+<p>至于为什么要使用 <code>Relect</code> ，有三点。</p>
+<ol>
+<li>正确的 <code>this</code> 绑定</li>
+<li>与 Proxy 方法的对称性</li>
+<li>操作失败时的合理返回值</li>
+</ol>
+<h2 id="五、实现-ref-reactive">五、实现 ref/reactive</h2>
+<h3 id="4-1-effect-和依赖收集">4.1 effect 和依赖收集</h3>
+<p>响应式的本质是“依赖追踪 + 变更通知”。当我们访问一个响应式数据时，Vue 会记录这个“依赖”，当数据发生变化时，会通知相关依赖重新执行。这就引出了一个关键函数---- <code>effect</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> activeEffect = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">effect</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  activeEffect = fn</span><br><span class="line">  <span class="title function_">fn</span>() <span class="comment">// 立即执行一次，触发依赖收集</span></span><br><span class="line">  activeEffect = <span class="literal">null</span> <span class="comment">// 执行完成后重置</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们调用 <code>effect(fn)</code> 时，Vue 就记录下了正在执行的副作用函数，并在之后数据变动时重新执行它。</p>
+<h3 id="4-2-实现-reactive">4.2 实现 reactive</h3>
+<p>使用 Proxy 来包裹对象，拦截它的 <code>get</code>和 <code>set</code> 操作。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">target</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, &#123;</span><br><span class="line">    <span class="comment">// 拦截属性读取</span></span><br><span class="line">    <span class="title function_">get</span>(<span class="params">target, key, receiver</span>) &#123;</span><br><span class="line">      <span class="comment">// 反射获取原始值</span></span><br><span class="line">      <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver)</span><br><span class="line">      <span class="title function_">track</span>(target, key) <span class="comment">// 收集依赖</span></span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拦截属性设置</span></span><br><span class="line">    <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">      <span class="comment">// 反射设置值</span></span><br><span class="line">      <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver)</span><br><span class="line">      <span class="title function_">trigger</span>(target, key) <span class="comment">// 触发更新</span></span><br><span class="line">      <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问数据时通过 <code>track</code> 函数收集依赖，当更新数据时通过 <code>trigger</code> 去一个个通知。</p>
+<h3 id="实现-ref">实现 ref</h3>
+<p><code>reactive</code> 只能处理对象，而 <code>ref</code> 用于处理基本类型（如 <code>number</code>、<code>string</code>）。它将基本类型包装为一个带 <code>.value</code> 的对象。</p>
+<p>同样的，<code>ref</code>  也是跟 <code>reactive</code> 一样的思路：收集依赖、触发依赖。</p>
+<p>和 <code>reactive</code> 不一样的是，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ref</span>(<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// ref 标识</span></span><br><span class="line">    <span class="attr">__is_ref</span>: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// value 的 getter</span></span><br><span class="line">    <span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">      <span class="comment">// 收集依赖</span></span><br><span class="line">      <span class="title function_">track</span>(<span class="variable language_">this</span>, <span class="string">&#x27;value&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span> value</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// value 的 setter</span></span><br><span class="line">    <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">      <span class="comment">// 只有值变化时才触发更新</span></span><br><span class="line">      <span class="keyword">if</span> (value !== newVal) &#123;</span><br><span class="line">        value = newVal</span><br><span class="line">        <span class="comment">// 触发更新</span></span><br><span class="line">        <span class="title function_">trigger</span>(<span class="variable language_">this</span>, <span class="string">&#x27;value&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何收集依赖、触发更新，track-trigger">如何收集依赖、触发更新，track/trigger</h3>
+<p>为了追踪依赖并在变化时通知更新，我们使用 <code>WeakMap → Map → Set</code> 的结构：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 全局依赖存储</span></span><br><span class="line"><span class="comment"> * 结构: WeakMap&lt;target, Map&lt;key, Set&lt;effect&gt;&gt;&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// 第一级：目标对象 → 依赖映射</span></span><br><span class="line"><span class="comment">// 第二级：属性键 → 依赖集合</span></span><br><span class="line"><span class="comment">// 第三级：Set 存储 effect</span></span><br><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">track</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">  <span class="comment">// 没有活跃的 effect 则直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (!activeEffect) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 target 对应的依赖映射</span></span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line">    targetMap.<span class="title function_">set</span>(target, depsMap)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 key 对应的依赖集合</span></span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    dep = <span class="keyword">new</span> <span class="title class_">Set</span>()</span><br><span class="line">    depsMap.<span class="title function_">set</span>(key, dep)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前 effect 添加到依赖集合</span></span><br><span class="line">  dep.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">trigger</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取 target 对应的所有依赖</span></span><br><span class="line">  <span class="keyword">const</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 key 对应的所有 effect</span></span><br><span class="line">  <span class="keyword">const</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (dep) &#123;</span><br><span class="line">    <span class="comment">// 执行所有关联的 effect</span></span><br><span class="line">    dep.<span class="title function_">forEach</span>(<span class="function"><span class="params">effect</span> =&gt;</span> <span class="title function_">effect</span>())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种依赖收集的结构是响应式系统的核心，它允许我们精确地追踪某个 key 被哪些 effect 使用了。</p>
+<h2 id="六、总结">六、总结</h2>
+<p>Vue3 响应式工作流</p>
+<pre class="mermaid">sequenceDiagram
+    participant Component as 组件
+    participant Proxy as Proxy拦截器
+    participant Deps as 依赖系统
+    
+    Component->>Proxy: 读取数据 (get)
+    activate Proxy
+    Note right of Proxy: 触发get拦截
+    Proxy->>Deps: track(target, key)
+    Note left of Deps: 存储activeEffect<br>到WeakMap→Map→Set
+    deactivate Proxy
+    
+    Component->>Proxy: 修改数据 (set)
+    activate Proxy
+    Note right of Proxy: 触发set拦截
+    Proxy->>Deps: trigger(target, key)
+    Deps->>Component: 通知关联effect执行
+    deactivate Proxy</pre>
+<h2 id="完整代码">完整代码</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 全局依赖存储</span></span><br><span class="line"><span class="comment"> * 结构: WeakMap&lt;target, Map&lt;key, Set&lt;effect&gt;&gt;&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// 第一级：目标对象 → 依赖映射</span></span><br><span class="line"><span class="comment">// 第二级：属性键 → 依赖集合</span></span><br><span class="line"><span class="comment">// 第三级：Set 存储 effect</span></span><br><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当前正在执行的 effect 函数</span></span><br><span class="line"><span class="keyword">let</span> activeEffect = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 注册副作用函数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Function</span>&#125; <span class="variable">fn</span> - 需要响应式执行的函数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">effect</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  <span class="comment">// 设置当前活跃的 effect</span></span><br><span class="line">  activeEffect = fn</span><br><span class="line">  <span class="comment">// 立即执行一次，触发依赖收集</span></span><br><span class="line">  <span class="title function_">fn</span>()</span><br><span class="line">  <span class="comment">// 执行完成后重置</span></span><br><span class="line">  activeEffect = <span class="literal">null</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 收集依赖</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Object</span>&#125; <span class="variable">target</span> - 目标对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">string|symbol</span>&#125; <span class="variable">key</span> - 属性键</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">track</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">  <span class="comment">// 没有活跃的 effect 则直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (!activeEffect) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 target 对应的依赖映射</span></span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line">    targetMap.<span class="title function_">set</span>(target, depsMap)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 key 对应的依赖集合</span></span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    dep = <span class="keyword">new</span> <span class="title class_">Set</span>()</span><br><span class="line">    depsMap.<span class="title function_">set</span>(key, dep)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前 effect 添加到依赖集合</span></span><br><span class="line">  dep.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 触发更新</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Object</span>&#125; <span class="variable">target</span> - 目标对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">string|symbol</span>&#125; <span class="variable">key</span> - 属性键</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">trigger</span>(<span class="params">target, key</span>) &#123;</span><br><span class="line">  <span class="comment">// 获取 target 对应的所有依赖</span></span><br><span class="line">  <span class="keyword">const</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 key 对应的所有 effect</span></span><br><span class="line">  <span class="keyword">const</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (dep) &#123;</span><br><span class="line">    <span class="comment">// 执行所有关联的 effect</span></span><br><span class="line">    dep.<span class="title function_">forEach</span>(<span class="function"><span class="params">effect</span> =&gt;</span> <span class="title function_">effect</span>())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建响应式对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Object</span>&#125; <span class="variable">target</span> - 目标对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Proxy</span>&#125; 响应式代理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">target</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, &#123;</span><br><span class="line">    <span class="comment">// 拦截属性读取</span></span><br><span class="line">    <span class="title function_">get</span>(<span class="params">target, key, receiver</span>) &#123;</span><br><span class="line">      <span class="comment">// 反射获取原始值</span></span><br><span class="line">      <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver)</span><br><span class="line">      <span class="comment">// 收集依赖</span></span><br><span class="line">      <span class="title function_">track</span>(target, key)</span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拦截属性设置</span></span><br><span class="line">    <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">      <span class="comment">// 反射设置值</span></span><br><span class="line">      <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver)</span><br><span class="line">      <span class="comment">// 触发更新</span></span><br><span class="line">      <span class="title function_">trigger</span>(target, key)</span><br><span class="line">      <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建响应式引用</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">*</span>&#125; <span class="variable">value</span> - 初始值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Object</span>&#125; 响应式引用对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">ref</span>(<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// ref 标识</span></span><br><span class="line">    <span class="attr">__is_ref</span>: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// value 的 getter</span></span><br><span class="line">    <span class="keyword">get</span> <span class="title function_">value</span>() &#123;</span><br><span class="line">      <span class="comment">// 收集依赖</span></span><br><span class="line">      <span class="title function_">track</span>(<span class="variable language_">this</span>, <span class="string">&#x27;value&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span> value</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// value 的 setter</span></span><br><span class="line">    <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params">newVal</span>) &#123;</span><br><span class="line">      <span class="comment">// 只有值变化时才触发更新</span></span><br><span class="line">      <span class="keyword">if</span> (value !== newVal) &#123;</span><br><span class="line">        value = newVal</span><br><span class="line">        <span class="comment">// 触发更新</span></span><br><span class="line">        <span class="title function_">trigger</span>(<span class="variable language_">this</span>, <span class="string">&#x27;value&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// ===================== 测试案例 =====================</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试1: reactive 基本功能</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;===== reactive测试 =====&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> person = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">25</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`个人信息: <span class="subst">$&#123;person.name&#125;</span>, <span class="subst">$&#123;person.age&#125;</span>岁`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">person.<span class="property">name</span> = <span class="string">&#x27;李四&#x27;</span>  <span class="comment">// 触发 effect</span></span><br><span class="line">person.<span class="property">age</span> = <span class="number">30</span>      <span class="comment">// 触发 effect</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试2: ref 基本功能</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;\n===== ref测试 =====&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`当前计数: <span class="subst">$&#123;count.value&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">count.<span class="property">value</span>++  <span class="comment">// 触发 effect</span></span><br><span class="line">count.<span class="property">value</span>++  <span class="comment">// 再次触发</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试3: ref 与 reactive 结合</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;\n===== 结合测试 =====&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">score</span>: <span class="title function_">ref</span>(<span class="number">80</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`学生信息: ID=<span class="subst">$&#123;state.id&#125;</span>, 分数=<span class="subst">$&#123;state.score.value&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">state.<span class="property">id</span> = <span class="number">2</span>          <span class="comment">// 触发 effect</span></span><br><span class="line">state.<span class="property">score</span>.<span class="property">value</span> = <span class="number">90</span> <span class="comment">// 触发 effect</span></span><br></pre></td></tr></table></figure>
+<p>测试输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">===== reactive测试 =====</span><br><span class="line">个人信息: 张三, 25岁</span><br><span class="line">个人信息: 李四, 25岁</span><br><span class="line">个人信息: 李四, 30岁</span><br><span class="line"></span><br><span class="line">===== ref测试 =====</span><br><span class="line">当前计数: 0</span><br><span class="line">当前计数: 1</span><br><span class="line">当前计数: 2</span><br><span class="line"></span><br><span class="line">===== 结合测试 =====</span><br><span class="line">学生信息: ID=1, 分数=80</span><br><span class="line">学生信息: ID=2, 分数=80</span><br><span class="line">学生信息: ID=2, 分数=90</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy - JavaScript | MDN</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://vue3js.cn/interview/vue3/proxy.html">面试官：Vue3.0里为什么要用 Proxy API 替代 defineProperty API ？ | web前端面试 - 面试官系列</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7134281691295645732">手写简单vue3响应式原理在之前的文章里小浪介绍过Vue2的响应式原理，评论中有掘友评论想让我介绍Vue3的响应式原理， - 掘金</a></p>
+</li>
+<li>
+<p>chatGPT / deepseek</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html" title="深入 Vue3 响应式原理：从 Proxy 到手写 ref&#x2F;reactive">https://blog.xchive.top/2025/deep-dive-into-vue3-reactivity-from-proxy-to-hand-rolling.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+              <a href="/tags/ref/" rel="tag"># ref</a>
+              <a href="/tags/reactive/" rel="tag"># reactive</a>
+              <a href="/tags/Proxy/" rel="tag"># Proxy</a>
+              <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag"># 响应式</a>
+              <a href="/tags/%E6%89%8B%E5%86%99/" rel="tag"># 手写</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/building-vue-number-input.html" rel="prev" title="构建一个支持精度、范围和负数的 Vue 数字输入框">
+                  <i class="fa fa-angle-left"></i> 构建一个支持精度、范围和负数的 Vue 数字输入框
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">41k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:28</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.3.0/mermaid.min.js","integrity":"sha256-9y71g5Lz/KLsHjB8uXwnkuWDtAMDSzD/HdIbqhJfTAI="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
