@@ -34,52 +34,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CSS学习笔记｜MDN-如何构建CSS</title>
-    <url>/2022/MDNHowToBuildCSS.html</url>
-    <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
-<span id="more"></span>
-<h2 id="如何使用CSS">如何使用CSS</h2>
-<h3 id="外部样式表">外部样式表</h3>
-<p>即把CSS样式写在外部文件，通过 head 标签中的 <code>&lt;link&gt; </code>  引入。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    xxx</span><br><span class="line">		<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;styles.css&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>href</code> 属性置顶要引入的CSS文件路径，可以是网络文件也可以是本地文件。</p>
-<h3 id="内部样式表">内部样式表</h3>
-<p>把CSS样式写在HTML文件的 <code>&lt;head&gt;</code> 标签里的 <code>&lt;style&gt;</code>	标签之中。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    xxx</span><br><span class="line">		<span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">      xxx</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="内联样式">内联样式</h3>
-<p>写在HTML元素的style属性之中。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;color:red;&quot;</span>&gt;</span>This is my first CSS example<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>不推荐使用。</p>
-<h2 id="选择器">选择器</h2>
-<p>使用不用的选择器选择HTML元素并美化它。</p>
-<h2 id="函数">函数</h2>
-<p>看起来CSS像是标记一样，只需要填写对应的值，但它其实也有函数。如：</p>
-<h3 id="calc">calc()</h3>
-<p>进行简单计算，如： <code>calc(100 / 6)</code></p>
-<h2 id="规则">@规则</h2>
-<p>一些特殊的规则。</p>
-<p>如 <code>@import</code> ，用于导入样式表。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&#x27;styles2.css&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>或是 <code>@import</code> ，媒体查询。</p>
-<h2 id="速记属性">速记属性</h2>
-<p>将多个属性值合并写在一个。如：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">padding</span>: <span class="number">10px</span> <span class="number">15px</span> <span class="number">15px</span> <span class="number">5px</span>;</span><br></pre></td></tr></table></figure>
-<p>等价于</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">padding-top</span>: <span class="number">10px</span>;</span><br><span class="line"><span class="attribute">padding-right</span>: <span class="number">15px</span>;</span><br><span class="line"><span class="attribute">padding-bottom</span>: <span class="number">15px</span>;</span><br><span class="line"><span class="attribute">padding-left</span>: <span class="number">5px</span>;</span><br></pre></td></tr></table></figure>
-<p>类似的还有font、background、border、margin等。</p>
-<h2 id="注释">注释</h2>
-<p>使用 <code>/*  */</code> ，不能用 <code>//</code> 。</p>
-<p>参考自</p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/First_steps/How_CSS_is_structured">MDN-如何构建CSS</a></p>
-]]></content>
-      <categories>
-        <category>CSS</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CSS学习笔记｜MDN-CSS选择器</title>
     <url>/2022/MDN_CSS_Selectors.html</url>
     <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
@@ -301,6 +255,52 @@
       </tags>
   </entry>
   <entry>
+    <title>CSS学习笔记｜MDN-如何构建CSS</title>
+    <url>/2022/MDNHowToBuildCSS.html</url>
+    <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
+<span id="more"></span>
+<h2 id="如何使用CSS">如何使用CSS</h2>
+<h3 id="外部样式表">外部样式表</h3>
+<p>即把CSS样式写在外部文件，通过 head 标签中的 <code>&lt;link&gt; </code>  引入。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    xxx</span><br><span class="line">		<span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;styles.css&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>href</code> 属性置顶要引入的CSS文件路径，可以是网络文件也可以是本地文件。</p>
+<h3 id="内部样式表">内部样式表</h3>
+<p>把CSS样式写在HTML文件的 <code>&lt;head&gt;</code> 标签里的 <code>&lt;style&gt;</code>	标签之中。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    xxx</span><br><span class="line">		<span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">      xxx</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="内联样式">内联样式</h3>
+<p>写在HTML元素的style属性之中。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;color:red;&quot;</span>&gt;</span>This is my first CSS example<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>不推荐使用。</p>
+<h2 id="选择器">选择器</h2>
+<p>使用不用的选择器选择HTML元素并美化它。</p>
+<h2 id="函数">函数</h2>
+<p>看起来CSS像是标记一样，只需要填写对应的值，但它其实也有函数。如：</p>
+<h3 id="calc">calc()</h3>
+<p>进行简单计算，如： <code>calc(100 / 6)</code></p>
+<h2 id="规则">@规则</h2>
+<p>一些特殊的规则。</p>
+<p>如 <code>@import</code> ，用于导入样式表。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&#x27;styles2.css&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>或是 <code>@import</code> ，媒体查询。</p>
+<h2 id="速记属性">速记属性</h2>
+<p>将多个属性值合并写在一个。如：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">padding</span>: <span class="number">10px</span> <span class="number">15px</span> <span class="number">15px</span> <span class="number">5px</span>;</span><br></pre></td></tr></table></figure>
+<p>等价于</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">padding-top</span>: <span class="number">10px</span>;</span><br><span class="line"><span class="attribute">padding-right</span>: <span class="number">15px</span>;</span><br><span class="line"><span class="attribute">padding-bottom</span>: <span class="number">15px</span>;</span><br><span class="line"><span class="attribute">padding-left</span>: <span class="number">5px</span>;</span><br></pre></td></tr></table></figure>
+<p>类似的还有font、background、border、margin等。</p>
+<h2 id="注释">注释</h2>
+<p>使用 <code>/*  */</code> ，不能用 <code>//</code> 。</p>
+<p>参考自</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/First_steps/How_CSS_is_structured">MDN-如何构建CSS</a></p>
+]]></content>
+      <categories>
+        <category>CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CSS学习笔记｜MDN-层叠与继承</title>
     <url>/2022/MDN_Cascade_and_inheritance.html</url>
     <content><![CDATA[<p>记录在MDN学习CSS中的一些个人笔记。</p>
@@ -429,105 +429,6 @@
       </categories>
       <tags>
         <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
-    <url>/2020/QTTabBarInstallationAndUse.html</url>
-    <content><![CDATA[<p>更高效的使用资源管理器</p>
-<span id="more"></span>
-<h1>1. 介绍</h1>
-<h2 id="功能">功能</h2>
-<p>窗口合并</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
-<p>照片视频文本预览，且支持选择哪种格式预览</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
-<p>很多…按需</p>
-<p>缺点</p>
-<ol>
-<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
-<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
-</ol>
-<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
-<h2 id="Why">Why?</h2>
-<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
-<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
-<h2 id="What？">What？</h2>
-<ol>
-<li>QTTabBar就是一个文件浏览增强工具</li>
-<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
-</ol>
-<h1>2. 安装</h1>
-<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
-官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
-<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
-<h1>3. 使用与配置</h1>
-<h2 id="3-1-开始使用">3.1 开始使用</h2>
-<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
-<blockquote>
-<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
-<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
-</blockquote>
-<p>重启资源管理器<br>
-<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
-<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
-<h2 id="3-2-汉化">3.2 汉化</h2>
-<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
-<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
-<blockquote>
-<p>若失效：任务管理器重启资源管理器</p>
-<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
-</blockquote>
-<h2 id="3-3-预览">3.3 预览</h2>
-<h3 id="开启">开启</h3>
-<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
-<h3 id="使用">使用</h3>
-<p>默认为鼠标悬停即可预览</p>
-<h3 id="配置">配置</h3>
-<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
-<h3 id="问题">问题</h3>
-<blockquote>
-<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
-</blockquote>
-<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
-<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
-<h2 id="群组">群组</h2>
-<p>加入群组，类似于浏览器的书签，快速访问</p>
-<h2 id="快捷键">快捷键</h2>
-<blockquote>
-<p>鼠标滚轮快速切换标签</p>
-<p>Ctrl + Tab 下一个标签页<br>
-Ctrl + Shift + Tab上一个标签页<br>
-Ctrl + Num0 – Num9 打开几号标签页<br>
-Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
-<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
-Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
-Ctrl + O open dialog for folder<br>
-Ctrl + L 锁定/解除标签页<br>
-Ctrl + N 关闭当然标签页<br>
-Alt + F4 直接把窗口关了，多数软件都使用</p>
-</blockquote>
-<h1>4. 卸载</h1>
-<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
-<h2 id="参考">参考</h2>
-<ol>
-<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
-<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
-</ol>
-]]></content>
-      <categories>
-        <category>软件&amp;工具&amp;技巧</category>
-      </categories>
-      <tags>
-        <tag>windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1044,6 +945,143 @@ Alt + F4 直接把窗口关了，多数软件都使用</p>
       </tags>
   </entry>
   <entry>
+    <title>iOS开发p12证书、描述文件、推送证书的差异</title>
+    <url>/2025/ios-p12-provisioning-profiles-push-certificates-differences.html</url>
+    <content><![CDATA[<p>记录，方便回顾。</p>
+<span id="more"></span>
+<p>背景：上个月将公司两个 App 的证书全部更新了一遍，每次都要重新查阅资料，特此整理记录，方便日后回顾。</p>
+<p>首先，<strong>开发证书和生产证书</strong>，通常以 <code>.p12</code> 文件格式分发。它封装了用于代码签名的密钥对，代表某个开发者账号下的开发身份。</p>
+<p><strong>描述文件</strong>（Provisioning Profile）则是与 App ID 相关联的配置文件中，同样分为开发和生产两种类型，在打包时需要使用对应的描述文件。此外，描述文件中还包含了授权测试设备的列表（UDID）。如果新增了测试设备，那么测试用的描述文件也需要重新生成。</p>
+<p><strong>推送证书</strong>同样区分开发和生产环境。它用于配置推送服务器。</p>
+<p>到期了怎么办？</p>
+<ul>
+<li>p12 证书 → 重新创建<strong>证书</strong>和<strong>描述文件</strong></li>
+<li>推送证书 → 重新创建。</li>
+<li>描述文件 → 重新创建。</li>
+</ul>
+<p>具体操作流程可参考相关文档，此处不再赘述。</p>
+<p>补充一点：制作证书时需要用到证书签名请求文件（CSR），该文件需在 Mac 的钥匙串访问（Keychain Access）工具中生成。</p>
+<p>❓为什么 p12 证书还需要重新创建描述文件？</p>
+<p>因为描述文件包含有证书，证书过期 → 描述文件必然失效 → 必须用新证书重新生成描述文件。</p>
+<p>参考：</p>
+<ol>
+<li><a href="https://blog.csdn.net/yehaocheng520/article/details/133162638">uniapp——ios证书申请——详细步骤+遇到的坑——技能提升_uniapp ios证书-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/qzmlyshao/article/details/135709252">uniapp的IOS证书(.p12)和描述文件(.mobileprovision)申请 2024年最新教程</a></li>
+<li><a href="https://www.yunedit.com/xueyuan/jx/howinstallipa">uniapp打包的ios应用的安装测试方法_香蕉云编</a></li>
+<li><a href="https://blog.csdn.net/weixin_42260789/article/details/139260951">iOS推送证书过期处理</a></li>
+<li><a href="https://juejin.cn/post/7247035267000139837">Apple Push Service过期更新记录收到苹果方面的推送证书过期的提醒，又打破了我平静的一天。 由于这个APP - 掘金</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>iOS</category>
+      </categories>
+      <tags>
+        <tag>iOS</tag>
+        <tag>证书</tag>
+        <tag>推送证书</tag>
+        <tag>描述文件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QTTabBar安装与使用: 更胜浏览器的Windows平台浏览文件方式</title>
+    <url>/2020/QTTabBarInstallationAndUse.html</url>
+    <content><![CDATA[<p>更高效的使用资源管理器</p>
+<span id="more"></span>
+<h1>1. 介绍</h1>
+<h2 id="功能">功能</h2>
+<p>窗口合并</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/windowsunite.png" alt="windowsunite.png"></p>
+<p>照片视频文本预览，且支持选择哪种格式预览</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/yulan.gif" alt=""></p>
+<p>很多…按需</p>
+<p>缺点</p>
+<ol>
+<li>在资源管理器下，鼠标侧键失效，补偿：“Alt+左/右”可以实现前进后退</li>
+<li>如果接受不了，那么这款软件并不适合你，或者你可以寻找更优解决方案</li>
+</ol>
+<h2 id="后面是废话，可以直接跳到安装部分">后面是废话，可以直接跳到安装部分</h2>
+<h2 id="Why">Why?</h2>
+<p>可能你像我一样，爱折腾，患有强迫症，一定要对文件分类，那么当你整理一些资料，或者说按照网上的教程，到xxx目录改xxx，接下来还要到xxx目录改xxx…相信你会疯狂双击鼠标左键。而且画面会逐渐混乱…</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winbedlam.png" alt=""></p>
+<p>学生党，有时候处理很多学校文档、编程源码文件、学习资料。可能你会快捷键，疯狂“Alt+Tab”，但是你可能会遇到切错文件夹或者直接切到别的软件去了，要想精准找到你想切换的文件夹，也许还需要那么1秒。而QTTabBar就可以解决这些问题。</p>
+<h2 id="What？">What？</h2>
+<ol>
+<li>QTTabBar就是一个文件浏览增强工具</li>
+<li>有种“插件的感觉”，实际上就是个插件，还是个“IE浏览器插件”，为什么？因为资源管理器就是一种特殊的浏览器，只不过浏览的是你电脑磁盘里的文件，其实浏览器一样可以浏览，试试在浏览器地址栏中输入“file:///文件路径”，比如“file:///E:/phpstudy_pro/”，一样可以浏览文件与文件夹。举个例子，你的老师或者是你，是否用过FTP，而FTP在浏览器和资源管理器都可以访问。  （反正我用过，我高中老师也用</li>
+</ol>
+<h1>2. 安装</h1>
+<p>注意：先安装1038版本，再安装1040版本，1040其实是个差异更新。官网链接：<a href="http://qttabbar.wikidot.com/">http://qttabbar.wikidot.com/</a><br>
+官网下载很慢，<a href="https://sn9.us/file/17786953-403832842">点这快速下载</a>   #链接来源网络#</p>
+<p>安装之后看不到，实际已经安装好，按下“win”键，就能看到（出现下图就是安装成功</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/winsee.png" alt=""></p>
+<h1>3. 使用与配置</h1>
+<h2 id="3-1-开始使用">3.1 开始使用</h2>
+<p>打开资源管理器-&gt;查看-&gt;选项-&gt;勾上QTTabBar</p>
+<blockquote>
+<p>若勾选无反应或者无QTTabBar勾选，请到任务管理器重启资源管理器重试</p>
+<p>再不行就到IE浏览器-&gt;Internet选项-&gt;程序-&gt;管理加载项-&gt;找到QTTabBar右键启动</p>
+</blockquote>
+<p>重启资源管理器<br>
+<img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//test1/RestartExplorer.gif" alt=""></p>
+<p>再不行，重启自行解决，友情链接<a href="http://www.google.com/">google</a></p>
+<h2 id="3-2-汉化">3.2 汉化</h2>
+<p>方法一：下载汉化文件，直接使用，个人亲测无效，不代表整体</p>
+<p>方法二：空白处右键-&gt;选择QTTabBar Options-&gt;左侧General-&gt;Download language file-&gt;找到简体中文(推荐吃爆米花的小熊)-&gt;双击选择合适的位置保存-&gt;回到设置-&gt;点击刚刚下载按钮上方的三点-&gt;选择刚刚保存的汉化包-&gt;右下角Apply-&gt;关闭所有资源管理器</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguage.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/changelanguagetwo.png" alt=""></p>
+<blockquote>
+<p>若失效：任务管理器重启资源管理器</p>
+<p>如果没有&quot;Download language file&quot;，请卸载重装，卸载在文末</p>
+</blockquote>
+<h2 id="3-3-预览">3.3 预览</h2>
+<h3 id="开启">开启</h3>
+<p>设置-&gt;预览提示-&gt;常规-&gt;显示预览提示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/preview.png" alt=""></p>
+<h3 id="使用">使用</h3>
+<p>默认为鼠标悬停即可预览</p>
+<h3 id="配置">配置</h3>
+<p>默认预览文件类型有图片视频音频文本（视频和音频是有声音的），可以在设置中取消或者添加全尺寸预览（看上图</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/noopenbig.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/openbig.png" alt=""></p>
+<h3 id="问题">问题</h3>
+<blockquote>
+<p>视频预览反转：1. 请重装软件   2.我有些视频也这样，可能是视频问题？预览速度过快：无解…QAQ</p>
+</blockquote>
+<h2 id="标签卡关闭按钮">标签卡关闭按钮</h2>
+<p>标签设置-&gt;关闭按钮，图标，锁定-&gt;在标签上显示关闭按钮</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC//2020/04/14QTTabBar/x.png" alt=""></p>
+<h2 id="群组">群组</h2>
+<p>加入群组，类似于浏览器的书签，快速访问</p>
+<h2 id="快捷键">快捷键</h2>
+<blockquote>
+<p>鼠标滚轮快速切换标签</p>
+<p>Ctrl + Tab 下一个标签页<br>
+Ctrl + Shift + Tab上一个标签页<br>
+Ctrl + Num0 – Num9 打开几号标签页<br>
+Ctrl + W 关闭当前标签页（  tips以上对于chrome浏览器同样使用</p>
+<p>Ctrl + Shift + W 关闭除当然标签页以外的标签页<br>
+Ctrl + Shift + Z 恢复打开刚才关闭的标签页<br>
+Ctrl + O open dialog for folder<br>
+Ctrl + L 锁定/解除标签页<br>
+Ctrl + N 关闭当然标签页<br>
+Alt + F4 直接把窗口关了，多数软件都使用</p>
+</blockquote>
+<h1>4. 卸载</h1>
+<p>要在1038版本安装包卸载，点击uninstall即可，控制面板无法卸载</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://sspai.com/post/52521">QTTabBar 「资源管理器」该有的样子</a></li>
+<li><a href="https://blog.csdn.net/Edogawa_Konan/article/details/83904742">抛弃clover，爱上QTTabBar</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>软件&amp;工具&amp;技巧</category>
+      </categories>
+      <tags>
+        <tag>windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Ubuntu18.04使用静态ip</title>
     <url>/2021/ubuntu1804StaticIp.html</url>
     <content><![CDATA[<p>如何修改ubuntu的ip并使用静态ip？（半科普</p>
@@ -1201,77 +1239,6 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
       </tags>
   </entry>
   <entry>
-    <title>algs4｜macOS《算法》idea环境配置及重定位</title>
-    <url>/2021/MacIdeaAlgs4Test.html</url>
-    <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
-<span id="more"></span>
-<h1>一、引</h1>
-<p>最近看在《算法》第四版，想测试一下书上的代码，但是书上的代码使用了自己的库，比如输入输出类，又并且想尝试一下10W个测试数据，折腾了一下。结果发现网上的教程要么无法复现要么系统不对要么软件不对。</p>
-<p>系统：macOS 10.15.6 (19G73)  idea jdk8</p>
-<p>代码和数据在官网可以下载</p>
-<h1>二、使用</h1>
-<h2 id="1-创建项目">1.创建项目</h2>
-<p>正常创建</p>
-<h2 id="2-导入数据">2.导入数据</h2>
-<p>将<code>algs4-data.zip</code>解压放在src目录下(方便重定位指令，但是不美观，可以放在文件夹，指令自行改动)</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Data.png" alt="algs4Data"></p>
-<h2 id="3、导入algs4-jar">3、导入algs4.jar</h2>
-<p>先将<code>algs4.jar</code>放入Java目录的EXtensions文件夹下：<code> /Library/Java/Extensions/</code>（位置不对无法编译）</p>
-<p>idea中导入algs4.jar</p>
-<p>文件–&gt;项目结构（ 快捷键com+; ）</p>
-<p>模块 --&gt; 依赖 --&gt; (添加) --&gt; 选择<code> /Library/Java/Extensions/</code>下的<code>algs4.jar</code></p>
-<p>（我测试的时候只要Java目录中有algs4.jar，不管添加存放在哪里的algs4.jar都可以，晕）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs401In.png" alt="algs401In"></p>
-<p>成功添加后，记得确定：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs402In.png" alt="algs402In"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs403In.png" alt="algs403In"></p>
-<p>成功导入后可以看到<code>algs4.jar</code><br>
-<em>注意：直接导入别的目录的也可以看到，但是编译会《找不到》</em></p>
-<p>打开可以复制的代码到src目录下使用，但是注意package路径，且要import这本书自己的库</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br></pre></td></tr></table></figure>
-<p>我的测试代码：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">hi</span> <span class="operator">=</span> a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123;</span><br><span class="line">            <span class="comment">// Key is in a[lo..hi] or not present.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>      (key &lt; a[mid]) hi = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (key &gt; a[mid]) lo = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rank</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span>[] a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexOf(a, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read the integers from a file</span></span><br><span class="line">        <span class="type">In</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">In</span>(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span>[] allowlist = in.readAllInts();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sort the array</span></span><br><span class="line">        Arrays.sort(allowlist);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read integer key from standard input; print if not in allowlist</span></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> StdIn.readInt();</span><br><span class="line">            <span class="keyword">if</span> (BinarySearch.indexOf(allowlist, key) == -<span class="number">1</span>)</span><br><span class="line">                StdOut.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="4-编译运行">4.编译运行</h2>
-<p>idea终端运行，因为要使用重定向</p>
-<p>cd到src目录 —&gt; 编译代码 —&gt; 运行代码</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac   BinarySearch.java  </span><br><span class="line">java   BinarySearch  largeW.txt &lt; largeT.txt  </span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Run.png" alt="algs4Run"></p>
-<p>只要一直在输出数据就是运行成功了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Y.png" alt="algs4Y"></p>
-<p>附录：</p>
-<p>参考：<a href="https://www.geek-share.com/detail/2733583097.html">如何在Intellij Idea下编译运行《算法》里的程序？</a></p>
-<p>官网：<a href="https://algs4.cs.princeton.edu/home/">算法第四版官网</a></p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>Mac</tag>
-        <tag>idea</tag>
-        <tag>algs4</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/cmdesuxcw000oqlyk8vyg8bi0.html</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-<h2 id="Quick-Start">Quick Start</h2>
-<h3 id="Create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>algs4｜Dijkstra的双栈算术表达式求值算法Java</title>
     <url>/2021/algs4DijkstraJava.html</url>
     <content><![CDATA[<p>使用Java自身的输入输出库实现Dijkstra的双栈算术表达式求值算法</p>
@@ -1328,6 +1295,77 @@ Ubuntu里面有管理网络连接的方案：方案1： <code>/etc/network/inter
         <tag>algs4</tag>
         <tag>Dijkstra</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>algs4｜macOS《算法》idea环境配置及重定位</title>
+    <url>/2021/MacIdeaAlgs4Test.html</url>
+    <content><![CDATA[<p>如何在macOS使用idea运行算法第四版中的代码？</p>
+<span id="more"></span>
+<h1>一、引</h1>
+<p>最近看在《算法》第四版，想测试一下书上的代码，但是书上的代码使用了自己的库，比如输入输出类，又并且想尝试一下10W个测试数据，折腾了一下。结果发现网上的教程要么无法复现要么系统不对要么软件不对。</p>
+<p>系统：macOS 10.15.6 (19G73)  idea jdk8</p>
+<p>代码和数据在官网可以下载</p>
+<h1>二、使用</h1>
+<h2 id="1-创建项目">1.创建项目</h2>
+<p>正常创建</p>
+<h2 id="2-导入数据">2.导入数据</h2>
+<p>将<code>algs4-data.zip</code>解压放在src目录下(方便重定位指令，但是不美观，可以放在文件夹，指令自行改动)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Data.png" alt="algs4Data"></p>
+<h2 id="3、导入algs4-jar">3、导入algs4.jar</h2>
+<p>先将<code>algs4.jar</code>放入Java目录的EXtensions文件夹下：<code> /Library/Java/Extensions/</code>（位置不对无法编译）</p>
+<p>idea中导入algs4.jar</p>
+<p>文件–&gt;项目结构（ 快捷键com+; ）</p>
+<p>模块 --&gt; 依赖 --&gt; (添加) --&gt; 选择<code> /Library/Java/Extensions/</code>下的<code>algs4.jar</code></p>
+<p>（我测试的时候只要Java目录中有algs4.jar，不管添加存放在哪里的algs4.jar都可以，晕）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs401In.png" alt="algs401In"></p>
+<p>成功添加后，记得确定：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs402In.png" alt="algs402In"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs403In.png" alt="algs403In"></p>
+<p>成功导入后可以看到<code>algs4.jar</code><br>
+<em>注意：直接导入别的目录的也可以看到，但是编译会《找不到》</em></p>
+<p>打开可以复制的代码到src目录下使用，但是注意package路径，且要import这本书自己的库</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br></pre></td></tr></table></figure>
+<p>我的测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> edu.princeton.cs.algs4.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearch</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span>[] a, <span class="type">int</span> key)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">lo</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">hi</span> <span class="operator">=</span> a.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (lo &lt;= hi) &#123;</span><br><span class="line">            <span class="comment">// Key is in a[lo..hi] or not present.</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> lo + (hi - lo) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>      (key &lt; a[mid]) hi = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (key &gt; a[mid]) lo = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">rank</span><span class="params">(<span class="type">int</span> key, <span class="type">int</span>[] a)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> indexOf(a, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read the integers from a file</span></span><br><span class="line">        <span class="type">In</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">In</span>(args[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">int</span>[] allowlist = in.readAllInts();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sort the array</span></span><br><span class="line">        Arrays.sort(allowlist);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read integer key from standard input; print if not in allowlist</span></span><br><span class="line">        <span class="keyword">while</span> (!StdIn.isEmpty()) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">key</span> <span class="operator">=</span> StdIn.readInt();</span><br><span class="line">            <span class="keyword">if</span> (BinarySearch.indexOf(allowlist, key) == -<span class="number">1</span>)</span><br><span class="line">                StdOut.println(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-编译运行">4.编译运行</h2>
+<p>idea终端运行，因为要使用重定向</p>
+<p>cd到src目录 —&gt; 编译代码 —&gt; 运行代码</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javac   BinarySearch.java  </span><br><span class="line">java   BinarySearch  largeW.txt &lt; largeT.txt  </span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Run.png" alt="algs4Run"></p>
+<p>只要一直在输出数据就是运行成功了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/WU-Kave/TC@master/2021/01/algs4Y.png" alt="algs4Y"></p>
+<p>附录：</p>
+<p>参考：<a href="https://www.geek-share.com/detail/2733583097.html">如何在Intellij Idea下编译运行《算法》里的程序？</a></p>
+<p>官网：<a href="https://algs4.cs.princeton.edu/home/">算法第四版官网</a></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>Mac</tag>
+        <tag>algs4</tag>
+        <tag>idea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/cmf5muqr6000u7hykfjayh5aj.html</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+<h2 id="Quick-Start">Quick Start</h2>
+<h3 id="Create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>vue源码|为什么子组件传参为undefined时会取默认值</title>
