@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/assets/favicon.png">
+  <link rel="mask-icon" href="/uploads/assets/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.xchive.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文用 JavaScript 梳理快速排序从非原地实现到原地分区的演进：先用最直观的递归拼接版本理解分治思想，再分别实现 Lomuto、Hoare &#x2F; Algs 4 双指针分区和三向切分，并对比它们在有序数据、重复元素和空间开销上的表现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法 | 快速排序的演进和3种分区实现（JavaScript）">
+<meta property="og:url" content="https://blog.xchive.top/2026/quicksort-evolution-and-three-partition-strategies-js.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="本文用 JavaScript 梳理快速排序从非原地实现到原地分区的演进：先用最直观的递归拼接版本理解分治思想，再分别实现 Lomuto、Hoare &#x2F; Algs 4 双指针分区和三向切分，并对比它们在有序数据、重复元素和空间开销上的表现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-28T07:30:57.000Z">
+<meta property="article:modified_time" content="2026-04-28T07:30:57.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="排序">
+<meta property="article:tag" content="快速排序">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.xchive.top/2026/quicksort-evolution-and-three-partition-strategies-js.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.xchive.top/2026/quicksort-evolution-and-three-partition-strategies-js.html","path":"2026/quicksort-evolution-and-three-partition-strategies-js.html","title":"算法 | 快速排序的演进和3种分区实现（JavaScript）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>算法 | 快速排序的演进和3种分区实现（JavaScript） | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9D%9E%E5%8E%9F%E5%9C%B0%E6%8E%92%E5%BA%8F%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">1 非原地排序法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8E%9F%E5%9C%B0%E6%8E%92%E5%BA%8F%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">2 原地排序法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Lomuto-%E5%88%86%E5%8C%BA%E6%B3%95%EF%BC%88%E5%8D%95%E5%90%91%E6%89%AB%E6%8F%8F%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Lomuto 分区法（单向扫描）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Hoare-Algs-4-%E5%88%86%E5%8C%BA%E6%B3%95%EF%BC%88%E5%8F%8C%E6%8C%87%E9%92%88%E6%B3%95%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Hoare &#x2F; Algs 4 分区法（双指针法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E4%B8%89%E5%90%91%E5%88%87%E5%88%86%EF%BC%883-Way-Partitioning-Dijkstra%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 三向切分（3-Way Partitioning &#x2F; Dijkstra）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E4%B8%89%E7%A7%8D%E5%88%86%E5%8C%BA%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 三种分区方法对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/assets/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.xchive.top/2026/quicksort-evolution-and-three-partition-strategies-js.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/assets/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="算法 | 快速排序的演进和3种分区实现（JavaScript） | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法 | 快速排序的演进和3种分区实现（JavaScript）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-28 15:30:57" itemprop="dateCreated datePublished" datetime="2026-04-28T15:30:57+08:00">2026-04-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文用 JavaScript 梳理快速排序从非原地实现到原地分区的演进：先用最直观的递归拼接版本理解分治思想，再分别实现 Lomuto、Hoare / Algs 4 双指针分区和三向切分，并对比它们在有序数据、重复元素和空间开销上的表现。</p>
+<span id="more"></span>
+<p>快速排序的精髓在于<strong>分而治之</strong>，主要分为三个步骤：</p>
+<ol>
+<li><strong>选基准 (Pivot)</strong>：从数组中选一个元素作为“基准”。</li>
+<li><strong>分区 (Partition)</strong>：重新排序数组，所有比基准小的元素摆放在左边，比基准大的摆在右边。这里就得到了左右两个子集。</li>
+<li><strong>递归</strong>：（这个时候左子集都是小于基准元素但是是乱序的，右子集也是。所以还要）对左、右两个子集重复上述步骤，进行递归快排，直到子集大小 <code>&lt;= 1</code>。</li>
+</ol>
+<p>Q：为什么是 <code>&lt;= 1</code> 而不是 <code>== 1</code>？</p>
+<p>递归时可能产生空数组/空区间，空数组和单元素数组都天然有序，所以终止条件要覆盖 <code>&lt;= 1</code>。</p>
+<p>根据分区时是否创建新数组，可以分为两类实现。</p>
+<h2 id="1-非原地排序法">1 非原地排序法</h2>
+<blockquote>
+<p>这个很简单，也可以直接看代码。</p>
+</blockquote>
+<p>这是最直观的写法，通过创建新数组来存储子集。非原地版本会频繁创建子数组，峰值额外空间通常高于原地版，累计分配量平均可达 <code>O(n log n)</code>。</p>
+<p>步骤：</p>
+<ol>
+<li>从原数组中<strong>取出</strong>基准元素。</li>
+<li>创建两个空数组 <code>leftArr</code> 和 <code>rightArr</code>，分别放置小于、大于基准元素的元素。</li>
+<li>遍历剩余元素，小于等于基准的放 <code>leftArr</code>，大于的放 <code>rightArr</code>。</li>
+<li>递归排序两个子数组，然后拼接，注意中间还要拼接上基准。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">quickSort</span>(<span class="params">arr</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (arr.<span class="property">length</span> &lt;= <span class="number">1</span>) <span class="keyword">return</span> arr</span><br><span class="line">    <span class="comment">// 选择基准元素</span></span><br><span class="line">    <span class="comment">// 这里选择数组的第一个，也有人选数组中间值</span></span><br><span class="line">    <span class="keyword">const</span> pivot = arr.<span class="title function_">splice</span>(<span class="number">0</span>, <span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">const</span> leftArr = []</span><br><span class="line">    <span class="keyword">const</span> rightArr = []</span><br><span class="line">    <span class="comment">// 循环，小于等于基准元素放到左边，大于放到右边</span></span><br><span class="line">    arr.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (item &lt;= pivot) &#123;</span><br><span class="line">            leftArr.<span class="title function_">push</span>(item)</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            rightArr.<span class="title function_">push</span>(item)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 这个时候拼接数组，小于基准值数组（leftArr） + 基准值 + 大于基准值数组（rightArr）</span></span><br><span class="line">    <span class="comment">// 并且两侧数组也要递归进行快排</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">quickSort</span>(leftArr).<span class="title function_">concat</span>([pivot], <span class="title function_">quickSort</span>(rightArr))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这份代码有几个问题。</p>
+<p><strong>问题 1：选第一个元素作为基准元素。</strong></p>
+<blockquote>
+<p>这个问题同样适用于下面的代码。</p>
+</blockquote>
+<p>已经有序或基本有序的数组，第一个元素往往是极值（最小或最大），每次分区都有一边为空，另一边包含几乎所有元素，递归深度接近 n，时间复杂度退化为 O(n²)。</p>
+<p>用 <code>[1, 2, 3, 4, 5, 6, 7, 8]</code> 举例子对比下。</p>
+<p>（a）选第一个元素作为基准（退化情况）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pivot=1, left=[], right=[2,3,4,5,6,7,8]</span><br><span class="line">         pivot=2, left=[], right=[3,4,5,6,7,8]</span><br><span class="line">                  pivot=3, left=[], right=[4,5,6,7,8]</span><br><span class="line">                           pivot=4, left=[], right=[5,6,7,8]</span><br><span class="line">                                    pivot=5, left=[], right=[6,7,8]</span><br><span class="line">                                             pivot=6, left=[], right=[7,8]</span><br><span class="line">                                                      pivot=7, left=[], right=[8]</span><br><span class="line">                                                               pivot=8</span><br></pre></td></tr></table></figure>
+<p>递归深度：8 层，每次只分出一个元素，O(n²)。</p>
+<p>（b）选中间元素作为基准（理想情况）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pivot=4, left=[1,2,3], right=[5,6,7,8]</span><br><span class="line">         pivot=2, left=[1], right=[3]     pivot=6, left=[5], right=[7,8]</span><br><span class="line">                  pivot=1     pivot=3              pivot=5     pivot=7</span><br><span class="line">                                                                   right=[8]</span><br><span class="line">                                                                       pivot=8</span><br></pre></td></tr></table></figure>
+<p>递归深度：4 层，每次都大致对半分，<code>O(n log n)</code>。</p>
+<p><strong>问题 2：等于基准的元素被迫参与递归</strong></p>
+<p>与基准元素相等的元素都放到左边去了，被迫继续参与后续递归。而它们实际上已经可以确定位置。更好的做法是把它们单独拎出来，不再参与排序。</p>
+<p>改进版</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 改进版</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">quickSort</span>(<span class="params">arr</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (arr.<span class="property">length</span> &lt;= <span class="number">1</span>) <span class="keyword">return</span> arr</span><br><span class="line">    <span class="comment">// 选数组中间的元素作为基准元素，也可以是第一个元素</span></span><br><span class="line">    <span class="keyword">const</span> pivotIndex = <span class="title class_">Math</span>.<span class="title function_">floor</span>(arr.<span class="property">length</span> / <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">const</span> pivot = arr[pivotIndex]</span><br><span class="line">    <span class="keyword">const</span> leftArr = []</span><br><span class="line">    <span class="keyword">const</span> equalArr = []</span><br><span class="line">    <span class="keyword">const</span> rightArr = []</span><br><span class="line">    <span class="comment">// 循环，小于基准元素放到左边，大于放到右边</span></span><br><span class="line">    arr.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (item &lt; pivot) &#123;</span><br><span class="line">            leftArr.<span class="title function_">push</span>(item)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (item &gt; pivot) &#123;</span><br><span class="line">            rightArr.<span class="title function_">push</span>(item)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            equalArr.<span class="title function_">push</span>(item)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">quickSort</span>(leftArr).<span class="title function_">concat</span>(equalArr, <span class="title function_">quickSort</span>(rightArr))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-原地排序法">2 原地排序法</h2>
+<p>上面的非原地排序法固然简单，但是它每次递归都创建左右子数组，数据量大时内存开销很大。</p>
+<p>那么原地快排的核心思路就是：不创建新数组，直接在原数组上通过交换来完成分区。</p>
+<p>整体流程和非原地版本一致：选基准 → 分区 → 递归左右子集。难点在于「分区」这一步——如何只通过交换，就把数组分成「左边 ≤ pivot、右边 ≥ pivot」两部分。</p>
+<p>分区的具体实现有 3 种，也代表了 3 种演进思路：</p>
+<ol>
+<li>Lomuto 分区法（单向扫描）</li>
+<li>Hoare / Algs 4 分区法（双指针法）
+<ol>
+<li>“基准归位”写法（Algs 4 / Sedgewick 版本）</li>
+<li>“单纯切分”写法（原始 Hoare 版本）</li>
+</ol>
+</li>
+<li>三向切分（3-Way Partitioning / Dijkstra）</li>
+</ol>
+<h3 id="2-1-Lomuto-分区法（单向扫描）">2.1 Lomuto 分区法（单向扫描）</h3>
+<p>原理：维护两个指针，<code>i</code> 是“小于区右边界的后一位”，<code>j</code> 从左向右扫描。<code>[left, i-1]</code> 都是小于 pivot 的元素，<code>[i, j-1]</code> 都是大于等于 pivot 的元素。</p>
+<p>步骤：</p>
+<ol>
+<li>
+<p>选择最右侧元素作为基准 <code>pivot</code>。</p>
+</li>
+<li>
+<p>初始化 <code>i = left</code></p>
+</li>
+<li>
+<p>用 <code>j</code>从 <code>left</code>扫描到 <code>right - 1</code>：</p>
+<ul>
+<li>若 <code>arr[j] &lt; pivot</code>，则交换 <code>arr[i]</code> 和 <code>arr[j]</code>，然后 <code>i++</code>。</li>
+</ul>
+</li>
+<li>
+<p>扫描结束后，将 <code>pivot</code> 交换到 <code>i</code> 的位置。</p>
+</li>
+<li>
+<p>返回 <code>i</code>（pivot 的最终位置）</p>
+</li>
+</ol>
+<p>为什么 i 指针总是「小于 pivot 区」的右边界呢？</p>
+<p>初始时 <code>i = left</code>，左侧为空，不变量自然成立。此后每次循环：</p>
+<ul>
+<li>如果 <code>arr[j] &lt; pivot</code>：交换 <code>arr[i]</code> 和 <code>arr[j]</code>，然后 <code>i++</code>。交换到 <code>i</code> 位置的元素一定 <code>&lt; pivot</code>（if 条件保证），所以 <code>i</code> 左侧仍然全是 <code>&lt; pivot</code> 的元素。</li>
+<li>如果 <code>arr[j] &gt;= pivot</code>：不做任何操作，<code>j++</code> 继续扫描。<code>i</code> 不动，不变量不受影响。</li>
+</ul>
+<p>因此在扫描过程中，<code>[left, i - 1]</code> 始终是「小于 pivot 区」，而 <code>i</code> 是下一个小元素应该放入的位置。</p>
+<p>有一个说法可以这样理解：</p>
+<blockquote>
+<p>交换的意义是：当遇到一个小的元素（&lt; pivot）时，我们想把它放到&quot;小值区域&quot;的末尾。这个区域的末尾就是 i 的位置。但 i 的位置当前放的是一个大的元素（&gt;= pivot），所以我们交换它们。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">quickSort</span>(<span class="params">arr, left = <span class="number">0</span>, right = arr.length - <span class="number">1</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (left &gt;= right) <span class="keyword">return</span> arr</span><br><span class="line">    <span class="keyword">const</span> pivotIndex = <span class="title function_">partition</span>(arr, left, right)</span><br><span class="line">    <span class="title function_">quickSort</span>(arr, left, pivotIndex - <span class="number">1</span>)</span><br><span class="line">    <span class="title function_">quickSort</span>(arr, pivotIndex + <span class="number">1</span>, right)</span><br><span class="line">    <span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">partition</span>(<span class="params">arr, left, right</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> pivot = arr[right] <span class="comment">// 选择最右侧为基准</span></span><br><span class="line">    <span class="keyword">let</span> i = left</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> j = left; j &lt; right; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[j] &lt; pivot) &#123;</span><br><span class="line">            [arr[i], arr[j]] = [arr[j], arr[i]]</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    [arr[i], arr[right]] = [arr[right], arr[i]] <span class="comment">// 基准归位</span></span><br><span class="line">    <span class="keyword">return</span> i</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>疑问：</p>
+<p><strong>Q1、为什么选 <code>arr[right]</code> 做 pivot？</strong></p>
+<p>因为扫描范围是 <code>[left, right-1]</code>，pivot 不参与扫描，扫描范围刚好是除 pivot 外的所有元素。选最右端是为了让 <code>for</code> 循环的范围 <code>[left, right)</code> 刚好是「除 pivot 外的所有元素」。</p>
+<p><strong>Q2、为什么交换后要 <code>i++</code>？</strong></p>
+<p>交换过来的 <code>arr[j]</code> 一定 <code>&lt; pivot</code>（if 条件保证），它属于小于区，所以小于区的右边界要右移一位。</p>
+<p>当然这个方法也有缺点，在数组几乎有序或大量重复元素时，效率会退化到 O(n^2)。</p>
+<h3 id="2-2-Hoare-Algs-4-分区法（双指针法）">2.2 Hoare / Algs 4 分区法（双指针法）</h3>
+<blockquote>
+<p>Algs4 指的是《算法》第四版。</p>
+</blockquote>
+<p>Lomuto 写法简单，但交换次数通常更多；双指针法可以减少一些不必要的交换。</p>
+<p>双指针法采用<strong>左右夹逼</strong>的策略：两个指针从数组两端相向而行，各自跳过「已经站对位置」的元素，发现站错位置的就交换。</p>
+<p>步骤：</p>
+<ol>
+<li>选择一个基准 pivot（通常选 <code>arr[left]</code> 或中间元素）。</li>
+<li>左指针 <code>i</code> 从左向右移动，跳过所有 <code>&lt; pivot</code> 的元素（这些元素本来就应该在左边）。</li>
+<li>右指针 <code>j</code> 从右向左移动，跳过所有 <code>&gt; pivot</code> 的元素（这些元素本来就应该在右边）。</li>
+<li>当 <code>i</code> 和 <code>j</code> 都停下时，说明 <code>arr[i]</code> 应该在右边、<code>arr[j]</code> 应该在左边，交换它们。</li>
+<li>重复 2-4，直到 <code>i &gt;= j</code>（指针交错），分区完成。</li>
+</ol>
+<p>根据「分区完成后 pivot 是否归位」，双指针有两种写法，分别是 Hoare 法和 Algs4 法，前者是以快速排序发明者 C. A. R. Hoare 命名的，也是快排最初的实现版本，后者是书籍《算法》第四版里的写法。</p>
+<p>写法一：单纯切分（原始 Hoare 版本）</p>
+<p>分区完成后不保证 pivot 在最终位置，只能保证<code>[left, j]</code>全部<code>&lt;= pivot</code>，<code>[j+1, right]</code>全部<code>&gt;= pivot</code>。递归时 <code>pivot</code> 可能还在左右子数组中继续参与排序</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">quickSort</span>(<span class="params">arr, left = <span class="number">0</span>, right = arr.length - <span class="number">1</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (left &gt;= right ) <span class="keyword">return</span> arr</span><br><span class="line">    <span class="keyword">const</span> p = <span class="title function_">partition</span>(arr, left, right)</span><br><span class="line">    <span class="comment">// 基准值没归位</span></span><br><span class="line">    <span class="title function_">quickSort</span>(arr, left, p)</span><br><span class="line">    <span class="title function_">quickSort</span>(arr, p + <span class="number">1</span>, right)</span><br><span class="line">    <span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">partition</span>(<span class="params">arr, left, right</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> pivot = arr[<span class="title class_">Math</span>.<span class="title function_">floor</span>((left + right) / <span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">let</span> i = left</span><br><span class="line">    <span class="keyword">let</span> j = right</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="comment">// 从左向右找第一个 &gt;= pivot 的元素</span></span><br><span class="line">        <span class="keyword">while</span>(arr[i] &lt; pivot) i++</span><br><span class="line">        <span class="comment">// 从右向左找第一个 &lt;= pivot 的元素</span></span><br><span class="line">        <span class="keyword">while</span>(arr[j] &gt; pivot) j--</span><br><span class="line">        <span class="comment">// i、j相遇或交错，分区完成</span></span><br><span class="line">        <span class="keyword">if</span> (i &gt;= j) &#123;<span class="keyword">return</span> j&#125;</span><br><span class="line">        <span class="comment">// 交换</span></span><br><span class="line">        [arr[i], arr[j]] = [arr[j], arr[i]]</span><br><span class="line">        <span class="comment">// 移动指针继续</span></span><br><span class="line">        i++</span><br><span class="line">        j-- </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写法二：基准归位（Algs4 / Sedgewick 版本）</p>
+<p>在双指针扫描的基础上，最后多做一步，把 <code>pivot</code> 交换到它的最终位置。这样 pivot 就不再参与后续递归，递归范围变为 <code>[left, p-1]</code> 和 <code>[p+1, right]</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">quickSort</span>(<span class="params">arr, left = <span class="number">0</span>, right = arr.length - <span class="number">1</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (left &gt;= right) <span class="keyword">return</span> arr</span><br><span class="line">    <span class="keyword">const</span> pivotIndex = <span class="title function_">partition</span>(arr, left, right)</span><br><span class="line">    <span class="title function_">quickSort</span>(arr, left, pivotIndex - <span class="number">1</span>) <span class="comment">// pivot 已在位置 pivotIndex，左右分别递归</span></span><br><span class="line">    <span class="title function_">quickSort</span>(arr, pivotIndex + <span class="number">1</span>, right)</span><br><span class="line">    <span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">partition</span>(<span class="params">arr, left, right</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> pivot = arr[left] <span class="comment">// 选最左元素做基准</span></span><br><span class="line">    <span class="keyword">let</span> i = left</span><br><span class="line">    <span class="keyword">let</span> j = right + <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="comment">// 从左找第一个 &gt;= pivot 的位置（跳过所有 &lt; pivot 的）</span></span><br><span class="line">        <span class="keyword">while</span>(arr[++i] &lt; pivot) <span class="keyword">if</span>(i === right) <span class="keyword">break</span></span><br><span class="line">        <span class="comment">// 从右找第一个 &lt;= pivot 的位置（跳过所有 &gt; pivot 的）</span></span><br><span class="line">        <span class="keyword">while</span>(arr[--j] &gt; pivot) <span class="keyword">if</span>(j === left) <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> (i &gt;= j) <span class="keyword">break</span></span><br><span class="line">        [arr[i], arr[j]] = [arr[j], arr[i]]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 关键：pivot 归位</span></span><br><span class="line">    [arr[j], arr[left]] = [arr[left], arr[j]]</span><br><span class="line">    <span class="keyword">return</span> j</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>关键解释：为什么最后能交换 <code>arr[left]</code> 和 <code>arr[j]</code>？</strong></p>
+<p>当 <code>i &gt;= j</code> 退出循环时：</p>
+<ul>
+<li><code>j</code> 指向的位置，其值一定 <code>&lt;= pivot</code>（因为 <code>j</code> 停在「从右找到的第一个 <code>&lt;= pivot</code> 的位置」或者原地不动）</li>
+<li>所以把 <code>pivot</code>和 <code>arr[j]</code> 交换后，<code>arr[j] = pivot</code>，左边全部 <code>&lt;= pivot</code>，右边全部 <code>&gt;= pivot</code></li>
+<li><strong>pivot 被放到了它的最终排序位置</strong></li>
+</ul>
+<h3 id="2-3-三向切分（3-Way-Partitioning-Dijkstra）">2.3 三向切分（3-Way Partitioning / Dijkstra）</h3>
+<p>当数据集中有大量的重复元素，标准快排会把等于 pivot 的元素分散到两边，造成不必要的递归。因此诞生了三向切分法，它的原理是将数组分为三部分：<strong>小于基准、等于基准、大于基准</strong>。等于 pivot 的元素全部集中在中间，不再参与递归。</p>
+<p>使用三个指针维护四个区间</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[left, lt-1]   &lt;  pivot   （小于区）</span><br><span class="line">[lt, i-1]      == pivot   （等于区）</span><br><span class="line">[i, gt]        未扫描</span><br><span class="line">[gt+1, right]  &gt;  pivot   （大于区）</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>lt</code> 指针：等于区起点 / 小于区右边界后一位。</li>
+<li><code>gt</code> 指针：未扫描区右边界 / 大于区左边界前一位。</li>
+<li><code>i</code> 指针：当前扫描位置。</li>
+</ul>
+<p>步骤：</p>
+<ol>
+<li>
+<p>选 <code>arr[left]</code> 为 pivot</p>
+</li>
+<li>
+<p>初始化：<code>lt = left</code>，<code>i = left + 1</code>，<code>gt = right</code></p>
+</li>
+<li>
+<p>当 <code>i &lt;= gt</code>时循环：</p>
+<ul>
+<li><code>arr[i] &lt; pivot</code>：交换 <code>arr[lt]</code> 和 <code>arr[i]</code>，<code>lt++</code>，<code>i++</code>（归入小于区，lt 和 i 同步右移）</li>
+<li><code>arr[i] &gt; pivot</code>：交换 <code>arr[i]</code> 和 <code>arr[gt]</code>，<code>gt--</code>（归入大于区，gt 左移，但 i 不动（因为换过来的元素还没检查））</li>
+<li><code>arr[i] == pivot</code>：<code>i++</code>（直接归入等于区）</li>
+</ul>
+</li>
+<li>
+<p>递归 <code>[left, lt-1]</code> 和 <code>[gt+1, right]</code>，跳过中间的等于区。</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">quickSort3Way</span>(<span class="params">arr, left = <span class="number">0</span>, right = arr.length - <span class="number">1</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (left &gt;= right) <span class="keyword">return</span> arr</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> lt = left      <span class="comment">// lt 之前全是小于 pivot 的</span></span><br><span class="line">    <span class="keyword">let</span> gt = right     <span class="comment">// gt 之后全是大于 pivot 的</span></span><br><span class="line">    <span class="keyword">let</span> i = left + <span class="number">1</span>   <span class="comment">// 扫描指针</span></span><br><span class="line">    <span class="keyword">let</span> pivot = arr[left]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(i &lt;= gt) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] &lt; pivot) &#123;</span><br><span class="line">            <span class="comment">// 情况 A：当前值小于基准</span></span><br><span class="line">            <span class="comment">// 归入小于区，lt 和 i 同步右移</span></span><br><span class="line">            [arr[i], arr[lt]] = [arr[lt], arr[i]]</span><br><span class="line">            lt++</span><br><span class="line">            i++</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[i] &gt; pivot) &#123;</span><br><span class="line">            <span class="comment">// 情况 B：当前值大于基准</span></span><br><span class="line">            <span class="comment">// 归入大于区，gt 左移，但 i 不动（因为换过来的元素还没检查）</span></span><br><span class="line">            [arr[i], arr[gt]] = [arr[gt], arr[i]]</span><br><span class="line">            gt--</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 情况 C：当前值等于基准</span></span><br><span class="line">            <span class="comment">// 啥也不动，i 继续往前走，等于区自然变长</span></span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此时：[left, lt-1] &lt; pivot，[lt, gt] == pivot，[gt+1, right] &gt; pivot</span></span><br><span class="line">    <span class="comment">// 只递归左右两部分，中间的等于区已经排好</span></span><br><span class="line">    <span class="title function_">quickSort3Way</span>(arr, left, lt - <span class="number">1</span>)</span><br><span class="line">    <span class="title function_">quickSort3Way</span>(arr, gt + <span class="number">1</span>, right)</span><br><span class="line">    <span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>疑问：</p>
+<p><strong>Q1、为什么 <code>arr[i] &gt; pivot</code> 时 <code>i</code> 不增加？</strong></p>
+<p>这是最容易出错的地方。当你把 <code>arr[gt]</code>（一个从未扫描过的元素）交换到 <code>i</code> 位置后，你不知道这个新元素比 pivot 大还是小，所以必须在下一轮循环中<strong>重新检查</strong>它。反之，当 <code>arr[i] &lt; pivot</code> 时，换到 <code>i</code> 位置的数来自 <code>lt</code>，而 <code>lt</code> 指向的数一定等于 pivot（或者是 <code>i</code> 自己），因此 <code>i</code> 可以放心自增。</p>
+<p><strong>Q2、为什么 <code>lt</code> 和 <code>gt</code> 的初始值这样定？</strong></p>
+<p>我们默认把第一个元素 <code>arr[left]</code> 当作 pivot，所以等于区已经有一个成员（<code>left</code> 自己），因此扫描指针 <code>i</code> 从 <code>left + 1</code> 开始。循环结束后，<code>lt</code> 指向等于区的起始索引，<code>gt</code> 指向等于区的结束索引。</p>
+<h3 id="2-4-三种分区方法对比">2.4 三种分区方法对比</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>扫描方向</th>
+<th>交换次数</th>
+<th>重复元素处理</th>
+<th>稳定性</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lomuto</td>
+<td>单向</td>
+<td>较多</td>
+<td>较差</td>
+<td>不稳定</td>
+<td>教学、简单实现</td>
+</tr>
+<tr>
+<td>Hoare</td>
+<td>双向</td>
+<td>较少</td>
+<td>一般</td>
+<td>不稳定</td>
+<td>通用场景</td>
+</tr>
+<tr>
+<td>三向切分</td>
+<td>双向 + 三指针</td>
+<td>取决于数据</td>
+<td>优秀</td>
+<td>不稳定</td>
+<td>大量重复元素</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6955381964337577991">【算法】经典排序算法总结-JavaScript描述-图解-复杂度分析-插入-快速-归并-堆排序等已经有很多排序算法的文章 - 掘金</a></li>
+<li><a target="_blank" rel="noopener" href="https://visualgo.net/zh">通过动画可视化数据结构和算法 - VisuAlgo</a></li>
+<li>各 AI：xiaomi mimo、Google gemini</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.xchive.top/2026/quicksort-evolution-and-three-partition-strategies-js.html" title="算法 | 快速排序的演进和3种分区实现（JavaScript）">https://blog.xchive.top/2026/quicksort-evolution-and-three-partition-strategies-js.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+              <a href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag"># 排序</a>
+              <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag"># 快速排序</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/how-to-build-echarts-3d-bar-and-pie-charts.html" rel="prev" title="ECharts 3D 图表 | 3D 柱状图和 3D 饼图实现思路">
+                  <i class="fa fa-angle-left"></i> ECharts 3D 图表 | 3D 柱状图和 3D 饼图实现思路
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">52k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:08</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.3.0/mermaid.min.js","integrity":"sha256-9y71g5Lz/KLsHjB8uXwnkuWDtAMDSzD/HdIbqhJfTAI="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
