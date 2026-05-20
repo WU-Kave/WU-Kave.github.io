@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/uploads/assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/uploads/assets/favicon.png">
+  <link rel="mask-icon" href="/uploads/assets/favicon.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.xchive.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前端开发里，页面切换、用户重复操作，都可能让尚未完成的请求变成“孤儿”。这些请求如果继续影响当前页面，数据和 UI 状态就容易变得不可控。 取消这些无效请求，可以避免旧结果继续影响当前页面。请求取消本身不难：实例化一个 AbortController，把 signal 传给请求，需要取消时调用 abort()。难的是，真实项目里请求通常会经过 axios 实例、二次封装的 axios、业务 API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端请求取消：用 AbortController 从 fetch 到 axios">
+<meta property="og:url" content="https://blog.xchive.top/2026/cancel-requests-with-abort-controller.html">
+<meta property="og:site_name" content="WU-Kave&#39;s Blogs">
+<meta property="og:description" content="前端开发里，页面切换、用户重复操作，都可能让尚未完成的请求变成“孤儿”。这些请求如果继续影响当前页面，数据和 UI 状态就容易变得不可控。 取消这些无效请求，可以避免旧结果继续影响当前页面。请求取消本身不难：实例化一个 AbortController，把 signal 传给请求，需要取消时调用 abort()。难的是，真实项目里请求通常会经过 axios 实例、二次封装的 axios、业务 API">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-20T10:10:31.000Z">
+<meta property="article:modified_time" content="2026-05-20T10:10:31.000Z">
+<meta property="article:author" content="WU-Kave">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="axios">
+<meta property="article:tag" content="fetch">
+<meta property="article:tag" content="AbortController">
+<meta property="article:tag" content="signal">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.xchive.top/2026/cancel-requests-with-abort-controller.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.xchive.top/2026/cancel-requests-with-abort-controller.html","path":"2026/cancel-requests-with-abort-controller.html","title":"前端请求取消：用 AbortController 从 fetch 到 axios"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>前端请求取消：用 AbortController 从 fetch 到 axios | WU-Kave's Blogs</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WU-Kave's Blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">如果你想知道什么是递归，首先你就要知道什么是递归</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%8F%96%E6%B6%88%E8%AF%B7%E6%B1%82"><span class="nav-number">1.</span> <span class="nav-text">为什么要取消请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%EF%BC%9AAbortController"><span class="nav-number">2.</span> <span class="nav-text">核心：AbortController</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fetch-%E9%87%8C%E7%9A%84%E5%8F%96%E6%B6%88%E8%AF%B7%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">fetch 里的取消请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E5%8D%95%E4%B8%AA%E8%AF%B7%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">取消单个请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%8F%96%E6%B6%88"><span class="nav-number">3.2.</span> <span class="nav-text">批量取消</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91"><span class="nav-number">4.</span> <span class="nav-text">进入实际开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E4%B8%9A%E5%8A%A1%E8%B0%83%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">普通业务调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%AA-axios-%E8%AF%B7%E6%B1%82%E5%8F%96%E6%B6%88"><span class="nav-number">4.2.</span> <span class="nav-text">单个 axios 请求取消</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%B7%E6%B1%82%EF%BC%9A%E4%B8%80%E4%B8%AA-signal-%E5%8F%96%E6%B6%88%E5%A4%9A%E4%B8%AA%E8%AF%B7%E6%B1%82"><span class="nav-number">4.3.</span> <span class="nav-text">多请求：一个 signal 取消多个请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%B7%E6%B1%82%EF%BC%9A%E5%8F%AF%E6%9B%B4%E6%96%B0%E7%9A%84%E5%85%B1%E4%BA%AB-signal"><span class="nav-number">4.4.</span> <span class="nav-text">多请求：可更新的共享 signal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%B7%E6%B1%82%EF%BC%9A%E4%B8%80%E4%B8%AA%E8%AF%B7%E6%B1%82%E4%B8%80%E4%B8%AA-controller"><span class="nav-number">4.5.</span> <span class="nav-text">多请求：一个请求一个 controller</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WU-Kave"
+      src="/uploads/assets/avatar.png">
+  <p class="site-author-name" itemprop="name">WU-Kave</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">88</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wu-kave" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/wu-kave" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;wu-kave" rel="noopener me" target="_blank"><i class="fab fa-gitee fa-fw"></i>Gitee</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.xchive.top/2026/cancel-requests-with-abort-controller.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/assets/avatar.png">
+      <meta itemprop="name" content="WU-Kave">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="前端请求取消：用 AbortController 从 fetch 到 axios | WU-Kave's Blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端请求取消：用 AbortController 从 fetch 到 axios
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-20 18:10:31" itemprop="dateCreated datePublished" datetime="2026-05-20T18:10:31+08:00">2026-05-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>前端开发里，页面切换、用户重复操作，都可能让尚未完成的请求变成“孤儿”。这些请求如果继续影响当前页面，数据和 UI 状态就容易变得不可控。</p>
+<p>取消这些无效请求，可以避免旧结果继续影响当前页面。请求取消本身不难：实例化一个 <code>AbortController</code>，把 <code>signal</code> 传给请求，需要取消时调用 <code>abort()</code>。难的是，真实项目里请求通常会经过 axios 实例、二次封装的 axios、业务 API，最后才到页面组件。那么 <code>AbortController</code> 应该在哪里创建？<code>signal</code> 要怎么传？多个请求又该怎么处理？</p>
+<span id="more"></span>
+<p>下面从原生 <code>fetch</code> 开始讲解，再过渡到已经封装好的 axios 业务接口。</p>
+<h2 id="为什么要取消请求">为什么要取消请求</h2>
+<p>例如，页面存在未完成的请求时用户跳转，旧请求可能引发几个问题：</p>
+<ul>
+<li>请求返回后还想更新一个已经卸载的组件。</li>
+<li>旧页面的数据被写回某个共享状态。</li>
+<li>用户重复点击，前一个慢请求比后一个快请求更晚返回，导致数据被覆盖。</li>
+<li>弹窗已经关闭了，但弹窗里的请求还在跑。</li>
+</ul>
+<p>取消请求不是为了保证服务端一定停止执行。请求发出去之后，服务端可能已经收到，也可能已经处理完了。前端调用 <code>abort()</code>，其实是在告诉当前这次请求：我这边不等了，这个结果也不应该继续影响当前页面。</p>
+<h2 id="核心：AbortController">核心：AbortController</h2>
+<p>首先了解一下 <code>AbortController</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line"></span><br><span class="line">controller.<span class="property">signal</span></span><br><span class="line"></span><br><span class="line">controller.<span class="title function_">abort</span>()</span><br></pre></td></tr></table></figure>
+<p><code>AbortController</code> 是控制器。</p>
+<p><code>controller.signal</code> 是取消信号，传给请求。</p>
+<p><code>controller.abort()</code> 是发出取消通知。</p>
+<p>注意：controller 调用过 <code>abort()</code> 之后，就不能复用了。</p>
+<p>因为它的 <code>signal.aborted</code> 会变成 <code>true</code>，而且不会再变回 <code>false</code>。如果你把一个已经 aborted 的 signal 传给新的请求，新请求会立刻被取消。</p>
+<h2 id="fetch-里的取消请求">fetch 里的取消请求</h2>
+<h3 id="取消单个请求">取消单个请求</h3>
+<p>先用 <code>fetch</code> 演示最小流程。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">getUserList</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;/api/users&#x27;</span>, &#123;</span><br><span class="line">      <span class="comment">// 把 signal 交给 fetch，这个请求才可以被 abort 控制</span></span><br><span class="line">      <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求成功&#x27;</span>)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (error.<span class="property">name</span> === <span class="string">&#x27;AbortError&#x27;</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求已取消&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求失败&#x27;</span>, error)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">getUserList</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要取消时调用</span></span><br><span class="line">controller.<span class="title function_">abort</span>()</span><br></pre></td></tr></table></figure>
+<p>取消时调用 <code>controller.abort()</code>，这次请求就会收到取消信号。</p>
+<p>注意在 <code>catch</code> 中区分错误类型。<code>fetch</code> 被取消后会抛出 <code>AbortError</code>，它不是普通业务错误。页面上最好不要把它显示成“请求失败”，否则用户会看到一个并不真实的错误提示。</p>
+<h3 id="批量取消">批量取消</h3>
+<p>如果多个请求要一起取消，给它们传同一个 <code>signal</code> 就可以。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">getPageData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>([</span><br><span class="line">      <span class="title function_">fetch</span>(<span class="string">&#x27;/api/users&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">fetch</span>(<span class="string">&#x27;/api/roles&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">      &#125;),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;页面数据请求成功&#x27;</span>)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (error.<span class="property">name</span> === <span class="string">&#x27;AbortError&#x27;</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;这一组请求已取消&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求失败&#x27;</span>, error)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">getPageData</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个 abort 会取消所有共用这个 signal 的请求</span></span><br><span class="line">controller.<span class="title function_">abort</span>()</span><br></pre></td></tr></table></figure>
+<p>这种写法适合一组请求要一起取消的场景。比如弹窗关闭后，弹窗里的几个请求都不需要了。</p>
+<h2 id="进入实际开发">进入实际开发</h2>
+<p>前面的例子直接写 <code>fetch</code>，是为了看清楚 <code>AbortController</code> 本身怎么工作。</p>
+<p>实际开发里更常见的是这样：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">页面组件</span><br><span class="line">  -&gt; getUserList()</span><br><span class="line">    -&gt; http.get()</span><br><span class="line">      -&gt; axios 实例</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>getUserList</code> 是已经封装好的业务请求接口。先关心两件事：</p>
+<ul>
+<li>它可以接收业务参数，比如分页、筛选条件。</li>
+<li>它也可以接收 <code>signal</code>，内部会把这个 <code>signal</code> 继续传给 axios 实例。</li>
+</ul>
+<p>业务 API 内部怎么拆参数、怎么调用 <code>http.get</code>，不同项目写法不一样，这里不展开讲。本文只关心 signal 怎么传下去：页面创建 controller，把 <code>controller.signal</code> 传给业务 API，业务 API 再把它交给 axios。</p>
+<h3 id="普通业务调用">普通业务调用</h3>
+<p>先看不取消请求时，业务 API 是怎么用的，方便理解后面代码。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadUsers</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> users = <span class="keyword">await</span> <span class="title function_">getUserList</span>(&#123;</span><br><span class="line">    <span class="attr">page</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">pageSize</span>: <span class="number">10</span>,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(users)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>getUserList</code> 本身还是普通的业务请求函数。后面要取消请求，只是在这个调用基础上多传一个 <code>signal</code>。</p>
+<h3 id="单个-axios-请求取消">单个 axios 请求取消</h3>
+<p>现在给这个调用加上取消能力。到了页面组件里，还要考虑组件卸载时清理请求。下面用 Vue 3 举例。</p>
+<p>具体流程是：</p>
+<ol>
+<li>发请求前创建新的 <code>AbortController</code>。</li>
+<li>调用业务 API 时传入 <code>signal</code>。</li>
+<li>取消时调用 <code>controller.abort()</code>。</li>
+<li>组件销毁前也调用一次取消，避免页面离开后旧请求继续影响页面。</li>
+</ol>
+<p>代码示例：</p>
+<blockquote>
+<p>注意：为了方便演示，这里没有展开重复点击、旧请求回调晚返回这些边界处理。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; onUnmounted, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; getUserList &#125; <span class="keyword">from</span> <span class="string">&#x27;@/api/user&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> users = <span class="title function_">ref</span>([])</span><br><span class="line"><span class="keyword">const</span> status = <span class="title function_">ref</span>(<span class="string">&#x27;idle&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> controller = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadUsers</span>(<span class="params"></span>) &#123;</span><br><span class="line">  controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line">  status.<span class="property">value</span> = <span class="string">&#x27;loading&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    users.<span class="property">value</span> = <span class="keyword">await</span> <span class="title function_">getUserList</span>(&#123;</span><br><span class="line">      <span class="attr">page</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">pageSize</span>: <span class="number">10</span>,</span><br><span class="line">      <span class="comment">// signal 会一路传到 axios 请求配置里</span></span><br><span class="line">      <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    status.<span class="property">value</span> = <span class="string">&#x27;success&#x27;</span></span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="comment">// axios 取消请求会进入 catch，需要单独区分</span></span><br><span class="line">    <span class="keyword">if</span> (axios.<span class="title function_">isCancel</span>(error)) &#123;</span><br><span class="line">      status.<span class="property">value</span> = <span class="string">&#x27;aborted&#x27;</span></span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    status.<span class="property">value</span> = <span class="string">&#x27;error&#x27;</span></span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    controller = <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">cancelRequest</span>(<span class="params"></span>) &#123;</span><br><span class="line">  controller?.<span class="title function_">abort</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 跳转页面或组件销毁时，清理还没完成的请求</span></span><br><span class="line">  <span class="title function_">cancelRequest</span>()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>前面说过，调用过 <code>abort()</code> 的 controller 不能复用，因为它的 <code>signal.aborted</code> 已经是 <code>true</code>。所以每次重新请求前，都要 new 一个新的 <code>AbortController</code>。</p>
+<p>取消请求和请求失败也要分开处理。取消是 <code>aborted</code>，失败才是 <code>error</code>。</p>
+<h3 id="多请求：一个-signal-取消多个请求">多请求：一个 signal 取消多个请求</h3>
+<p>如果页面里有一组请求要一起取消，可以让它们共用一个 controller。</p>
+<p>下面这个例子里，用户列表和角色列表共用同一个 <code>signal</code>，权限列表不传 <code>signal</code>。也就是说，取消时只取消前两个请求，权限列表不受影响。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; getPermissionList, getRoleList, getUserList &#125; <span class="keyword">from</span> <span class="string">&#x27;@/api/user&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> controller = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadPageData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">cancelPageData</span>()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> currentController = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line">  controller = currentController</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 这两个请求共用一个 signal，取消时会一起取消</span></span><br><span class="line">    <span class="keyword">const</span> usersPromise = <span class="title function_">getUserList</span>(&#123;</span><br><span class="line">      <span class="attr">signal</span>: currentController.<span class="property">signal</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> rolesPromise = <span class="title function_">getRoleList</span>(&#123;</span><br><span class="line">      <span class="attr">signal</span>: currentController.<span class="property">signal</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="title function_">getPermissionList</span>()</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function"><span class="params">permissions</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;权限请求成功&#x27;</span>, permissions)</span><br><span class="line">      &#125;)</span><br><span class="line">      .<span class="title function_">catch</span>(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;权限请求失败&#x27;</span>, error)</span><br><span class="line">      &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> [users, roles] = <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>([</span><br><span class="line">      usersPromise,</span><br><span class="line">      rolesPromise,</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (controller === currentController) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(users, roles)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (axios.<span class="title function_">isCancel</span>(error)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (controller === currentController) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户和角色请求已取消&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求失败&#x27;</span>, error)</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (controller === currentController) &#123;</span><br><span class="line">      controller = <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">cancelPageData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  controller?.<span class="title function_">abort</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里用户和角色属于同一个取消分组，所以放进同一个 <code>Promise.all</code>。权限请求不传 <code>signal</code>，也不放进这个 <code>Promise.all</code>，而是单独处理。这样用户和角色被取消时，权限请求不会被 abort，它自己的结果也不会被这个取消分支跳过。</p>
+<p>这个写法有一个缺陷：一旦调用 <code>controller.abort()</code>，这个 controller 就不能再用了。下一轮请求必须重新创建新的 controller。</p>
+<h3 id="多请求：可更新的共享-signal">多请求：可更新的共享 signal</h3>
+<p>上面的例子把一组请求都放在 <code>loadPageData()</code> 里，controller 的创建和清理都在一个地方。实际页面里，请求经常分散在不同函数中：用户列表在 <code>loadUsers</code> 里，角色列表在 <code>loadRoles</code> 里，但它们又想进入同一个取消分组。</p>
+<p>这种情况下可以写一个 <code>getOrCreateSharedSignal()</code>。每次发请求前先拿 signal；如果旧 controller 已经取消了，就创建一个新的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; getRoleList, getUserList &#125; <span class="keyword">from</span> <span class="string">&#x27;@/api/user&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> sharedController = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getOrCreateSharedSignal</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!sharedController || sharedController.<span class="property">signal</span>.<span class="property">aborted</span>) &#123;</span><br><span class="line">    <span class="comment">// 旧 controller 已经 abort 后不能复用，所以这里要重新创建</span></span><br><span class="line">    sharedController = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> sharedController.<span class="property">signal</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadUsers</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> users = <span class="keyword">await</span> <span class="title function_">getUserList</span>(&#123;</span><br><span class="line">      <span class="attr">signal</span>: <span class="title function_">getOrCreateSharedSignal</span>(),</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(users)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (axios.<span class="title function_">isCancel</span>(error)) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户请求已取消&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户请求失败&#x27;</span>, error)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadRoles</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> roles = <span class="keyword">await</span> <span class="title function_">getRoleList</span>(&#123;</span><br><span class="line">      <span class="attr">signal</span>: <span class="title function_">getOrCreateSharedSignal</span>(),</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(roles)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (axios.<span class="title function_">isCancel</span>(error)) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;角色请求已取消&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;角色请求失败&#x27;</span>, error)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">cancelGroupRequests</span>(<span class="params"></span>) &#123;</span><br><span class="line">  sharedController?.<span class="title function_">abort</span>()</span><br><span class="line">  sharedController = <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码处理的是“共享 signal 取消后不能复用”的问题。取消之后把旧 controller 丢掉，下一次调用 <code>getOrCreateSharedSignal()</code> 时会自动创建新的 controller。</p>
+<h3 id="多请求：一个请求一个-controller">多请求：一个请求一个 controller</h3>
+<p>除了在共享 signal 方案里重新创建 controller，也可以换个思路：一个请求一个 controller。页面维护一个请求队列，需要取消时统一处理。</p>
+<p>这种方式适合请求生命周期不完全一致的页面。需要取消的请求放进队列，不需要取消的请求正常调用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; getPermissionList, getRoleList, getUserList &#125; <span class="keyword">from</span> <span class="string">&#x27;@/api/user&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> controllers = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createController</span>(<span class="params">key</span>) &#123;</span><br><span class="line">  <span class="comment">// 只有需要取消的请求才登记到队列里</span></span><br><span class="line">  controllers.<span class="title function_">get</span>(key)?.<span class="title function_">abort</span>()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>()</span><br><span class="line">  controllers.<span class="title function_">set</span>(key, controller)</span><br><span class="line">  <span class="keyword">return</span> controller</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">removeController</span>(<span class="params">key, controller</span>) &#123;</span><br><span class="line">  <span class="comment">// 只清理当前请求自己的 controller，避免误删后发起的新请求</span></span><br><span class="line">  <span class="keyword">if</span> (controllers.<span class="title function_">get</span>(key) === controller) &#123;</span><br><span class="line">    controllers.<span class="title function_">delete</span>(key)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadUsers</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> controller = <span class="title function_">createController</span>(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> users = <span class="keyword">await</span> <span class="title function_">getUserList</span>(&#123;</span><br><span class="line">      <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(users)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (axios.<span class="title function_">isCancel</span>(error)) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户请求已取消&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户请求失败&#x27;</span>, error)</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="title function_">removeController</span>(<span class="string">&#x27;users&#x27;</span>, controller)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadRoles</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> controller = <span class="title function_">createController</span>(<span class="string">&#x27;roles&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> roles = <span class="keyword">await</span> <span class="title function_">getRoleList</span>(&#123;</span><br><span class="line">      <span class="attr">signal</span>: controller.<span class="property">signal</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(roles)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (axios.<span class="title function_">isCancel</span>(error)) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;角色请求已取消&#x27;</span>)</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;角色请求失败&#x27;</span>, error)</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="title function_">removeController</span>(<span class="string">&#x27;roles&#x27;</span>, controller)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadPermissions</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 这个请求不需要取消，所以不创建 controller，也不传 signal</span></span><br><span class="line">  <span class="keyword">const</span> permissions = <span class="keyword">await</span> <span class="title function_">getPermissionList</span>()</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(permissions)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">cancelAllRequests</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 页面离开时遍历队列，批量取消还没完成的请求</span></span><br><span class="line">  controllers.<span class="title function_">forEach</span>(<span class="function"><span class="params">controller</span> =&gt;</span> &#123;</span><br><span class="line">    controller.<span class="title function_">abort</span>()</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  controllers.<span class="title function_">clear</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>页面卸载时统一取消：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; onUnmounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">cancelAllRequests</span>()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>队列写法代码多一点，但更灵活。真实页面里如果有很多接口，只有一部分需要取消，用队列会比手写多个 <code>controller.abort()</code> 更清楚。</p>
+<h2 id="总结">总结</h2>
+<p>controller 一般放在页面或业务流程里创建，signal 传给业务 API，再由业务 API 继续传给 axios。调用过 <code>abort()</code> 的 controller 不能复用，因为它的 <code>signal.aborted</code> 已经是 <code>true</code>。</p>
+<p>单个请求就单独 new controller；一组请求要一起取消，就共用 signal；如果页面请求多、生命周期不一样，就一个请求一个 controller，再用队列统一取消。取消请求不是业务失败，UI 上不要把它当成普通 error 展示。</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7603263490342158345">JS-AbortController：优雅中止请求操作在前端开发中，我们经常遇到需要中途撤回请求的情况（例如：搜索框快速 - 掘金</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>WU-Kave
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.xchive.top/2026/cancel-requests-with-abort-controller.html" title="前端请求取消：用 AbortController 从 fetch 到 axios">https://blog.xchive.top/2026/cancel-requests-with-abort-controller.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+              <a href="/tags/axios/" rel="tag"># axios</a>
+              <a href="/tags/fetch/" rel="tag"># fetch</a>
+              <a href="/tags/AbortController/" rel="tag"># AbortController</a>
+              <a href="/tags/signal/" rel="tag"># signal</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/quicksort-evolution-and-three-partition-strategies-js.html" rel="prev" title="算法 | 快速排序的演进和3种分区实现（JavaScript）">
+                  <i class="fa fa-angle-left"></i> 算法 | 快速排序的演进和3种分区实现（JavaScript）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2020 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WU-Kave</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">54k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:18</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.3.0/mermaid.min.js","integrity":"sha256-9y71g5Lz/KLsHjB8uXwnkuWDtAMDSzD/HdIbqhJfTAI="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
